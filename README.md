@@ -1,5 +1,7 @@
 # ELARIS — Combat Prototype 0.1
 
+For AI coding agents: read `AGENTS.md` first.
+
 Browser-only trading-card duel. No accounts, no backend.
 
 ## Run
