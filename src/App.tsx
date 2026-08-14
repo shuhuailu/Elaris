@@ -10,39 +10,20 @@ import { AetherMeter } from "./ui/AetherMeter";
 import { kindOf } from "./ui/terms";
 import { starterBrief } from "./ui/starterBrief";
 import { SetupScreen } from "./ui/SetupScreen";
+import { displayText, useLanguage } from "./ui/i18n";
+import { MarketingHome } from "./MarketingHome";
+
+function LanguageSwitch() {
+  const { locale, setLocale } = useLanguage();
+  return <div className="language-switch" role="group" aria-label="Language / 语言">
+    <button className={locale === "en" ? "active" : ""} type="button" onClick={() => setLocale("en")} aria-pressed={locale === "en"}>EN</button>
+    <span aria-hidden>⌁</span>
+    <button className={locale === "zh" ? "active" : ""} type="button" onClick={() => setLocale("zh")} aria-pressed={locale === "zh"}>中</button>
+  </div>;
+}
 
 function Title({ g, dispatch }: { g: GameState; dispatch: (a: any) => void }) {
-  const [sel, setSel] = useState<DeckId>(g.player.deckId);
-  return (
-    <div className="title-screen">
-      <h1 className="brand">ELARIS</h1>
-      <div className="subtitle">Combat Prototype · 0.1.5</div>
-      <div className="decks">
-        {(["mist", "ash"] as DeckId[]).map((id) => {
-          const m = DECK_META[id];
-          return (
-            <button
-              key={id}
-              className={`deck-card ${sel === id ? "sel" : ""}`}
-              onClick={() => {
-                setSel(id);
-                dispatch({ type: "SELECT_DECK", deck: id });
-              }}
-            >
-              <h2>{m.title}</h2>
-              <div className="en">{m.titleEn}</div>
-              <div className="src">{m.sources}</div>
-              <p>“{m.blurb}”</p>
-            </button>
-          );
-        })}
-      </div>
-      <button className="begin" onClick={() => dispatch({ type: "BEGIN" })}>
-        开始对决
-        <span style={{ display: "block", fontSize: 11, letterSpacing: "0.2em", opacity: 0.7 }}>BEGIN DUEL</span>
-      </button>
-    </div>
-  );
+  return <MarketingHome onPlay={() => dispatch({ type: "BEGIN" })} onDeck={(deck) => dispatch({ type: "SELECT_DECK", deck })} />;
 }
 
 const PRE_PLAY_TARGET: Record<string, { reason: string; filter: "friendlyAny" | "friendlyEmber" }> = {
@@ -53,6 +34,8 @@ const PRE_PLAY_TARGET: Record<string, { reason: string; filter: "friendlyAny" | 
 };
 
 export default function App() {
+  const { locale } = useLanguage();
+  const en = locale === "en";
   const [g, dispatch] = useReducer(reduce, undefined, menuState);
   const [inspect, setInspect] = useState<string | null>(null);
   const [selectedHand, setSelectedHand] = useState<string | null>(null);
@@ -144,7 +127,9 @@ export default function App() {
   const p = g.player;
   const o = g.ai;
   const phaseName =
-    g.phase === "closing" ? "战斗" : g.phase === "setup" ? "备战" : ({ awaken: "苏醒", draw: "抽牌", action: "行动", battle: "战斗", nightfall: "夜幕" } as Record<string, string>)[g.phase] ?? "";
+    g.phase === "closing" ? (en ? "Battle" : "战斗") : g.phase === "setup" ? (en ? "Setup" : "备战") : (en
+      ? ({ awaken: "Awaken", draw: "Draw", action: "Action", battle: "Battle", nightfall: "Nightfall" } as Record<string, string>)
+      : ({ awaken: "苏醒", draw: "抽牌", action: "行动", battle: "战斗", nightfall: "夜幕" } as Record<string, string>))[g.phase] ?? "";
 
   const resReady = p.hand.some((id) => {
     const d = CARDS[g.instances[id].defId];
@@ -315,14 +300,15 @@ export default function App() {
   return (
     <div className={`desk ${inspect ? "has-inspect" : ""}`}>
       <header className="sky">
+        <LanguageSwitch />
         <div className="hud-mini" title="击败对方主契获得契痕，先至 3 点获胜。">
-          对方 <span className="dots">{"◇".repeat(o.covenant)}{"○".repeat(3 - o.covenant)}</span>
-          <div>库 {o.library.length}</div>
+          {en ? "Opponent" : "对方"} <span className="dots">{"◇".repeat(o.covenant)}{"○".repeat(3 - o.covenant)}</span>
+          <div>{en ? "Deck" : "库"} {o.library.length}</div>
         </div>
         <div className="sky-mid">
           <div className="turn-line">第 {g.turn} 回合 · {g.activeSide === "player" ? "你" : "对方"}</div>
           <div className="phases">
-            {(["苏醒", "抽牌", "行动", "战斗", "夜幕"] as const).map((lab, i) => (
+            {(en ? ["Awaken", "Draw", "Action", "Battle", "Nightfall"] : ["苏醒", "抽牌", "行动", "战斗", "夜幕"]).map((lab, i) => (
               <span key={lab}>
                 {i > 0 ? " · " : ""}
                 <span className={lab === phaseName ? "on" : ""}>{lab === phaseName ? `◇ ${lab}` : lab}</span>
@@ -331,10 +317,10 @@ export default function App() {
           </div>
         </div>
         <div className="hud-mini" style={{ textAlign: "right" }}>
-          灵息 ◇ {p.aether}/{p.aetherMax}
-          {p.tempAetherGenerated ? ` +${p.tempAetherGenerated}` : ""} · 库 {p.library.length}
+          {en ? "Aether" : "灵息"} ◇ {p.aether}/{p.aetherMax}
+          {p.tempAetherGenerated ? ` +${p.tempAetherGenerated}` : ""} · {en ? "Deck" : "库"} {p.library.length}
           <div>
-            契痕 <span className="dots">{"◇".repeat(p.covenant)}{"○".repeat(3 - p.covenant)}</span>
+            {en ? "Covenants" : "契痕"} <span className="dots">{"◇".repeat(p.covenant)}{"○".repeat(3 - p.covenant)}</span>
           </div>
         </div>
         <div className="menu-wrap">
@@ -542,10 +528,10 @@ export default function App() {
           )}
           {g.phase === "action" && g.activeSide === "player" && !g.prompt && (
             <>
-              <div className="flow-title">行动阶段</div>
-              <span className="whisper">可以使用手牌。准备完成后，进入战斗。</span>
+              <div className="flow-title">{en ? "Action" : "行动阶段"}</div>
+              <span className="whisper">{en ? "Play cards, then enter battle when you are ready." : "可以使用手牌。准备完成后，进入战斗。"}</span>
               <button className="primary" onClick={() => dispatch({ type: "END_ACTION" })}>
-                进入战斗
+                {en ? "ENTER BATTLE" : "进入战斗"}
               </button>
               <button
                 className="ghost"
@@ -556,13 +542,13 @@ export default function App() {
                 }}
                 disabled={p.usedNormalSwitch || !p.companions.some(Boolean)}
               >
-                换位
+                {en ? "SWITCH" : "换位"}
               </button>
             </>
           )}
           {g.phase === "battle" && g.activeSide === "player" && !g.prompt && (
             <>
-              <div className="flow-title">战斗阶段</div>
+              <div className="flow-title">{en ? "Battle" : "战斗阶段"}</div>
               {(() => {
                 const sk = p.active ? battleSkillLabel(p.active.defId) : null;
                 const why = canAttack(g, "player");
@@ -577,7 +563,7 @@ export default function App() {
                     </button>
                     {why && <span className="whisper">{why}</span>}
                     <button className="ghost" onClick={() => dispatch({ type: "SKIP_BATTLE" })}>
-                      跳过战斗
+                      {en ? "SKIP BATTLE" : "跳过战斗"}
                     </button>
                   </>
                 );
@@ -586,17 +572,17 @@ export default function App() {
           )}
           {g.phase === "closing" && g.activeSide === "player" && !g.prompt && (
             <>
-              <div className="flow-title">战斗完成</div>
-              <span className="whisper">结束本回合后，对手将开始行动。</span>
+              <div className="flow-title">{en ? "Battle complete" : "战斗完成"}</div>
+              <span className="whisper">{en ? "End your turn to let the opponent act." : "结束本回合后，对手将开始行动。"}</span>
               <button className="primary" onClick={() => dispatch({ type: "END_TURN" })}>
-                结束本回合
+                {en ? "END TURN" : "结束本回合"}
               </button>
             </>
           )}
           {g.activeSide === "ai" && <span className="whisper">对方仪轨</span>}
         </div>
         <div className="logline" onClick={() => setLogOpen((v) => !v)}>
-          {lastLog ? lastLog.text : "—"}
+          {lastLog ? displayText(lastLog.text, locale) : "—"}
         </div>
       </footer>
 
@@ -642,11 +628,16 @@ export default function App() {
 
       <FxLayer g={g} />
       {handoff && !toastGone && <div className="toast settle handoff">{handoff}</div>}
-      {g.settleNote && !g.lastActionIllegal && !handoff && !toastGone && <div className="toast settle">{g.settleNote}</div>}
-      {g.lastActionIllegal && <div className="toast">{g.lastActionIllegal}</div>}
+      {g.settleNote && !g.lastActionIllegal && !handoff && !toastGone && <div className="toast settle">{displayText(g.settleNote, locale)}</div>}
+      {g.lastActionIllegal && <div className="toast">{displayText(g.lastActionIllegal, locale)}</div>}
       {inspect && !pendingPlay && !(g.prompt && String(g.prompt.kind) !== "setup" && g.promptSide === "player") && (
-        <aside className="inspector" aria-label="卡牌详情">
-          <p className="whisper">已选择 · 查看（尚未使用）</p>
+        <aside className="inspector" aria-label={en ? "Card details" : "卡牌详情"}>
+          <div className="inspector-topline">
+            <p className="whisper">{en ? "Selected · Inspect only (not played)" : "已选择 · 查看（尚未使用）"}</p>
+            <button className="inspector-back" type="button" onClick={() => { setInspect(null); setSelectedHand(null); }}>
+              {en ? "← BACK" : "← 返回"}
+            </button>
+          </div>
           <CardView
             defId={inspect}
             size="inspect"
@@ -790,6 +781,8 @@ function PromptUI({
   pick: string | null;
   setPick: (id: string | null) => void;
 }) {
+  const { locale } = useLanguage();
+  const en = locale === "en";
   const pr = g.prompt!;
   if (pr.kind === "target") {
     const pool = [g.player.active, ...g.player.companions].filter((e) => {
@@ -799,8 +792,8 @@ function PromptUI({
     });
     return (
       <>
-        <h3>{pr.reason}</h3>
-        <p className="whisper">先点选目标，再确认。此效果已开始结算，不能撤回用牌。</p>
+        <h3>{displayText(pr.reason, locale)}</h3>
+        <p className="whisper">{en ? "Select a target, then confirm. This effect has started resolving and the card cannot be undone." : "先点选目标，再确认。此效果已开始结算，不能撤回用牌。"}</p>
         <div className="pick-row">
           {pool.map((e) => (
             <CardView
@@ -823,7 +816,7 @@ function PromptUI({
               setPick(null);
             }}
           >
-            确认目标
+            {en ? "CONFIRM TARGET" : "确认目标"}
           </button>
         </div>
       </>

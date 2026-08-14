@@ -2,6 +2,7 @@ import { def, starterBindError } from "../cards/definitions";
 import type { GameState } from "../types";
 import { CardView } from "./CardView";
 import { groupStarterInstances, starterBrief } from "./starterBrief";
+import { cardName, cardText, skillName, skillText, starterNarrative, starterTag, useLanguage } from "./i18n";
 
 export function SetupScreen({
   g,
@@ -34,10 +35,13 @@ export function SetupScreen({
   onToggleCompare: () => void;
   onToggleFull: () => void;
 }) {
+  const { locale, setLocale } = useLanguage();
+  const en = locale === "en";
   const legal = g.player.hand.filter((id) => !starterBindError(g.instances[id].defId));
   const other = g.player.hand.filter((id) => starterBindError(g.instances[id].defId));
   const focusId = setupStep === "companion" ? setupComp : setupActive;
   const brief = focusId ? starterBrief(g.instances[focusId].defId) : null;
+  const narrative = brief && focusId ? starterNarrative(g.instances[focusId].defId, brief, locale) : null;
   const pickingComp = setupStep === "companion";
   const rawPool = pickingComp ? legal.filter((id) => id !== setupActive) : legal;
   const groups = groupStarterInstances(rawPool, (id) => g.instances[id].defId);
@@ -47,17 +51,18 @@ export function SetupScreen({
   return (
     <div className="rite">
       <header className="rite-head">
+        <div className="language-switch" role="group" aria-label="Language / 语言">
+          <button className={locale === "en" ? "active" : ""} type="button" onClick={() => setLocale("en")} aria-pressed={locale === "en"}>EN</button>
+          <span aria-hidden>⌁</span>
+          <button className={locale === "zh" ? "active" : ""} type="button" onClick={() => setLocale("zh")} aria-pressed={locale === "zh"}>中</button>
+        </div>
         <div className="brand-mini">ELARIS</div>
-        <h1>{pickingComp ? "可选 · 设置一只伴契" : "选择你的主契幻兽"}</h1>
-        <p className="rite-lead">
-          {pickingComp
-            ? "伴契在后方待命，之后可通过换位成为主契。"
-            : "主契是当前出战、通常负责发动战技的幻兽。"}
-        </p>
+        <h1>{pickingComp ? (en ? "Optional · Set a Companion" : "可选 · 设置一只伴契") : (en ? "Choose your Active Eidolon" : "选择你的主契幻兽")}</h1>
+        <p className="rite-lead">{pickingComp ? (en ? "Companions wait behind you and can later switch into the active slot." : "伴契在后方待命，之后可通过换位成为主契。") : (en ? "Your active Eidolon fights now and usually uses attack skills." : "主契是当前出战、通常负责发动战技的幻兽。")}</p>
         {!pickingComp && (
           <>
-            <p className="rite-keys">♡ 生命 = 能承受多少伤害　　◇ 部署费 = 之后从手牌部署时需要的灵息</p>
-            <p className="rite-note">开局绑定主契不消耗部署灵息。</p>
+            <p className="rite-keys">{en ? "♡ Health = damage it can take     ◇ Deploy cost = Aether needed to deploy it from hand later" : "♡ 生命 = 能承受多少伤害　　◇ 部署费 = 之后从手牌部署时需要的灵息"}</p>
+            <p className="rite-note">{en ? "Binding your opening Eidolon costs no deploy Aether." : "开局绑定主契不消耗部署灵息。"}</p>
             {uniqueDefs === 1 && groups[0].ids.length > 1 && (
               <p className="rite-note">
                 本次开局可选主契：{starterBrief(groups[0].defId).name} ×{groups[0].ids.length}
@@ -70,23 +75,24 @@ export function SetupScreen({
       <section className="rite-stage">
         {groups.map((grp) => {
           const b = starterBrief(grp.defId);
+          const d = def(grp.defId);
           const on = focusId != null && grp.ids.includes(focusId);
           return (
             <div key={grp.defId} className={`rite-cand ${on ? "on" : ""}`} onClick={() => onPick(grp.pick)}>
               <CardView defId={grp.defId} size="lg" selected={on} onClick={() => onPick(grp.pick)} />
               <div className="rite-meta">
                 <strong>
-                  {b.name}
+                  {cardName(d, locale)}
                   {grp.ids.length > 1 ? ` ×${grp.ids.length}` : ""}
                 </strong>
                 <span>
                   ♡ {b.hp}　◇ {b.deploy}
                 </span>
                 <span>
-                  {b.skillName} · ◇{b.skillCost}
+                  {d.skill ? skillName(d.skill, d.id, locale) : "—"} · ◇{b.skillCost}
                 </span>
-                <span>{b.skillBite}</span>
-                <em>{b.tags.join(" / ")}</em>
+                <span>{d.skill ? `${skillText(d.skill, d.id, locale).split(locale === "en" ? "." : "。")[0]}${locale === "en" ? "…" : "…"}` : ""}</span>
+                <em>{b.tags.map((tag) => starterTag(tag, locale)).join(" / ")}</em>
               </div>
             </div>
           );
@@ -95,44 +101,44 @@ export function SetupScreen({
 
       {brief && setupStep !== "companion" && (
         <aside className="rite-sum">
-          <h2>{brief.name}</h2>
+          <h2>{en ? def(g.instances[focusId!].defId).nameEn : brief.name}</h2>
           <p>
-            ♡ {brief.hp} · {brief.hpLabel}
+            ♡ {brief.hp} · {en ? "Health" : brief.hpLabel}
             <br />
-            部署费 ◇{brief.deploy} · {brief.deployLabel}
+            {en ? "Deploy cost" : "部署费"} ◇{brief.deploy} · {en ? "Aether" : brief.deployLabel}
           </p>
           <p>
-            <b>战技</b>
+            <b>{en ? "Skill" : "战技"}</b>
             <br />
-            {brief.skillName} · ◇{brief.skillCost}
+            {def(g.instances[focusId!].defId).skill ? skillName(def(g.instances[focusId!].defId).skill!, def(g.instances[focusId!].defId).id, locale) : brief.skillName} · ◇{brief.skillCost}
             <br />
-            {brief.skillText}
+            {def(g.instances[focusId!].defId).skill ? skillText(def(g.instances[focusId!].defId).skill!, def(g.instances[focusId!].defId).id, locale) : brief.skillText}
           </p>
           {brief.keyAbility && (
             <p>
-              <b>关键能力</b>
+              <b>{en ? "Key ability" : "关键能力"}</b>
               <br />
-              {brief.keyAbility}
+              {cardText(def(g.instances[focusId!].defId), locale)}
             </p>
           )}
           <p>
-            <b>玩法</b>
+            <b>{en ? "Playstyle" : "玩法"}</b>
             <br />
-            {brief.pro}
+            {narrative?.pro}
           </p>
           <p>
-            <b>取舍</b>
+            <b>{en ? "Trade-off" : "取舍"}</b>
             <br />
-            {brief.con}
+            {narrative?.con}
           </p>
           {setupStep === "confirm" ? (
             <div className="rite-acts">
               <button className="primary" onClick={onConfirm}>
-                确认选择
+                {en ? "CONFIRM" : "确认选择"}
               </button>
               {uniqueDefs >= 2 && (
                 <button className="ghost" onClick={onBackCompare}>
-                  继续比较
+                  {en ? "COMPARE AGAIN" : "继续比较"}
                 </button>
               )}
             </div>
