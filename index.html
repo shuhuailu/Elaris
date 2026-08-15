@@ -151,7 +151,19 @@ body.reduced *{animation-duration:.001s!important;transition-duration:.12s!impor
 .ldskip button:hover{color:var(--ivory);border-color:rgba(107,73,52,.65);background:rgba(140,47,28,.08)}
 /* legibility over moving footage */
 .ld .brand,.ldline,.ldpct,.ldhint .k,.ldhint .v{text-shadow:0 2px 18px rgba(0,0,0,.95),0 0 42px rgba(0,0,0,.8)}
-.ldhint{position:absolute;bottom:6%;left:0;right:0;text-align:center;padding:0 8vw}
+.ldhint{position:absolute;bottom:11%;left:0;right:0;text-align:center;padding:0 8vw}
+/* created-by line — quiet, engraved, sits under everything */
+.ldcredit{position:absolute;bottom:4.2%;left:0;right:0;text-align:center;
+  opacity:0;animation:sf 3s ease 2.2s forwards}
+.ldcredit .lbl{font-family:var(--ui);font-size:8px;letter-spacing:.34em;text-transform:uppercase;
+  color:rgba(216,205,184,.22)}
+.ldcredit .names{margin-top:9px;font-size:14.5px;letter-spacing:.16em;color:rgba(216,205,184,.5);
+  text-shadow:0 2px 16px rgba(0,0,0,.95)}
+.ldcredit .names span{color:rgba(216,205,184,.62)}
+.ldcredit .sep{display:inline-block;margin:0 12px;color:rgba(140,47,28,.85);font-size:11px;
+  transform:translateY(-2px)}
+.ldcredit .rule{width:112px;height:1px;margin:13px auto 0;
+  background:linear-gradient(90deg,transparent,rgba(107,73,52,.55),transparent)}
 .ldhint .k{font-family:var(--ui);font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(216,205,184,.2)}
 .ldhint .v{font-size:14.5px;color:rgba(216,205,184,.4);margin-top:8px;font-style:italic;min-height:22px;transition:opacity .7s}
 
@@ -659,6 +671,11 @@ details.deep .b{padding-top:14px;font-size:14.5px;line-height:1.75;color:var(--i
     <div class="ldhint">
       <div class="k">From the covenant ledger</div>
       <div class="v" id="ldHint"></div>
+    </div>
+    <div class="ldcredit">
+      <div class="lbl">Created by</div>
+      <div class="names"><span>Shuhuai Lu</span><span class="sep">✦</span><span>Hammad Safi</span></div>
+      <div class="rule"></div>
     </div>
   </div>
 
