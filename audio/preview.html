@@ -1,0 +1,44 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>ELARIS — Score</title>
+<style>
+body{margin:0;background:#0a0908;color:#D8CDB8;font-family:"Iowan Old Style",Palatino,Georgia,serif;
+ display:grid;place-items:center;min-height:100vh;padding:40px}
+.wrap{width:min(720px,92vw)}
+h1{font-weight:400;letter-spacing:.34em;font-size:22px;margin:0 0 6px}
+.fn{font-family:ui-sans-serif,system-ui,sans-serif;font-size:10px;letter-spacing:.24em;
+ text-transform:uppercase;color:rgba(216,205,184,.35)}
+.cue{border:1px solid rgba(216,205,184,.1);padding:22px 24px;margin-top:18px;
+ background:linear-gradient(180deg,rgba(22,17,14,.6),rgba(8,7,6,.8));transition:.6s}
+.cue:hover{border-color:rgba(107,73,52,.55)}
+.cue h2{font-size:19px;font-weight:400;margin:8px 0 4px}
+.cue p{margin:6px 0 14px;font-size:14px;font-style:italic;color:rgba(216,205,184,.45);line-height:1.6}
+audio{width:100%;filter:sepia(.5) hue-rotate(-18deg) saturate(.7) brightness(.9)}
+.meta{display:flex;gap:20px;margin-top:10px}
+.meta span{font-family:ui-sans-serif,sans-serif;font-size:9.5px;letter-spacing:.16em;
+ text-transform:uppercase;color:rgba(216,205,184,.28)}
+</style></head><body><div class="wrap">
+<div class="fn">The ELARIS score</div>
+<h1>FOUR CUES</h1>
+<p style="font-size:14px;color:rgba(216,205,184,.45);font-style:italic">
+All synthesized from scratch — detuned pads, struck bronze, convolution hall, tape wobble.
+Every cue loops seamlessly.</p>
+
+<div class="cue"><div class="fn">Cue I · the vault wakes</div><h2>Loading</h2>
+<p>D aeolian. A slow harmonic descent — Dm, B♭, F, Gm — with distant bells marking progress and a bowed shimmer entering as the doors open. 60s.</p>
+<audio controls loop preload="none"><source src="elaris-loading.ogg" type="audio/ogg"><source src="elaris-loading.mp3" type="audio/mpeg"></audio>
+<div class="meta"><span>60 seconds</span><span>D minor</span><span>very sparse</span></div></div>
+
+<div class="cue"><div class="fn">Cue II · home</div><h2>The Hall</h2>
+<p>Warmer, with a small recurring bell figure — the hall's own melody. Hearth crackle sits underneath. This is the lobby. 68s.</p>
+<audio controls loop preload="none"><source src="elaris-hall.ogg" type="audio/ogg"><source src="elaris-hall.mp3" type="audio/mpeg"></audio>
+<div class="meta"><span>68 seconds</span><span>D minor</span><span>hearth crackle</span></div></div>
+
+<div class="cue"><div class="fn">Cue III · the drawers</div><h2>The Archive</h2>
+<p>Pared back to almost nothing. One low drone, a fifth drifting above it, four barely-audible high tones across the whole minute. Mixed 13 dB below the trial so it genuinely disappears. 69s.</p>
+<audio controls loop preload="none"><source src="elaris-archive.ogg" type="audio/ogg"><source src="elaris-archive.mp3" type="audio/mpeg"></audio>
+<div class="meta"><span>69 seconds</span><span>−26 dB · very calm</span><span>near-silent</span></div></div>
+
+<div class="cue"><div class="fn">Cue IV · the trial</div><h2>Battle</h2>
+<p>132 BPM, D phrygian. Driving eighth-note bass, hard kick and snare backbeat, gritty saw stabs, 16th metal ticks, screaming lead in the second half, noise risers into each phrase. 74s.</p>
+<audio controls loop preload="none"><source src="elaris-battle.ogg" type="audio/ogg"><source src="elaris-battle.mp3" type="audio/mpeg"></audio>
+<div class="meta"><span>74 seconds</span><span>132 BPM</span><span>harsh · energetic</span></div></div>
+</div></body></html>

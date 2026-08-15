@@ -1,0 +1,86 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>ELARIS — Background Proof</title>
+<style>
+:root{--ivory:#D8CDB8;--ui:ui-sans-serif,-apple-system,"Segoe UI",Inter,sans-serif;
+ --lore:"Iowan Old Style",Palatino,"Book Antiqua",Georgia,serif;
+ --verdant:#5d7a58;--tide:#5b7d94;--ember:#a8442a;--astral:#8083a8}
+*{box-sizing:border-box}
+body{margin:0;background:#070606;color:var(--ivory);font-family:var(--lore);overflow-x:hidden}
+.stage{position:relative;min-height:100vh;background-image:url(elaris-bg-master.jpg);
+  background-size:cover;background-position:center;overflow:hidden}
+/* aspect awaken layer — the selected card lights its own region */
+#awaken{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.6s cubic-bezier(.22,.8,.24,1);mix-blend-mode:screen}
+#awaken.on{opacity:1}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>")}
+.vig{position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 96% at 50% 46%,transparent 32%,rgba(0,0,0,.5) 76%,rgba(0,0,0,.92) 100%)}
+.wrap{position:relative;z-index:5;padding:54px 60px 80px}
+h1{font-size:26px;letter-spacing:.34em;font-weight:400;margin:0}
+.fn{font-family:var(--ui);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:rgba(216,205,184,.4)}
+.row{display:grid;grid-template-columns:repeat(6,1fr);gap:22px;margin-top:40px;max-width:1180px}
+.card{position:relative;aspect-ratio:5/7;border-radius:2px;overflow:hidden;cursor:pointer;
+ background:linear-gradient(168deg,#1a1614,#0a0908 62%);border:1px solid rgba(216,205,184,.09);
+ filter:brightness(.82) saturate(.8);transition:.8s cubic-bezier(.22,.8,.24,1)}
+.card:before{content:"";position:absolute;inset:0;z-index:3;opacity:0;transition:opacity 1s;
+ background:radial-gradient(120% 76% at 50% 112%,var(--ag),transparent 62%)}
+.card:hover{filter:brightness(1.06) saturate(1);transform:translateY(-9px);border-color:rgba(107,73,52,.6);
+ box-shadow:0 34px 56px -30px #000,0 0 36px -12px var(--ag)}
+.card:hover:before{opacity:1}
+.card.sel{border-color:rgba(160,55,30,.9);box-shadow:0 0 42px -8px var(--ag)}
+.card .nm{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:9px 10px;font-size:12.5px;
+ background:linear-gradient(0deg,rgba(5,4,4,.97),transparent)}
+.card .mt{font-family:var(--ui);font-size:8px;letter-spacing:.14em;text-transform:uppercase;
+ color:rgba(216,205,184,.4);margin-top:3px;display:flex;justify-content:space-between}
+.note{margin-top:56px;max-width:640px;font-size:15px;line-height:1.7;color:rgba(216,205,184,.5);font-style:italic}
+.zone{margin-top:70px;padding:26px;border:1px dashed rgba(216,205,184,.14)}
+.zone .fn{margin-bottom:14px}
+.mini{display:grid;grid-template-columns:repeat(10,1fr);gap:10px}
+.mini .card{aspect-ratio:5/7}
+</style></head><body>
+<div class="stage">
+  <div id="awaken"></div><div class="grain"></div><div class="vig"></div>
+  <div class="wrap">
+    <div class="fn">ELARIS · background proof · cards must dominate</div>
+    <h1 style="margin-top:14px">THE VAULT</h1>
+    <div class="row" id="row"></div>
+    <div class="note">Click a record. Its affinity awakens the region of the background that belongs to it — ember at the left, tide lower right, verdant lower left, astral upper right. The base plate stays dark enough to carry all four.</div>
+    <div class="zone">
+      <div class="fn">Density test · ten records over the calm centre</div>
+      <div class="mini" id="mini"></div>
+    </div>
+  </div>
+</div>
+<script>
+const A={Ember:{c:"#a8442a",g:"rgba(168,68,42,.6)",pos:"18% 46%",sz:"58% 78%"},
+ Tide:{c:"#5b7d94",g:"rgba(91,125,148,.55)",pos:"82% 84%",sz:"52% 60%"},
+ Verdant:{c:"#5d7a58",g:"rgba(93,122,88,.55)",pos:"10% 88%",sz:"46% 52%"},
+ Astral:{c:"#8083a8",g:"rgba(128,131,168,.5)",pos:"88% 14%",sz:"54% 62%"}};
+const C=[["Star-Lamp Fox","Astral",2,90],["Mossling","Verdant",1,70],["Embertail Lizard","Ember",1,60],
+ ["Moon-Tide Cat","Tide",2,80],["Ash-Crowned Salamander","Ember",3,100],["Star-Weaving Moth","Astral",4,110]];
+function plate(a,s){const R=(x=>()=>((x=x*16807%2147483647)/2147483647))(s*97+11);
+ const col=A[a].c;let bg=a==="Verdant"?"#0d1210":a==="Tide"?"#0b1016":a==="Ember"?"#140b09":"#0c0b13",f="";
+ if(a==="Astral"){for(let i=0;i<24;i++)f+=`<circle cx="${(R()*120).toFixed(1)}" cy="${(R()*96).toFixed(1)}" r="${(R()*.9+.25).toFixed(2)}" fill="rgba(216,205,184,${(.2+R()*.5).toFixed(2)})"/>`;
+  f+=`<circle cx="60" cy="52" r="26" fill="none" stroke="${col}" stroke-width=".5" opacity=".5"/>`}
+ if(a==="Tide")for(let i=0;i<5;i++)f+=`<path d="M-4 ${96+i*11} q18 -6 34 0 t34 0 t34 0 t34 0" fill="none" stroke="${col}" stroke-width=".55" opacity="${(.5-i*.07).toFixed(2)}"/>`;
+ if(a==="Verdant"){for(let i=0;i<7;i++){const x=8+R()*104;f+=`<path d="M${x.toFixed(1)} 168 L${(x+R()*6-3).toFixed(1)} ${(70+R()*40).toFixed(1)}" stroke="rgba(216,205,184,.14)" stroke-width="1" fill="none"/>`}}
+ if(a==="Ember"){f+=`<ellipse cx="60" cy="140" rx="44" ry="16" fill="rgba(150,52,26,.28)"/>`;
+  for(let i=0;i<14;i++)f+=`<circle cx="${(20+R()*80).toFixed(1)}" cy="${(80+R()*60).toFixed(1)}" r="${(R()*1.1+.3).toFixed(2)}" fill="rgba(196,90,46,${(.3+R()*.6).toFixed(2)})"/>`}
+ const w=16+R()*10,hh=20+R()*14,cx=60,cy=94;
+ return `<svg viewBox="0 0 120 168" style="position:absolute;inset:0;width:100%;height:100%">
+  <defs><radialGradient id="g${s}" cx="50%" cy="42%"><stop offset="0" stop-color="rgba(255,255,255,.05)"/><stop offset="1" stop-color="rgba(0,0,0,.72)"/></radialGradient></defs>
+  <rect width="120" height="168" fill="${bg}"/><rect width="120" height="168" fill="url(#g${s})"/>${f}
+  <path d="M0 108 Q30 102 60 105 T120 106 L120 168 L0 168Z" fill="rgba(0,0,0,.55)"/>
+  <g stroke="rgba(216,205,184,.55)" stroke-width="1" fill="rgba(6,5,5,.5)">
+   <path d="M${cx-w} ${cy+hh} q${(w*.3).toFixed(1)} ${(-hh*1.5).toFixed(1)} ${w.toFixed(1)} ${(-hh*1.6).toFixed(1)} q${(w*.7).toFixed(1)} ${(.1*hh).toFixed(1)} ${w.toFixed(1)} ${(hh*1.6).toFixed(1)} Z"/>
+   <circle cx="${cx-4.5}" cy="${(cy-hh*.55).toFixed(1)}" r="1.5" fill="${col}"/><circle cx="${cx+4.5}" cy="${(cy-hh*.55).toFixed(1)}" r="1.5" fill="${col}"/></g></svg>`}
+function make(n,a,c,hp,i,small){const d=document.createElement("div");d.className="card";
+ d.style.setProperty("--ag",A[a].g);
+ d.innerHTML=plate(a,i+1)+`<div class="nm">${small?"":n}<div class="mt"><span style="color:${A[a].c}">${a}</span><span>${hp} HP</span></div></div>`;
+ d.onclick=()=>{document.querySelectorAll(".card").forEach(x=>x.classList.remove("sel"));d.classList.add("sel");awaken(a)};
+ return d}
+function awaken(a){const el=document.getElementById("awaken");
+ el.style.background=`radial-gradient(${A[a].sz} at ${A[a].pos}, ${A[a].g}, transparent 70%)`;
+ el.classList.remove("on");void el.offsetWidth;el.classList.add("on")}
+C.forEach((c,i)=>document.getElementById("row").appendChild(make(...c,i)));
+for(let i=0;i<10;i++){const c=C[i%C.length];document.getElementById("mini").appendChild(make(c[0],c[1],c[2],c[3],i+20,true))}
+</script></body></html>

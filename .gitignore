@@ -1,0 +1,22 @@
+# dependencies / caches — never committed
+node_modules/
+package-lock.json
+package.json
+__pycache__/
+*.pyc
+.venv/
+
+# working files
+_*.png
+_*.svg
+_*.wav
+*.tmp
+
+# os
+.DS_Store
+Thumbs.db
+
+# never commit credentials
+.env
+*.token
+tok
