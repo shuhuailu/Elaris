@@ -347,6 +347,213 @@ body.reduced #ground video{display:none}
 .card.locked{filter:brightness(.28) saturate(0)}
 .card.locked:hover{filter:brightness(.45) saturate(.2)}
 
+
+/* ============================================================
+   CARD-LED PALETTE — sampled from the Liora artwork
+   navy frame · parchment · warm gold · forest
+   ============================================================ */
+:root{
+  --navy:#171f25;
+  --navy-2:#0e151b;
+  --navy-3:#090c0f;
+  --navy-lift:#1e2a33;
+  --gold:#c5885b;
+  --gold-lt:#e0b183;
+  --gold-dim:#8a6446;
+  --parch:#cbbea6;
+  --parch-lt:#e6dcc6;
+  --parch-dim:rgba(203,190,166,.6);
+  --parch-3:rgba(203,190,166,.34);
+  --parch-4:rgba(203,190,166,.16);
+  --line:rgba(203,190,166,.14);
+  --line-2:rgba(197,136,91,.4);
+  --forest:#5d6b45;
+  --ok:#7fa06a;
+  --bad:#b4633f;
+}
+
+/* ============================================================
+   MODERN LOBBY, CARD-LED — replaces the old hall
+   ============================================================ */
+.hall{position:absolute;inset:0;display:grid;grid-template-rows:auto 1fr auto;
+  background:
+    radial-gradient(80% 60% at 50% 0%,rgba(30,42,51,.55),transparent 70%),
+    linear-gradient(180deg,rgba(9,12,15,.7),rgba(14,21,27,.5) 45%,rgba(9,12,15,.85))}
+
+/* ---------- TOP BAR ---------- */
+.h-top{display:flex;align-items:center;gap:16px;padding:14px 22px;z-index:20;
+  background:linear-gradient(180deg,rgba(9,12,15,.92),rgba(9,12,15,.35));
+  border-bottom:1px solid var(--line)}
+.h-you{display:flex;align-items:center;gap:12px;cursor:pointer;padding:6px 14px 6px 6px;
+  border:1px solid var(--line);border-radius:40px;background:rgba(23,31,37,.7);transition:.4s var(--ez)}
+.h-you:hover{border-color:var(--line-2);background:rgba(30,42,51,.9)}
+.h-you .mk{width:38px;height:38px;flex:0 0 auto;border-radius:50%;overflow:hidden;
+  border:2px solid var(--gold);background:var(--navy-3);display:grid;place-items:center}
+.h-you .nm{font-family:var(--ui);font-size:14px;font-weight:600;color:var(--parch-lt);line-height:1.1}
+.h-you .lv{font-family:var(--ui);font-size:10px;color:var(--gold);margin-top:2px;font-weight:600}
+.h-xp{width:96px;height:4px;background:rgba(203,190,166,.14);border-radius:3px;margin-top:5px;overflow:hidden}
+.h-xp i{display:block;height:100%;border-radius:3px;transition:width 1s var(--ez);
+  background:linear-gradient(90deg,var(--gold-dim),var(--gold-lt))}
+.h-purse{margin-left:auto;display:flex;align-items:center;gap:10px}
+.h-coin{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:30px;
+  border:1px solid var(--line);background:rgba(23,31,37,.75);cursor:pointer;transition:.4s var(--ez)}
+.h-coin:hover{border-color:var(--line-2);background:rgba(30,42,51,.95);transform:translateY(-1px)}
+.h-coin .v{font-family:var(--ui);font-size:14px;font-weight:600;color:var(--parch-lt)}
+.h-ico{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;
+  border:1px solid var(--line);background:rgba(23,31,37,.75);transition:.4s var(--ez)}
+.h-ico:hover{border-color:var(--line-2);background:rgba(30,42,51,.95)}
+
+/* ---------- CENTRE ---------- */
+.h-mid{position:relative;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  gap:34px;padding:0 40px;min-height:0}
+.h-champ{position:relative;display:grid;place-items:center;justify-self:end}
+.h-champ .cardwrap{width:min(210px,26vh);position:relative;cursor:pointer;transition:.6s var(--ez)}
+.h-champ .cardwrap:hover{transform:translateY(-8px) rotate(-1deg)}
+.h-champ .glow{position:absolute;bottom:-18px;width:80%;height:60px;filter:blur(24px);pointer-events:none;
+  background:radial-gradient(closest-side,var(--ag,rgba(197,136,91,.6)),transparent 74%)}
+.h-cname{text-align:center;margin-top:16px}
+.h-cname .n{font-family:var(--ui);font-size:16px;font-weight:600;color:var(--parch-lt)}
+.h-cname .a{font-family:var(--ui);font-size:10.5px;color:var(--gold);margin-top:4px;
+  letter-spacing:.08em;text-transform:uppercase}
+
+/* THE PLAY BUTTON — unmistakable */
+.h-playzone{display:flex;flex-direction:column;align-items:center;gap:16px}
+.h-play{position:relative;cursor:pointer;border:0;padding:0;background:none;
+  transition:transform .35s var(--ez)}
+.h-play:hover{transform:translateY(-3px) scale(1.02)}
+.h-play:active{transform:translateY(1px) scale(.99)}
+.h-play .face{position:relative;padding:26px 88px;border-radius:8px;text-align:center;overflow:hidden;
+  background:linear-gradient(180deg,#d99a63,#b46f3e 52%,#8a4f2b);
+  border:2px solid var(--gold-lt);
+  box-shadow:0 12px 0 -2px #5e3620, 0 22px 40px -14px rgba(0,0,0,.9),
+             inset 0 2px 0 rgba(255,225,190,.55)}
+.h-play:hover .face{box-shadow:0 12px 0 -2px #5e3620, 0 28px 54px -12px rgba(197,136,91,.55),
+             inset 0 2px 0 rgba(255,235,205,.7)}
+.h-play .face:after{content:"";position:absolute;top:-60%;left:-70%;width:45%;height:220%;
+  background:linear-gradient(96deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:rotate(14deg);transition:left .9s var(--ez)}
+.h-play:hover .face:after{left:130%}
+.h-play .w{position:relative;z-index:2;font-family:var(--ui);font-size:30px;font-weight:800;
+  letter-spacing:.16em;color:#2a160c;text-shadow:0 1px 0 rgba(255,225,190,.6)}
+.h-play .s{position:relative;z-index:2;font-family:var(--ui);font-size:11px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:rgba(42,22,12,.7);margin-top:4px}
+.h-deckline{font-family:var(--ui);font-size:12px;color:var(--parch-3);text-align:center}
+.h-deckline b{color:var(--parch);font-weight:600}
+.h-deckline a{color:var(--gold);cursor:pointer;font-weight:600}
+.h-deckline a:hover{color:var(--gold-lt);text-decoration:underline}
+
+/* right column — a compact "what next" strip */
+.h-next{justify-self:start;width:min(260px,100%);display:flex;flex-direction:column;gap:10px}
+.h-tile{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:rgba(23,31,37,.66);transition:.35s var(--ez)}
+.h-tile:hover{border-color:var(--line-2);background:rgba(30,42,51,.92);transform:translateX(3px)}
+.h-tile .ic{width:34px;height:34px;flex:0 0 auto;border-radius:8px;display:grid;place-items:center;
+  background:rgba(197,136,91,.14);border:1px solid rgba(197,136,91,.3)}
+.h-tile .tx{flex:1;min-width:0}
+.h-tile .tt{font-family:var(--ui);font-size:13px;font-weight:600;color:var(--parch-lt)}
+.h-tile .td{font-family:var(--ui);font-size:11px;color:var(--parch-3);margin-top:2px}
+.h-tile .dot{min-width:20px;height:20px;padding:0 6px;border-radius:10px;display:grid;place-items:center;
+  font-family:var(--ui);font-size:11px;font-weight:700;background:var(--gold);color:#2a160c}
+
+/* ---------- BOTTOM MENU ---------- */
+.h-menu{display:flex;gap:0;z-index:20;border-top:1px solid var(--line);
+  background:linear-gradient(0deg,rgba(9,12,15,.96),rgba(14,21,27,.6))}
+.h-door{flex:1;padding:14px 10px 13px;text-align:center;position:relative;cursor:pointer;
+  transition:.35s var(--ez);border-right:1px solid rgba(203,190,166,.07)}
+.h-door:last-child{border-right:0}
+.h-door:hover{background:rgba(197,136,91,.1)}
+.h-door:after{content:"";position:absolute;left:50%;right:50%;bottom:0;height:3px;border-radius:3px;
+  background:var(--gold);transition:.35s var(--ez)}
+.h-door:hover:after{left:24%;right:24%}
+.h-door .ic{width:28px;height:28px;margin:0 auto 6px;display:grid;place-items:center;opacity:.72;transition:.35s}
+.h-door:hover .ic{opacity:1;transform:translateY(-2px)}
+.h-door .l{font-family:var(--ui);font-size:12px;font-weight:600;color:var(--parch);letter-spacing:.02em}
+.h-door .d{font-family:var(--ui);font-size:10.5px;color:var(--parch-3);margin-top:2px}
+.h-door .dot{position:absolute;top:8px;right:calc(50% - 42px);min-width:19px;height:19px;padding:0 5px;
+  border-radius:10px;display:grid;place-items:center;font-family:var(--ui);font-size:10px;font-weight:700;
+  background:var(--gold);color:#2a160c;box-shadow:0 2px 8px rgba(0,0,0,.6)}
+
+@media(max-width:1080px){
+  .h-mid{grid-template-columns:1fr;gap:18px;padding:14px 20px;overflow:auto}
+  .h-champ,.h-next{justify-self:center}
+  .h-play .face{padding:20px 56px}
+  .h-play .w{font-size:24px}
+}
+
+/* ============================================================
+   NAME SCREEN — clean, modern, card-led
+   ============================================================ */
+#s-covenant{background:
+  radial-gradient(70% 60% at 50% 22%,rgba(30,42,51,.6),transparent 72%),
+  linear-gradient(180deg,rgba(9,12,15,.9),rgba(14,21,27,.7) 50%,rgba(9,12,15,.94))}
+.nm-wrap{position:absolute;inset:0;display:grid;place-items:center;padding:30px}
+.nm-card{width:min(480px,92vw);padding:38px 38px 32px;border-radius:14px;text-align:center;
+  background:linear-gradient(180deg,rgba(30,42,51,.96),rgba(14,21,27,.98));
+  border:1px solid var(--line-2);
+  box-shadow:0 40px 90px -30px #000,inset 0 1px 0 rgba(230,220,198,.1)}
+.nm-crest{width:64px;height:64px;margin:0 auto 18px;color:var(--gold)}
+.nm-card h2{font-family:var(--ui);font-size:22px;font-weight:700;color:var(--parch-lt);letter-spacing:.02em}
+.nm-card .sub{font-family:var(--ui);font-size:13.5px;color:var(--parch-3);margin-top:8px;line-height:1.5}
+.nm-field{margin-top:26px;position:relative}
+.nm-field input{width:100%;background:rgba(9,12,15,.7);border:1px solid var(--line);
+  border-radius:9px;outline:0;padding:15px 16px;text-align:center;
+  font-family:var(--ui);font-size:19px;font-weight:600;color:var(--parch-lt);transition:.35s var(--ez)}
+.nm-field input:focus{border-color:var(--gold);background:rgba(23,31,37,.9);
+  box-shadow:0 0 0 4px rgba(197,136,91,.14)}
+.nm-field input::placeholder{color:rgba(203,190,166,.24);font-weight:400}
+.nm-hint{font-family:var(--ui);font-size:11.5px;color:var(--parch-3);margin-top:10px;min-height:16px}
+.btn-primary{margin-top:22px;width:100%;padding:15px;border-radius:9px;cursor:pointer;
+  font-family:var(--ui);font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:#2a160c;border:2px solid var(--gold-lt);
+  background:linear-gradient(180deg,#d99a63,#b46f3e 55%,#8a4f2b);
+  box-shadow:0 6px 0 -1px #5e3620,0 16px 30px -12px rgba(0,0,0,.85);
+  transition:.3s var(--ez)}
+.btn-primary:hover:not([disabled]){transform:translateY(-2px);
+  box-shadow:0 8px 0 -1px #5e3620,0 22px 40px -12px rgba(197,136,91,.5)}
+.btn-primary:active:not([disabled]){transform:translateY(2px);box-shadow:0 3px 0 -1px #5e3620}
+.btn-primary[disabled]{opacity:.4;cursor:default;filter:grayscale(.5)}
+
+/* ============================================================
+   CHOOSE A CHAMPION — modern, obvious
+   ============================================================ */
+#s-firstpack{background:
+  radial-gradient(80% 60% at 50% 0%,rgba(30,42,51,.6),transparent 70%),
+  linear-gradient(180deg,rgba(9,12,15,.86),rgba(14,21,27,.6) 45%,rgba(9,12,15,.92))}
+.pick-head{position:absolute;top:5%;left:0;right:0;text-align:center;z-index:5}
+.pick-head .step{display:inline-block;font-family:var(--ui);font-size:10.5px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--gold);
+  border:1px solid rgba(197,136,91,.4);border-radius:20px;padding:6px 16px;background:rgba(197,136,91,.1)}
+.pick-head h2{font-family:var(--ui);font-size:clamp(24px,3vw,34px);font-weight:800;
+  color:var(--parch-lt);margin-top:14px;letter-spacing:.01em}
+.pick-sub{font-family:var(--ui);font-size:14.5px;color:var(--parch-3);margin-top:8px}
+.pick-rail{position:absolute;inset:0;display:grid;place-items:center;padding:110px 20px 40px}
+.pick-row{display:flex;gap:22px;justify-content:center;align-items:flex-start;flex-wrap:wrap;max-width:1220px}
+.pick{position:relative;width:188px;cursor:pointer;border-radius:12px;padding:12px 12px 14px;
+  background:rgba(23,31,37,.6);border:1px solid var(--line);
+  transition:transform .45s var(--ez),border-color .45s,background .45s,opacity .6s}
+.pick:hover{transform:translateY(-10px);border-color:var(--gold);background:rgba(30,42,51,.95);
+  box-shadow:0 26px 50px -20px #000,0 0 34px -14px rgba(197,136,91,.6)}
+.pick .card{filter:brightness(.92)}
+.pick:hover .card{filter:brightness(1.06)}
+.pick .nameplate{margin-top:12px;text-align:center}
+.pick .nameplate .n{font-family:var(--ui);font-size:13.5px;font-weight:700;color:var(--parch-lt);line-height:1.25}
+.pick .nameplate .f{font-family:var(--ui);font-size:10px;font-weight:600;margin-top:5px;
+  letter-spacing:.06em;text-transform:uppercase}
+.pick .nameplate .d{font-family:var(--ui);font-size:11.5px;color:var(--parch-3);margin-top:8px;line-height:1.45}
+.pick .press{margin-top:12px;width:100%;padding:11px 0;border-radius:8px;cursor:pointer;
+  font-family:var(--ui);font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:#2a160c;border:2px solid var(--gold-lt);
+  background:linear-gradient(180deg,#d99a63,#b46f3e 55%,#8a4f2b);
+  box-shadow:0 4px 0 -1px #5e3620;transition:.3s var(--ez)}
+.pick:hover .press{box-shadow:0 6px 0 -1px #5e3620,0 12px 22px -8px rgba(197,136,91,.6)}
+.pick.taken{transform:translateY(-14px) scale(1.05);border-color:var(--gold-lt);z-index:8}
+.pick.gone{opacity:0;transform:translateY(22px) scale(.92);pointer-events:none}
+.pick-foot{position:absolute;bottom:5%;left:0;right:0;text-align:center;z-index:6;opacity:0;
+  transition:opacity .8s var(--ez);font-family:var(--ui)}
+.pick-foot.on{opacity:1}
+.pick-foot .a{font-size:16px;font-weight:700;color:var(--parch-lt)}
+.pick-foot .b{font-size:13px;color:var(--parch-3);margin-top:6px}
+
 /* ============================================================
    TUTORIAL BATTLE — the game teaches itself by being played
    ============================================================ */
@@ -384,17 +591,18 @@ body.reduced #ground video{display:none}
 .tut-say{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:30;
   width:min(560px,86vw);text-align:center;pointer-events:none;opacity:0;transition:.9s var(--ez)}
 .tut-say.on{opacity:1}
-.tut-say .box{padding:26px 30px;background:linear-gradient(180deg,rgba(16,12,10,.96),rgba(7,6,6,.98));
-  border:1px solid rgba(107,73,52,.5);box-shadow:0 40px 90px -40px #000,inset 0 0 40px rgba(140,47,28,.1)}
-.tut-say .t{font-size:19px;line-height:1.55;color:rgba(216,205,184,.92)}
-.tut-say .k{font-family:var(--ui);font-size:9px;letter-spacing:.3em;text-transform:uppercase;
-  color:rgba(168,68,42,.95);margin-bottom:12px}
-.tut-say .hint{font-family:var(--ui);font-size:11px;color:rgba(216,205,184,.4);margin-top:14px}
+.tut-say .box{padding:24px 28px;border-radius:12px;
+  background:linear-gradient(180deg,rgba(30,42,51,.97),rgba(14,21,27,.98));
+  border:1px solid rgba(197,136,91,.45);box-shadow:0 30px 70px -28px #000}
+.tut-say .t{font-family:var(--ui);font-size:17px;line-height:1.6;color:var(--parch-lt)}
+.tut-say .k{font-family:var(--ui);font-size:10px;font-weight:800;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.tut-say .hint{font-family:var(--ui);font-size:12px;font-weight:600;color:var(--gold);margin-top:14px}
 
 /* what the player must click, made obvious */
 .tut-target{position:relative;z-index:40}
-.tut-target:after{content:"";position:absolute;inset:-10px;border:1px solid rgba(196,85,44,.9);
-  pointer-events:none;animation:tutpulse 1.9s ease-in-out infinite}
+.tut-target:after{content:"";position:absolute;inset:-10px;border:2px solid var(--gold);border-radius:10px;
+  pointer-events:none;animation:tutpulse 1.6s ease-in-out infinite}
 @keyframes tutpulse{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:1;transform:scale(1.03)}}
 
 .tut-hand{display:flex;justify-content:center;gap:12px;padding:0 30px 22px;min-height:150px;align-items:flex-end}
@@ -532,7 +740,7 @@ body.reduced #ground video{display:none}
   background:radial-gradient(60% 60% at 50% 50%,rgba(4,3,3,.92),rgba(0,0,0,.985))}
 #spoils.on{opacity:1;pointer-events:auto}
 .sp-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sp-verdict{font-size:clamp(20px,2.8vw,32px);letter-spacing:.34em;color:rgba(216,205,184,.85);
+.sp-verdict{font-family:var(--ui);font-weight:800;font-size:clamp(22px,3vw,34px);letter-spacing:.06em;color:var(--parch-lt);
   opacity:0;animation:sf 2.2s ease .5s forwards}
 .sp-sub{margin-top:14px;opacity:0;animation:sf 2s ease 1.2s forwards}
 /* the sealed reward, waiting to be broken */
@@ -940,14 +1148,15 @@ details.deep .b{padding-top:14px;font-size:14.5px;line-height:1.75;color:var(--i
   <!-- 02 COVENANT -->
   <div class="scene" id="s-covenant">
     <div class="fog"></div>
-    <div class="covt">
-      <div class="fn2">The Covenant Ledger · folio the last</div>
-      <div class="ask">By what name shall the Covenant remember you?</div>
-      <div class="inkline"><input id="covName" maxlength="18" placeholder="write here" autocomplete="off" spellcheck="false"></div>
-      <div class="fn2" style="margin-top:40px">Choose the sign to be struck beside your name</div>
-      <div class="markrow" id="markRow"></div>
-      <div style="margin-top:44px"><button class="rite grave" id="doSeal" disabled>Seal the Covenant</button></div>
-      <div class="li" style="margin-top:20px;font-size:13.5px">Ink dries slowly here. What is written is not easily unwritten.</div>
+    <div class="nm-wrap">
+      <div class="nm-card">
+        <div class="nm-crest" id="nmCrest"></div>
+        <h2>What should we call you?</h2>
+        <div class="sub">This is the name other players will see.</div>
+        <div class="nm-field"><input id="covName" maxlength="18" placeholder="Enter a name" autocomplete="off" spellcheck="false"></div>
+        <div class="nm-hint" id="nmHint">At least 2 characters</div>
+        <button class="btn-primary" id="doSeal" disabled>Continue</button>
+      </div>
     </div>
   </div>
 
@@ -955,9 +1164,9 @@ details.deep .b{padding-top:14px;font-size:14.5px;line-height:1.75;color:var(--i
   <div class="scene" id="s-firstpack">
     <div class="fog"></div><div class="fog b"></div>
     <div class="pick-head">
-      <div class="fn2">Your first record</div>
-      <h2>CHOOSE A CHAMPION</h2>
-      <div class="pick-sub">Press a card. It becomes yours, and you begin.</div>
+      <div class="step">Step 2 of 2</div>
+      <h2>Pick your first card</h2>
+      <div class="pick-sub">Tap one. It becomes your champion and we&rsquo;ll start a match.</div>
     </div>
     <div class="pick-rail"><div class="pick-row" id="pickRow"></div></div>
     <div class="pick-foot" id="pickFoot"></div>
@@ -1655,9 +1864,9 @@ function buildGate(){
     $$(".gtab").forEach(x=>x.classList.remove("on"));t.classList.add("on");render(t.dataset.tab)});
 }
 async function enterHallDirect(){
-  await goScene("lobby","you were expected");
+  await goScene("lobby","");
   playCue("hall");
-  buildLobby();
+  buildHall();
   toast("Welcome back, "+P.name+".");
 }
 
@@ -1678,32 +1887,31 @@ $("#doEnter").addEventListener("click",async()=>{
 
 /* ---------- 02 covenant ---------- */
 function buildCovenant(prefilled){
-  // the name may already have been given at the gate
-  if(prefilled&&P.name){
-    $("#covName").value=P.name;
-    const ask=$(".ask");if(ask)ask.textContent="The Covenant will remember you as "+P.name+".";
+  const crest=$("#nmCrest");
+  if(crest&&!crest.innerHTML)crest.innerHTML=elarisCrest({size:64});
+  const inp=$("#covName"), btn=$("#doSeal"), hint=$("#nmHint");
+  if(prefilled&&P.name)inp.value=P.name;
+  if(!P.seed)P.seed=Math.floor(Math.random()*900+100);
+  const chk=()=>{
+    const v=inp.value.trim();
+    btn.disabled=v.length<2;
+    hint.textContent=v.length<2?"At least 2 characters":"Looks good";
+    hint.style.color=v.length<2?"":"var(--ok)";
+  };
+  if(!inp.dataset.wired){
+    inp.dataset.wired="1";
+    inp.addEventListener("input",chk);
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter"&&!btn.disabled)btn.click()});
+    btn.addEventListener("click",async()=>{
+      P.name=inp.value.trim();
+      P.seed=Math.floor(Math.random()*900+100);
+      saveGame();
+      await goScene("firstpack","");
+      buildFirstPack();
+    });
   }
-  const w=$("#markRow");
-  if(w.childElementCount){
-    $("#doSeal").disabled=!($("#covName").value.trim().length>=2&&$(".mpick.sel"));
-    return;
-  }
-  const seeds=[0,0,0,0].map(()=>Math.floor(Math.random()*900+100));
-  const nm=["The Unclosed Ring","The Sprig and Tick","The Broken Quadrant","The Late Vigil"];
-  seeds.forEach((s,i)=>{
-    const b=document.createElement("div");b.className="mpick";b.tabIndex=0;
-    b.innerHTML=`<div style="width:88px;height:88px">${mark(s,{draw:true})}</div><div class="fn2" style="margin-top:10px;text-align:center">${nm[i]}</div>`;
-    const pick=()=>{$$(".mpick").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");P.seed=s;chk()};
-    b.addEventListener("click",pick);b.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick()}});
-    w.appendChild(b);
-  });
-  const chk=()=>{$("#doSeal").disabled=!($("#covName").value.trim().length>=2&&$(".mpick.sel"))};
-  $("#covName").addEventListener("input",chk);
-  $("#doSeal").addEventListener("click",async()=>{
-    P.name=$("#covName").value.trim();
-    await goScene("firstpack","six stand before you");
-    buildFirstPack();
-  });
+  chk();
+  setTimeout(()=>{try{inp.focus()}catch(e){}},300);
 }
 
 /* ============================================================
@@ -1771,8 +1979,8 @@ async function takeChampion(id,box){
   awaken(c.a);
 
   const foot=$("#pickFoot");
-  foot.innerHTML=`<div class="fn2" style="color:${FACTION[c.a].c}">${c.n} answers</div>
-    <div class="li" style="margin-top:10px;font-size:15.5px">Your deck is bound. ${pack.n}.</div>`;
+  foot.innerHTML=`<div class="a">${c.n} is yours</div>
+    <div class="b">Deck ready: ${pack.n} · starting your first match…</div>`;
   foot.classList.add("on");
 
   await wait(P.reduced?300:1700);
@@ -1811,42 +2019,41 @@ function buildStarterDeck(pk){
 
 /* ---------- 05 LOBBY ---------- */
 const NAVICON={
-  home:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>`,
-  battle:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><path d="M4 20 15 9"/><path d="M13 4h7v7"/><path d="M20 4 9 15"/><path d="M4 13v7h7"/></svg>`,
-  collection:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M3 14h18M9 4v16"/></svg>`,
-  decks:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><rect x="6" y="3" width="12" height="17" rx="1"/><path d="M4 6v14h12"/></svg>`,
-  packs:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><path d="M4 8h16v12H4z"/><path d="M4 8 12 3l8 5"/><path d="M12 3v17"/><circle cx="12" cy="12" r="2"/></svg>`,
-  shop:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><path d="M3 7h18l-1.5 13H4.5z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>`
+  home:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>`,
+  battle:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><path d="M4 20 15 9"/><path d="M13 4h7v7"/><path d="M20 4 9 15"/><path d="M4 13v7h7"/></svg>`,
+  collection:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M3 14h18M9 4v16"/></svg>`,
+  decks:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><rect x="6" y="3" width="12" height="17" rx="1"/><path d="M4 6v14h12"/></svg>`,
+  packs:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><path d="M4 8h16v12H4z"/><path d="M4 8 12 3l8 5"/><path d="M12 3v17"/><circle cx="12" cy="12" r="2"/></svg>`,
+  shop:`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><path d="M3 7h18l-1.5 13H4.5z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>`
 };
 /* ============================================================
    THE HALL — calm. one purpose.
    ============================================================ */
 const DOORICON={
-  collection:`<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M3 14h18M9 4v16"/></svg>`,
-  decks:`<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><rect x="7" y="3" width="12" height="17" rx="1"/><path d="M4 6v14h12"/></svg>`,
-  packs:`<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><path d="M4 8h16v12H4z"/><path d="M4 8 12 3l8 5M12 3v17"/><circle cx="12" cy="12" r="2"/></svg>`,
-  shop:`<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><path d="M3 7h18l-1.5 13H4.5z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>`
+  collection:`<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><rect x="3" y="4" width="18" height="16"/><path d="M3 9h18M3 14h18M9 4v16"/></svg>`,
+  decks:`<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><rect x="7" y="3" width="12" height="17" rx="1"/><path d="M4 6v14h12"/></svg>`,
+  packs:`<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><path d="M4 8h16v12H4z"/><path d="M4 8 12 3l8 5M12 3v17"/><circle cx="12" cy="12" r="2"/></svg>`,
+  shop:`<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><path d="M3 7h18l-1.5 13H4.5z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>`
 };
 const ORBICON={
-  events:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><path d="m12 2 2.9 7.1L22 12l-7.1 2.9L12 22l-2.9-7.1L2 12l7.1-2.9z"/></svg>`,
-  gifts:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><rect x="3" y="9" width="18" height="12"/><path d="M3 9 12 4l9 5M12 4v17"/></svg>`,
-  ledger:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><path d="M6 3h12v18H6z"/><path d="M6 3q-3 9 0 18M10 8h6M10 12h6M10 16h4"/></svg>`,
-  rank:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><path d="M7 3h10v7a5 5 0 0 1-10 0z"/><path d="M12 15v4M8 21h8"/></svg>`,
-  friends:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c.6-4 3.2-6 6.5-6s5.9 2 6.5 6M16 5.5a3.4 3.4 0 0 1 0 6.4"/></svg>`
+  events:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><path d="m12 2 2.9 7.1L22 12l-7.1 2.9L12 22l-2.9-7.1L2 12l7.1-2.9z"/></svg>`,
+  gifts:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><rect x="3" y="9" width="18" height="12"/><path d="M3 9 12 4l9 5M12 4v17"/></svg>`,
+  ledger:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><path d="M6 3h12v18H6z"/><path d="M6 3q-3 9 0 18M10 8h6M10 12h6M10 16h4"/></svg>`,
+  rank:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><path d="M7 3h10v7a5 5 0 0 1-10 0z"/><path d="M12 15v4M8 21h8"/></svg>`,
+  friends:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.1"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c.6-4 3.2-6 6.5-6s5.9 2 6.5 6M16 5.5a3.4 3.4 0 0 1 0 6.4"/></svg>`
 };
 function buildHall(){
   const r=$("#lobbyRoot");
   r.className="hall";
   const ch=BY[P.champ]||CARDS[0];
+  const F=FACTION[ch.a];
   const xpPct=Math.min(1,P.xp/P.xpMax);
-  const fresh=!P.seenHall;              // first arrival gets guidance
   const deckOk=P.deck.length===40;
 
   r.innerHTML=`
-  <!-- TOP -->
   <div class="h-top">
-    <div class="h-you" onclick="openScreen('profile')" title="Your covenant">
-      <div class="mk">${mark(P.seed,{ember:1,progress:xpPct})}</div>
+    <div class="h-you" onclick="openScreen('profile')">
+      <div class="mk">${elarisCrest({size:26})}</div>
       <div>
         <div class="nm">${P.name||"Recorder"}</div>
         <div class="lv">Level ${P.level} · ${P.rank}</div>
@@ -1854,85 +2061,77 @@ function buildHall(){
       </div>
     </div>
     <div class="h-purse">
-      <div class="h-coin" onclick="openScreen('shop')" title="Earned in battle. Spent on parcels.">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c4552c" stroke-width="1.2"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M10 10h4M10 14h4"/></svg>
-        <span class="v num">${P.points.toLocaleString()}</span>
-      </div>
-      <div class="h-coin" onclick="openScreen('shop')" title="Rare. Spent on altered records.">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8083a8" stroke-width="1.2"><path d="m12 3 2.6 6.4L21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6z"/></svg>
-        <span class="v num">${P.shards}</span>
-      </div>
+      <div class="h-coin" onclick="openScreen('shop')" title="Earned by winning">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c5885b" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10h5M9.5 14h5"/></svg>
+        <span class="v">${P.points.toLocaleString()}</span></div>
+      <div class="h-coin" onclick="openScreen('shop')" title="Rare currency">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8fa8c8" stroke-width="1.6"><path d="m12 3 2.6 6.4L21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6z"/></svg>
+        <span class="v">${P.shards}</span></div>
       <button class="h-ico" onclick="openSettings()" title="Settings">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D8CDB8" stroke-width="1.1"><circle cx="10" cy="8" r="4.4"/><path d="M13 11 21 19M18.5 17l2.5-1.6M20.6 19.4 22 17"/></svg>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#cbbea6" stroke-width="1.6"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2 2 2 0 1 1-4 0 1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 15a2 2 0 1 1 0-4 1.7 1.7 0 0 0 1.2-2.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10 4.6a2 2 0 1 1 4 0 1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 21 11a2 2 0 1 1 0 4Z"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- CENTRE -->
   <div class="h-mid">
-    ${fresh?`<div class="h-firstword">
-      <div class="k">The hall is yours</div>
-      <div class="t">Your champion stands ready. There is only one thing to do.</div></div>`:""}
-    <div class="h-champ" style="--ag:${ASP[ch.a].glow}">
-      <div class="ring">${mark(P.seed+7,{spin:true})}</div>
-      <div class="glow"></div>
-      <div class="cardwrap" id="hChamp"></div>
+    <div class="h-champ" style="--ag:${F.glow}">
+      <div>
+        <div class="cardwrap" id="hChamp"><div class="glow"></div></div>
+        <div class="h-cname">
+          <div class="n">${ch.n}</div>
+          <div class="a" style="color:${F.c}">${FACTION_FULL[ch.a]} · ${ch.race}</div>
+        </div>
+      </div>
     </div>
-    <div class="h-cname">
-      <div class="n">${ch.n}</div>
-      <div class="a" style="color:${ASP[ch.a].c}">Your champion · ${FACTION_FULL[ch.a]}</div>
+
+    <div class="h-playzone">
+      <button class="h-play" onclick="enterBattle()">
+        <div class="face"><div class="w">PLAY</div><div class="s">Find a match</div></div>
+      </button>
+      <div class="h-deckline">
+        Deck: <b>${P.deckName}</b> · ${P.deck.length}/40
+        ${deckOk?`· <a onclick="event.stopPropagation();openScreen('decks')">Change</a>`
+                :`· <a onclick="event.stopPropagation();openScreen('decks')">Finish deck</a>`}
+      </div>
     </div>
-    <div style="height:26px"></div>
-    <div class="h-gate" onclick="enterBattle()">
-      <div class="arch"><div class="w">BATTLE</div>
-        <div class="s">Three marks to win</div></div>
-    </div>
-    <div class="h-deckline">
-      Fighting with <b>${P.deckName}</b> · ${P.deck.length}/40 records
-      ${deckOk?"":` · <a onclick="event.stopPropagation();openScreen('decks')">finish your deck</a>`}
-      ${deckOk?` · <a onclick="event.stopPropagation();openScreen('decks')">change</a>`:""}
+
+    <div class="h-next">
+      <div class="h-tile" onclick="openScreen('packs')">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c5885b" stroke-width="1.7"><path d="M4 8h16v12H4z"/><path d="M4 8 12 3l8 5M12 3v17"/></svg></div>
+        <div class="tx"><div class="tt">Open packs</div><div class="td">${P.packs?P.packs+" waiting":"None right now"}</div></div>
+        ${P.packs?`<span class="dot">${P.packs}</span>`:""}
+      </div>
+      <div class="h-tile" onclick="openScreen('ledger')">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c5885b" stroke-width="1.7"><path d="M6 3h12v18H6z"/><path d="M10 8h6M10 12h6M10 16h4"/></svg></div>
+        <div class="tx"><div class="tt">Quests</div><div class="td">Earn packs and gold</div></div>
+      </div>
+      <div class="h-tile" onclick="openScreen('rank')">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c5885b" stroke-width="1.7"><path d="M7 3h10v7a5 5 0 0 1-10 0z"/><path d="M12 15v4M8 21h8"/></svg></div>
+        <div class="tx"><div class="tt">${P.rank}</div><div class="td">${P.wins}W · ${P.losses}L this season</div></div>
+      </div>
+      <div class="h-tile" onclick="openScreen('friends')">
+        <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c5885b" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c.6-4 3.2-6 6.5-6s5.9 2 6.5 6M16 5.6a3.2 3.2 0 0 1 0 6"/></svg></div>
+        <div class="tx"><div class="tt">Friends</div><div class="td">Play a private match</div></div>
+      </div>
     </div>
   </div>
 
-  <!-- SIDE ORBS -->
-  <div class="h-side">
-    ${[["events","Events","rgba(128,131,168,.5)",0],
-       ["gifts","Gifts",'rgba(168,68,42,.5)',P.packs],
-       ["ledger","Quests","rgba(107,73,52,.55)",1],
-       ["rank","Rank","rgba(93,122,88,.45)",0],
-       ["friends","Friends","rgba(91,125,148,.45)",0]]
-      .map(([k,l,c,n])=>`<div class="h-orb" style="--oc:${c}" onclick="openOrb('${k}')">
-        ${ORBICON[k]}<span class="tip">${l}</span>${n?`<span class="dot">${n}</span>`:""}</div>`).join("")}
-  </div>
-
-  <!-- BOTTOM MENU -->
   <div class="h-menu">
-    ${[["collection","Collection","every record you hold"],
-       ["decks","Deck","the 40 you fight with"],
-       ["packs","Packs","sealed, unopened"],
-       ["shop","Merchant","parcels and altered art"]]
-      .map(([k,l,d])=>`<div class="h-door" onclick="openScreen('${k}')">
-        ${DOORICON[k]}<div class="l">${l}</div><div class="d">${d}</div>
+    ${[["collection","Collection","All your cards",DOORICON.collection],
+       ["decks","Deck","The 40 you play with",DOORICON.decks],
+       ["packs","Packs","Sealed, unopened",DOORICON.packs],
+       ["shop","Shop","Packs and card art",DOORICON.shop]]
+      .map(([k,l,d,ic])=>`<div class="h-door" onclick="openScreen('${k}')">
+        <div class="ic">${ic}</div><div class="l">${l}</div><div class="d">${d}</div>
         ${k==="packs"&&P.packs?`<span class="dot">${P.packs}</span>`:""}</div>`).join("")}
   </div>`;
 
-  if(fresh)r.classList.add("focus");
   const cw=$("#hChamp");
   const card=cardEl(ch,{noclick:true});
   cw.appendChild(card);
   card.addEventListener("click",()=>inspect(ch));
   awaken(ch.a);
-
-  // after the first look, the room relaxes
-  if(fresh){
-    P.seenHall=true;
-    setTimeout(()=>{r.classList.remove("focus");saveGame()},6000);
-  }
-  // dust
-  for(let i=0;i<16;i++){const d=document.createElement("div");d.className="dust";
-    d.style.left=(20+Math.random()*60)+"%";d.style.top=(35+Math.random()*55)+"%";
-    d.style.animationDuration=(18+Math.random()*20)+"s";d.style.animationDelay=(-Math.random()*30)+"s";
-    r.appendChild(d)}
+  P.seenHall=true;
 }
 function openOrb(k){
   if(k==="events")   return toast("The Season of the Low Tallow opens soon.");
