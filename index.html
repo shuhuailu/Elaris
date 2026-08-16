@@ -379,6 +379,138 @@ body.reduced #ground video{display:none}
 }
 
 
+
+/* ============================================================
+   ENTRY — threshold, gate, name, pick
+   Same design system as the dashboard: calm panels, cyan state,
+   orange action. All energy from the card art and the crest.
+   ============================================================ */
+
+/* ---------- shared entry furniture ---------- */
+.e-wrap{position:absolute;inset:0;display:grid;place-items:center;padding:28px;overflow:auto}
+.e-panel{width:min(440px,94vw);background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;padding:34px 32px 28px;text-align:center;
+  box-shadow:0 40px 90px -34px #000}
+.e-crest{width:56px;height:56px;margin:0 auto 18px;color:var(--gold);opacity:.95}
+.e-title{font-family:var(--ui);font-size:21px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.e-sub{font-family:var(--ui);font-size:13.5px;color:var(--text-dim);margin-top:8px;line-height:1.55}
+.e-field{margin-top:20px;text-align:left}
+.e-field label{display:block;font-family:var(--ui);font-size:11px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--label);margin-bottom:8px}
+.e-input{width:100%;background:#0E0F13;border:1px solid var(--line);border-radius:10px;outline:0;
+  padding:13px 14px;font-family:var(--ui);font-size:15px;font-weight:500;color:#fff;
+  transition:.18s ease-out}
+.e-input::placeholder{color:#4a505c;font-weight:400}
+.e-input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,229,255,.14)}
+.e-hint{font-family:var(--ui);font-size:11.5px;color:var(--text-dim);margin-top:9px;min-height:15px}
+.e-err{font-family:var(--ui);font-size:12px;color:#ff7a5c;margin-top:10px;min-height:16px;text-align:left}
+.e-cta{margin-top:20px;width:100%;padding:14px;border-radius:10px;cursor:pointer;border:0;
+  font-family:var(--ui);font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:#0E0F13;background:linear-gradient(90deg,var(--cyan),var(--orange));
+  transition:.18s ease-out}
+.e-cta:hover:not([disabled]){filter:brightness(1.08);transform:translateY(-1px)}
+.e-cta:active:not([disabled]){transform:translateY(0)}
+.e-cta[disabled]{opacity:.32;cursor:default;filter:grayscale(.6)}
+.e-ghost{margin-top:12px;width:100%;padding:12px;border-radius:10px;cursor:pointer;
+  background:transparent;border:1px solid var(--line);
+  font-family:var(--ui);font-size:12.5px;font-weight:600;color:var(--text-dim);transition:.18s ease-out}
+.e-ghost:hover{border-color:rgba(255,255,255,.2);color:#fff}
+.e-foot{font-family:var(--ui);font-size:12px;color:var(--text-dim);margin-top:16px}
+.e-foot a{color:var(--cyan);cursor:pointer;font-weight:600}
+.e-foot a:hover{text-decoration:underline}
+
+/* ---------- 01 THRESHOLD ---------- */
+#s-threshold{background:
+  radial-gradient(80% 60% at 50% 34%,rgba(0,229,255,.05),transparent 68%),
+  linear-gradient(180deg,#0b0d11,#0E0F13 55%,#08090c)}
+.th-stage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.th-logo{width:min(300px,64vw);color:#fff;opacity:0;animation:eUp 1.1s ease-out .25s forwards}
+.th-tag{font-family:var(--ui);font-size:12.5px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--label);margin-top:26px;opacity:0;animation:eUp .9s ease-out .85s forwards}
+.th-go{margin-top:46px;opacity:0;animation:eUp .9s ease-out 1.15s forwards}
+.th-btn{position:relative;padding:16px 62px;border-radius:12px;cursor:pointer;border:0;
+  font-family:var(--ui);font-size:14px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  color:#0E0F13;background:linear-gradient(90deg,var(--cyan),var(--orange));
+  box-shadow:0 14px 34px -14px rgba(0,229,255,.5);transition:.2s ease-out;overflow:hidden}
+.th-btn:hover{transform:translateY(-2px);box-shadow:0 20px 44px -14px rgba(0,229,255,.62)}
+.th-btn:after{content:"";position:absolute;top:-60%;left:-70%;width:45%;height:220%;
+  background:linear-gradient(96deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:rotate(14deg);transition:left .8s ease-out}
+.th-btn:hover:after{left:130%}
+@keyframes eUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---------- 01b GATE ---------- */
+#s-gate{background:
+  radial-gradient(80% 60% at 50% 8%,rgba(30,42,51,.5),transparent 70%),
+  linear-gradient(180deg,#0b0d11,#0E0F13 55%,#08090c)}
+/* the returning player card — the loudest thing on this screen */
+.g-return{display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;cursor:pointer;
+  background:var(--panel-2);border:1px solid rgba(0,229,255,.3);text-align:left;width:100%;
+  box-shadow:0 0 22px rgba(0,229,255,.14);transition:.2s ease-out;margin-bottom:18px}
+.g-return:hover{border-color:var(--cyan);box-shadow:0 0 30px rgba(0,229,255,.3);transform:translateY(-2px)}
+.g-return .av{position:relative;width:46px;height:46px;flex:0 0 auto}
+.g-return .av .face{position:absolute;inset:3px;border-radius:50%;background:#0E0F13;
+  display:grid;place-items:center;color:var(--gold)}
+.g-return .nm{font-family:var(--ui);font-size:15.5px;font-weight:700;color:#fff}
+.g-return .mt{font-family:var(--ui);font-size:11.5px;color:var(--text-dim);margin-top:3px}
+.g-return .go{margin-left:auto;font-family:var(--ui);font-size:11.5px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--cyan)}
+.g-or{display:flex;align-items:center;gap:12px;margin:4px 0 16px}
+.g-or:before,.g-or:after{content:"";flex:1;height:1px;background:var(--line)}
+.g-or span{font-family:var(--ui);font-size:10.5px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--label)}
+.g-tabs{display:flex;gap:6px;padding:4px;border-radius:11px;background:#0E0F13;
+  border:1px solid var(--line);margin-bottom:18px}
+.g-tab{flex:1;padding:10px;border-radius:8px;cursor:pointer;text-align:center;
+  font-family:var(--ui);font-size:12.5px;font-weight:700;color:var(--text-dim);transition:.18s ease-out}
+.g-tab:hover{color:#fff}
+.g-tab.on{background:rgba(0,229,255,.12);color:var(--cyan);box-shadow:inset 0 0 0 1px rgba(0,229,255,.3)}
+
+/* ---------- 02 NAME ---------- */
+#s-covenant{background:
+  radial-gradient(80% 60% at 50% 12%,rgba(30,42,51,.5),transparent 70%),
+  linear-gradient(180deg,#0b0d11,#0E0F13 55%,#08090c)}
+
+/* ---------- 03 PICK ---------- */
+#s-firstpack{background:
+  radial-gradient(90% 60% at 50% -6%,rgba(30,42,51,.5),transparent 70%),
+  linear-gradient(180deg,#0b0d11,#0E0F13 50%,#08090c)}
+.pick-head{position:absolute;top:5.5%;left:0;right:0;text-align:center;z-index:5}
+.pick-head .step{display:inline-block;font-family:var(--ui);font-size:10.5px;font-weight:800;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);
+  border:1px solid rgba(0,229,255,.32);border-radius:20px;padding:6px 15px;background:rgba(0,229,255,.09)}
+.pick-head h2{font-family:var(--ui);font-size:clamp(22px,2.8vw,31px);font-weight:800;
+  color:#fff;margin-top:14px;letter-spacing:-.01em}
+.pick-sub{font-family:var(--ui);font-size:14px;color:var(--text-dim);margin-top:8px}
+.pick-rail{position:absolute;inset:0;display:grid;place-items:center;padding:112px 20px 40px}
+.pick-row{display:flex;gap:18px;justify-content:center;align-items:flex-start;flex-wrap:wrap;max-width:1200px}
+.pick{position:relative;width:176px;cursor:pointer;border-radius:14px;padding:10px 10px 12px;
+  background:var(--panel);border:1px solid var(--line);
+  transition:transform .2s ease-out,border-color .2s ease-out,box-shadow .2s ease-out,opacity .5s}
+.pick:hover{transform:translateY(-6px);border-color:var(--cyan);
+  box-shadow:0 20px 40px -18px #000,0 0 24px rgba(0,229,255,.3)}
+.pick.legendary{border-color:rgba(255,215,0,.5)}
+.pick.legendary:hover{border-color:var(--gold);box-shadow:0 20px 40px -18px #000,0 0 26px rgba(255,215,0,.35)}
+.pick .card{filter:brightness(.94)}
+.pick:hover .card{filter:brightness(1.05)}
+.pick .nameplate{margin-top:11px;text-align:center}
+.pick .nameplate .n{font-family:var(--ui);font-size:13.5px;font-weight:700;color:#fff;line-height:1.25}
+.pick .nameplate .f{font-family:var(--ui);font-size:10.5px;font-weight:600;margin-top:5px;
+  letter-spacing:.04em}
+.pick .nameplate .d{font-family:var(--ui);font-size:11.5px;color:var(--text-dim);margin-top:8px;line-height:1.45}
+.pick .press{margin-top:11px;width:100%;padding:10px 0;border-radius:9px;cursor:pointer;border:0;
+  font-family:var(--ui);font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:#0E0F13;background:linear-gradient(90deg,var(--cyan),var(--orange));transition:.18s ease-out}
+.pick:hover .press{filter:brightness(1.1)}
+.pick.taken{transform:translateY(-10px) scale(1.04);border-color:var(--cyan);
+  box-shadow:0 0 0 2px var(--cyan),0 0 34px rgba(0,229,255,.4);z-index:8}
+.pick.gone{opacity:0;transform:translateY(18px) scale(.94);pointer-events:none}
+.pick-foot{position:absolute;bottom:5%;left:0;right:0;text-align:center;z-index:6;opacity:0;
+  transition:opacity .5s ease-out;font-family:var(--ui)}
+.pick-foot.on{opacity:1}
+.pick-foot .a{font-size:16px;font-weight:700;color:#fff}
+.pick-foot .b{font-size:12.5px;color:var(--text-dim);margin-top:6px}
+
 /* ============================================================
    THE HALL — quiet layout, loud accents.
    rail · topbar · roster · quests · analytics column
@@ -941,28 +1073,24 @@ details.deep .b{padding-top:14px;font-size:14.5px;line-height:1.75;color:var(--i
 
   <!-- 01 THRESHOLD -->
   <div class="scene" id="s-threshold">
-    <div class="fog"></div><div class="fog b"></div>
-    <div class="smoke"></div><div id="thember"></div>
-    <div class="thw">
-      <div id="thCrest" style="color:var(--ivory);margin-bottom:14px"></div>
-      <div id="thWord"></div>
-      <div class="fn2 soft" style="margin-top:28px;animation-delay:1.6s">The covenant hall stands empty · the fire is nearly out</div>
-      <div class="soft" style="margin-top:70px;animation-delay:2.4s"><button class="thdoor" id="doEnter">Enter Elaris</button></div>
+    <div class="th-stage">
+      <div class="th-logo" id="thLogo"></div>
+      <div class="th-tag">A collectible card game</div>
+      <div class="th-go"><button class="th-btn" id="doEnter">Enter</button></div>
     </div>
   </div>
 
   <!-- 01b GATE -->
   <div class="scene" id="s-gate">
-    <div class="fog"></div>
-    <div class="gatewrap">
-      <div class="gatecard">
-        <div style="display:flex;justify-content:center;margin-bottom:18px;color:var(--ivory)" id="gateCrest"></div>
-        <div class="fn2" style="text-align:center">The door is kept</div>
-        <h2 style="text-align:center;font-size:22px;letter-spacing:.3em;margin-top:12px;margin-bottom:26px">WHO STANDS THERE?</h2>
+    <div class="e-wrap">
+      <div class="e-panel">
+        <div class="e-crest" id="gateCrest"></div>
         <div id="gateRemembered"></div>
-        <div class="gtabs">
-          <div class="gtab on" data-tab="in">I have been here</div>
-          <div class="gtab" data-tab="up">I am new</div>
+        <div class="e-title" id="gateTitle">Welcome to Elaris</div>
+        <div class="e-sub" id="gateSub">Sign in, or create an account to begin.</div>
+        <div class="g-tabs" style="margin-top:20px">
+          <div class="g-tab on" data-tab="up">Create account</div>
+          <div class="g-tab" data-tab="in">Sign in</div>
         </div>
         <div id="gateBody"></div>
       </div>
@@ -971,15 +1099,15 @@ details.deep .b{padding-top:14px;font-size:14.5px;line-height:1.75;color:var(--i
 
   <!-- 02 COVENANT -->
   <div class="scene" id="s-covenant">
-    <div class="fog"></div>
-    <div class="nm-wrap">
-      <div class="nm-card">
-        <div class="nm-crest" id="nmCrest"></div>
-        <h2>What should we call you?</h2>
-        <div class="sub">This is the name other players will see.</div>
-        <div class="nm-field"><input id="covName" maxlength="18" placeholder="Enter a name" autocomplete="off" spellcheck="false"></div>
-        <div class="nm-hint" id="nmHint">At least 2 characters</div>
-        <button class="btn-primary" id="doSeal" disabled>Continue</button>
+    <div class="e-wrap">
+      <div class="e-panel">
+        <div class="e-crest" id="nmCrest"></div>
+        <div class="e-title">What should we call you?</div>
+        <div class="e-sub">This is the name other players will see.</div>
+        <div class="e-field"><label>Display name</label>
+          <input class="e-input" id="covName" maxlength="18" placeholder="Enter a name" autocomplete="off" spellcheck="false"></div>
+        <div class="e-hint" id="nmHint">At least 2 characters</div>
+        <button class="e-cta" id="doSeal" disabled>Continue</button>
       </div>
     </div>
   </div>
@@ -1557,6 +1685,8 @@ function armAudio(){
 
 /* paint the crest wherever the world needs it */
 function paintLogos(){
+  const tl=$("#thLogo");
+  if(tl&&!tl.innerHTML)tl.innerHTML=elarisLockup({width:250});
   /* NOTE: the lockup viewBox is tightly cropped (198x267), so the artwork
      fills ~96% of its own frame. Widths here are therefore much smaller
      than they would be for an uncropped 600x327 canvas. */
@@ -1564,10 +1694,6 @@ function paintLogos(){
   if(c){c.style.width="auto";c.style.height="auto";
         c.innerHTML=elarisLockup({width:148,cls:"crest-glow"});}
   const cw=$("#ldWord"); if(cw)cw.innerHTML="";
-  const t=$("#thCrest");
-  if(t){t.style.width="auto";t.style.height="auto";
-        t.innerHTML=elarisLockup({width:172,cls:"crest-glow"});}
-  const tw=$("#thWord"); if(tw)tw.innerHTML="";
 }
 paintLogos();
 
@@ -1634,60 +1760,104 @@ function applySave(s){Object.assign(P,s);P.new=false}
 
 function buildGate(){
   const gc=$("#gateCrest");
-  if(gc)gc.innerHTML=elarisCrest({size:76});
+  if(gc)gc.innerHTML=elarisCrest({size:56});
   const saved=loadGame();
   const rem=$("#gateRemembered");
+
+  /* a saved player is offered a one-click continue and NEVER
+     sent back through champion selection */
   if(saved&&saved.name){
-    rem.innerHTML=`<div class="remembered" id="remBtn">
-        <div class="mk">${mark(saved.seed,{ember:1,progress:(saved.xp||0)/(saved.xpMax||600)})}</div>
-        <div style="flex:1">
-          <div style="font-size:18px;color:rgba(216,205,184,.92)">${saved.name}</div>
-          <div class="fn2" style="margin-top:4px">Level ${saved.level} · ${saved.rank} · continue</div>
+    $("#gateTitle").textContent="Welcome back";
+    $("#gateSub").textContent="Continue where you left off.";
+    rem.innerHTML=`<button class="g-return" id="remBtn">
+        <div class="av">
+          <svg viewBox="0 0 46 46" style="position:absolute;inset:0"><circle cx="23" cy="23" r="21"
+            fill="none" stroke="rgba(255,255,255,.1)" stroke-width="3"/>
+            <circle cx="23" cy="23" r="21" fill="none" stroke="#00E5FF" stroke-width="3" stroke-linecap="round"
+              transform="rotate(-90 23 23)"
+              stroke-dasharray="${(2*Math.PI*21).toFixed(1)}"
+              stroke-dashoffset="${(2*Math.PI*21*(1-(saved.xp||0)/(saved.xpMax||600))).toFixed(1)}"/></svg>
+          <div class="face">${elarisCrest({size:20})}</div>
         </div>
-        <div class="fn2">Enter →</div>
-      </div>`;
-    $("#remBtn").onclick=async()=>{applySave(saved);await enterHallDirect()};
-  }else rem.innerHTML="";
+        <div>
+          <div class="nm">${saved.name}</div>
+          <div class="mt">Level ${saved.level} · ${saved.rank} · ${(saved.deck||[]).length}-card deck</div>
+        </div>
+        <div class="go">Continue →</div>
+      </button>
+      <div class="g-or"><span>or use another account</span></div>`;
+    $("#remBtn").onclick=()=>{ applySave(saved); enterHallDirect(); };
+  }else{
+    rem.innerHTML="";
+    $("#gateTitle").textContent="Welcome to Elaris";
+    $("#gateSub").textContent="Create an account to begin, or sign in.";
+  }
 
   const body=$("#gateBody");
   const forms={
-    in:`<div class="field"><label>Covenant name</label><input id="inName" placeholder="the name you were given" autocomplete="username"></div>
-        <div class="field"><label>Word of passage</label><input id="inPass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
-        <div class="gerr" id="gErr"></div>
-        <button class="rite grave" id="doIn" style="width:100%;justify-content:center">Enter the hall</button>
-        <div class="li" style="margin-top:16px;font-size:13px;text-align:center">Returning recorders go straight to the hearth.</div>`,
-    up:`<div class="field"><label>Choose a covenant name</label><input id="upName" maxlength="18" placeholder="how you will be remembered" autocomplete="username"></div>
-        <div class="field"><label>Word of passage</label><input id="upPass" type="password" placeholder="at least four characters" autocomplete="new-password"></div>
-        <div class="gerr" id="gErr"></div>
-        <button class="rite grave" id="doUp" style="width:100%;justify-content:center">Take the covenant</button>
-        <div class="li" style="margin-top:16px;font-size:13px;text-align:center">New recorders choose a sign, then a first parcel of five records.</div>`
+    up:`<div class="e-field"><label>Display name</label>
+          <input class="e-input" id="upName" maxlength="18" placeholder="Choose a name" autocomplete="username"></div>
+        <div class="e-field"><label>Password</label>
+          <input class="e-input" id="upPass" type="password" placeholder="At least 4 characters" autocomplete="new-password"></div>
+        <div class="e-err" id="gErr"></div>
+        <button class="e-cta" id="doUp">Create account</button>
+        <div class="e-foot">You'll pick a starting card next.</div>`,
+    in:`<div class="e-field"><label>Display name</label>
+          <input class="e-input" id="inName" placeholder="Your name" autocomplete="username"></div>
+        <div class="e-field"><label>Password</label>
+          <input class="e-input" id="inPass" type="password" placeholder="Password" autocomplete="current-password"></div>
+        <div class="e-err" id="gErr"></div>
+        <button class="e-cta" id="doIn">Sign in</button>
+        <div class="e-foot">Signing in takes you straight to your dashboard.</div>`
   };
+
   const render=t=>{
     body.innerHTML=forms[t];
     if(t==="in"){
-      $("#doIn").onclick=async()=>{
+      const go=()=>{
         const n=$("#inName").value.trim();
-        if(n.length<2)return $("#gErr").textContent="A name is required.";
-        if(saved&&saved.name&&n.toLowerCase()===saved.name.toLowerCase()){applySave(saved);return enterHallDirect()}
-        // unknown name: treat as a fresh covenant, but keep the name
-        P.name=n;P.new=true;
-        await goScene("covenant","the ledger is opened");buildCovenant(true);
+        if(n.length<2)return $("#gErr").textContent="Enter your name.";
+        if(saved&&saved.name){
+          // any sign-in resumes the saved account — never re-onboard
+          applySave(saved);
+          if(n.toLowerCase()!==saved.name.toLowerCase())P.name=n;
+          return enterHallDirect();
+        }
+        $("#gErr").textContent="No account found on this device. Create one instead.";
       };
+      $("#doIn").onclick=go;
+      $("#inPass").onkeydown=e=>{if(e.key==="Enter")go()};
+      $("#inName").onkeydown=e=>{if(e.key==="Enter")go()};
     }else{
-      $("#doUp").onclick=async()=>{
+      const go=async()=>{
         const n=$("#upName").value.trim(),p=$("#upPass").value;
-        if(n.length<2)return $("#gErr").textContent="Choose a name of at least two characters.";
-        if(p.length<4)return $("#gErr").textContent="The word of passage is too short.";
-        P.name=n;P.new=true;
-        await goScene("covenant","the ledger is opened");buildCovenant(true);
+        if(n.length<2)return $("#gErr").textContent="Choose a name of at least 2 characters.";
+        if(p.length<4)return $("#gErr").textContent="Password must be at least 4 characters.";
+        P.name=n;P.new=true;P.tutorialDone=false;
+        await goScene("covenant","");buildCovenant(true);
       };
+      $("#doUp").onclick=go;
+      $("#upPass").onkeydown=e=>{if(e.key==="Enter")go()};
     }
   };
-  render("in");
-  $$(".gtab").forEach(t=>t.onclick=()=>{
-    $$(".gtab").forEach(x=>x.classList.remove("on"));t.classList.add("on");render(t.dataset.tab)});
+  // a returning player defaults to Sign in; a new device to Create
+  const first=(saved&&saved.name)?"in":"up";
+  $$(".g-tab").forEach(x=>x.classList.toggle("on",x.dataset.tab===first));
+  render(first);
+  $$(".g-tab").forEach(t=>t.onclick=()=>{
+    $$(".g-tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");render(t.dataset.tab)});
 }
+
 async function enterHallDirect(){
+  // a returning account is complete by definition: never re-onboard
+  P.tutorialDone=true;
+  P.seenHall=true;
+  if(!P.champ)P.champ=(P.deck&&P.deck[0])||CARDS[0].id;
+  if(!P.deck||!P.deck.length){
+    const pk=PACKS.find(p=>p.cards.includes(P.champ))||PACKS[0];
+    P.deck=buildStarterDeck(pk); P.deckName=pk.n;
+  }
+  saveGame();
   await goScene("lobby","");
   playCue("hall");
   buildHall();
