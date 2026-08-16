@@ -979,6 +979,7 @@ details.deep .b{padding-top:14px;font-size:14.5px;line-height:1.75;color:var(--i
     <div class="screen" id="sc-shop"></div>
     <div class="screen" id="sc-skins"></div>
     <div class="screen" id="sc-rank"></div>
+    <div class="screen" id="sc-ledger"></div>
     <div class="screen" id="sc-friends"></div>
     <div class="screen" id="sc-profile"></div>
   </div>
@@ -1055,110 +1056,312 @@ function mark(seed,o={}){
   return `<svg class="cmark${o.draw?" draw":""}${o.spin?" spin":""}" viewBox="0 0 100 100" width="100%" height="100%">${p.join("")}</svg>`;
 }
 
-/* ---------- ASPECTS ----------
-   `at` maps each affinity onto the region of the painted ground
-   where that element actually lives, so a selected record awakens
-   its own part of the vault rather than glowing generically. */
-const ASP={
-  Verdant:{c:"#5d7a58",glow:"rgba(93,122,88,.55)",en:"ancient forest green",at:"10% 88%",sz:"48% 54%"},
-  Tide:{c:"#5b7d94",glow:"rgba(91,125,148,.55)",en:"moonlit blue",at:"84% 84%",sz:"52% 60%"},
-  Ember:{c:"#a8442a",glow:"rgba(168,68,42,.6)",en:"deep ember red",at:"16% 44%",sz:"58% 76%"},
-  Astral:{c:"#8083a8",glow:"rgba(128,131,168,.55)",en:"pale astral light",at:"88% 14%",sz:"56% 64%"}
+/* ============================================================
+   FACTIONS — four, each with four races
+   ============================================================ */
+const FACTION={
+  Civilization:{cn:"文明系",c:"#8fa8c8",glow:"rgba(143,168,200,.5)",
+    frame:"#16233f",frame2:"#0d1526",rail:"#1d2c4c",
+    en:"order, knowledge and craft",
+    line:"Order, knowledge, craft and cooperation shape a thriving world."},
+  Warfare:{cn:"战争系",c:"#c4713f",glow:"rgba(196,113,63,.5)",
+    frame:"#3a1c12",frame2:"#1d0e08",rail:"#4a251722",
+    en:"strength, conflict and conquest",
+    line:"Strength, conflict and conquest forge legends."},
+  Nature:{cn:"自然与秘灵系",c:"#7aa860",glow:"rgba(122,168,96,.5)",
+    frame:"#16301f",frame2:"#0a1810",rail:"#1d3d28",
+    en:"life, nature and mystery",
+    line:"Life, nature and mystery flow in endless harmony."},
+  Dark:{cn:"黑暗与异质系",c:"#a druid",glow:"rgba(150,106,180,.5)",
+    frame:"#241238",frame2:"#120820",rail:"#2e1745",
+    en:"shadow and the beyond",
+    line:"From shadows and beyond, powers defy reality."}
 };
-/* wake the ground where this affinity belongs */
+FACTION.Dark.c="#a06ab4";
+const FACTION_FULL={Civilization:"Civilization",Warfare:"Warfare",
+  Nature:"Nature & Mystic",Dark:"Dark & Otherworldly"};
+
+/* the sixteen races */
+const RACE={
+  Human:{f:"Civilization",cn:"人类",of:"Balanced tactics, formation play"},
+  Elf:{f:"Civilization",cn:"精灵",of:"Precision, ranged control, draw"},
+  Dwarf:{f:"Civilization",cn:"矮人",of:"Forgecraft, equipment, sturdy defense"},
+  "Demi-human":{f:"Civilization",cn:"亚人",of:"Agile movement, ambush pressure"},
+  Orc:{f:"Warfare",cn:"兽人",of:"Brutal offense, frontline pressure"},
+  Goblin:{f:"Warfare",cn:"哥布林",of:"Swarm tactics, tricks, sacrifice"},
+  Demigod:{f:"Warfare",cn:"半神",of:"Elite bodies, battlefield aura"},
+  Dragon:{f:"Warfare",cn:"龙",of:"High-cost finishers, aerial dominance"},
+  Treekin:{f:"Nature",cn:"树裔",of:"Growth, healing, root control"},
+  Insectoid:{f:"Nature",cn:"虫族",of:"Brood expansion, overwhelming numbers"},
+  Merfolk:{f:"Nature",cn:"人鱼",of:"Tidal flow, repositioning, tempo"},
+  Slime:{f:"Nature",cn:"史莱姆",of:"Split and merge, attrition"},
+  Demon:{f:"Dark",cn:"恶魔",of:"Risk for power, explosive turns"},
+  Bloodborn:{f:"Dark",cn:"血裔",of:"Life drain, blood rituals"},
+  Undead:{f:"Dark",cn:"不死族",of:"Graveyard revival, death value"},
+  Monster:{f:"Dark",cn:"怪物",of:"Mutation, fear pressure, unpredictable"}
+};
+/* keep old call sites working */
+const ASP=FACTION;
+
+const RAR={C:"◇",R:"◆",A:"✦",L:"✧",M:"✦✦"};
+const RARN={C:"Common",R:"Rare",A:"Arcane",L:"Relic",M:"Mythic"};
+
+/* altered records change the light on the art, never the numbers */
+const SKINFX={
+  Original:"",
+  Ancient:"sepia(.55) saturate(.7) brightness(.9)",
+  Ceremonial:"saturate(1.3) brightness(1.12) contrast(1.05)",
+  Corrupted:"hue-rotate(275deg) saturate(1.4) brightness(.82)",
+  Moonlit:"hue-rotate(185deg) saturate(.85) brightness(1.06)",
+  Winter:"grayscale(.55) brightness(1.14) contrast(.95)",
+  "Ember-Touched":"hue-rotate(-22deg) saturate(1.5) brightness(1.05)"
+};
+
+
+/* each faction wakes its own region of the painted ground */
+const FACTION_AT={
+  Civilization:{at:"88% 14%",sz:"56% 64%"},
+  Warfare:{at:"16% 44%",sz:"58% 76%"},
+  Nature:{at:"10% 88%",sz:"48% 54%"},
+  Dark:{at:"84% 84%",sz:"52% 60%"}
+};
 let AWK=null;
-function awaken(aspect){
-  const a=ASP[aspect];if(!a)return;
+function awaken(faction){
+  const F=FACTION[faction], pos=FACTION_AT[faction];
+  if(!F||!pos)return;
   const el=document.getElementById("awaken");if(!el)return;
-  el.style.background=`radial-gradient(${a.sz} at ${a.at}, ${a.glow}, transparent 70%)`;
+  el.style.background=`radial-gradient(${pos.sz} at ${pos.at}, ${F.glow}, transparent 70%)`;
   el.classList.add("on");
   clearTimeout(AWK);
   AWK=setTimeout(()=>el.classList.remove("on"),P.reduced?900:5200);
 }
-function groundQuiet(on){document.getElementById("ground").classList.toggle("quiet",!!on)}
-const RAR={C:"◇",R:"◆",A:"✦",L:"✧",M:"✦✦"},RARN={C:"Common",R:"Rare",A:"Arcane",L:"Relic",M:"Mythic"};
+function groundQuiet(on){
+  const g=document.getElementById("ground");
+  if(g)g.classList.toggle("quiet",!!on);
+}
 
-/* ---------- CARDS ---------- */
-const C=(id,n,cn,a,t,cost,hp,r,sk,lore,fl)=>({id,n,cn,a,t,cost,hp,r,sk,lore,fl});
+/* ============================================================
+   CARDS
+   C(id, name, subtitle, race, role, cost, power, hp, rarity,
+     [[ability, text], ...], flavour)
+   ============================================================ */
+function C(id,n,sub,race,role,cost,pow,hp,r,sk,fl,lore){
+  return {id,n,sub,race,role,cost,pow,hp,r,sk,fl,
+    lore:lore||fl, a:RACE[race].f, t:"Unit", cn:""};
+}
+function S(id,n,sub,race,kind,cost,r,sk,fl){
+  return {id,n,sub,race,role:kind,cost,pow:null,hp:null,r,sk,fl,
+    lore:fl, a:RACE[race].f, t:kind, cn:""};
+}
+
 const CARDS=[
-C("mossling","Mossling","苔生子","Verdant","Eidolon",1,70,"C",[["Softbind",1,"Heal 20 from any Eidolon you keep."],["Root",1,"20 damage."]],"Common past the point of notice, which is why the oldest complete plates are of Mosslings. The crown is not armour — it is accumulated care.","“The first thing most of us ever drew.”"),
-C("guardian","Moss-Crowned Guardian","苔冠守护","Verdant","Eidolon",3,130,"R",[["Old Growth",2,"Heal 30. If this healed last turn, heal 50."],["Stone Bough",3,"50 damage."]],"What a Mossling becomes when tended rather than trained. The change is never witnessed directly.","“It grew toward whoever stayed.”"),
-C("thornwarden","Thornwarden","荆守","Verdant","Eidolon",4,150,"A",[["Bramble Vow",2,"Heal 30. Deals 20 to any Eidolon striking it."],["Rend",3,"60 damage."]],"Grown along a boundary hedge planted as a legal document.","“The hedge is the contract. The warden is the seal.”"),
-C("fenmother","The Fen Mother","沼之母","Verdant","Eidolon",6,190,"M",[["Green Silence",0,"While Active, your Eidolons heal 10 at Nightfall."],["Deep Root",4,"70 damage. Heal 40."]],"She was surveyed once, in 811, by a recorder who submitted forty pages and no drawing. The pages describe only sounds.","“The wood does not hide things. The wood is patient.”"),
-C("lantern","Iron Lantern of the Long Road","长路铁灯","Verdant","Relic",1,null,"C",[["Standing",0,"At Awakening, heal your Active 10."]],"Ordinary, dented, and present in more surviving accounts than any relic of consequence.","“Nothing famous ever happened to it. That is the point.”"),
-C("veilwood","The Veilwood at Dusk","雾林薄暮","Verdant","Environment",2,null,"A",[["Standing",0,"At Nightfall each player heals their Active 10."],["Thicket",0,"Switching costs 1 more."]],"The first region surveyed and the least understood.","“Recorders return with complete notes and no memory of writing them.”"),
+/* ---------------- CIVILIZATION ---------------- */
+C("liora","Liora, Silverleaf Warden","Sacred Pact","Elf","Ranger",4,3,5,"M",
+ [["Precision Volley","Deal 2 damage to an enemy unit. If you control another Civilization ally, draw 1 card."],
+  ["Moonstep","The first time each turn this unit becomes the target of an enemy effect, cancel that effect and move this unit to your backline."]],
+ "She hears the forest breathe before the string is drawn."),
+C("elfscout","Silverleaf Scout","First Watch","Elf","Scout",1,1,2,"C",
+ [["Keen Sight","When this enters play, look at the top 2 cards of your deck. Put one on the bottom."]],
+ "The border is only quiet because someone is watching it."),
+C("elfsinger","Dawnsong Weaver","Verse of Binding","Elf","Singer",3,2,4,"R",
+ [["Verse","Draw 1 card. Your next unit this turn costs 1 less."]],
+ "Every treaty in the north began as a song."),
+C("humancap","Captain Aldric","Shield of the Vale","Human","Captain",3,3,4,"R",
+ [["Formation","Allied units in your frontline take 1 less damage."],
+  ["Rally","When this enters play, give an ally +1 power this turn."]],
+ "Hold the line, and the line will hold you."),
+C("humanrec","Field Recorder","Sworn Ledger","Human","Recorder",2,1,3,"C",
+ [["Catalogue","When this enters play, draw 1 card."]],
+ "Record it before you understand it. Understanding will edit."),
+C("humanknight","Vale Knight","Oathbound","Human","Knight",4,4,5,"R",
+ [["Charge","This unit may attack the turn it arrives."]],
+ "The oath is heavier than the armour, and worn longer."),
+C("dwarfsmith","Forgemaster Brann","Anvil Rite","Dwarf","Smith",4,3,6,"A",
+ [["Forgecraft","When this enters play, give an allied unit +1/+2 permanently."],
+  ["Sturdy","This unit cannot be moved by enemy effects."]],
+ "Steel remembers the hand that shaped it."),
+C("dwarfguard","Deepstone Guard","Wall of the Hold","Dwarf","Guard",2,1,5,"C",
+ [["Bulwark","Enemy units must attack this unit if able."]],
+ "Doors were his life's work. He became one."),
+C("dwarfrunner","Ore Runner","Long Tunnel","Dwarf","Runner",1,2,1,"C",
+ [["Haul","When this unit falls, gain 1 Aether next turn."]],
+ "Down, and then further down, and then home."),
+C("demihunt","Vashka the Swift","Ambush Pact","Demi-human","Hunter",3,4,3,"A",
+ [["Ambush","This unit deals 2 extra damage when attacking from your backline."],
+  ["Slip","After attacking, move this unit to your backline."]],
+ "You will hear the second arrow. Never the first."),
+C("demiscrap","Alleyclaw","Gutter Tactics","Demi-human","Thief",2,2,2,"C",
+ [["Pickpocket","When this unit damages an enemy, draw 1 card if your hand is empty."]],
+ "Nothing in the quarter is owned. Only currently held."),
 
-C("moontide","Moon-Tide Cat","月潮猫","Tide","Eidolon",2,80,"R",[["Undertow",1,"Entering Active makes your next Switch free."],["Slipstrike",2,"40 damage."]],"Tide Eidolons are recorded by position, not portrait. Plot one across a night and you have drawn the tide.","“Never where you left it.”"),
-C("mirrormoon","Mirror-Moon Spirit Cat","镜月灵猫","Tide","Eidolon",4,110,"A",[["Two Shores",2,"Switch freely this turn. 30 damage."],["Reflected Hour",3,"70 damage if this switched."]],"It reflects thresholds it has not yet crossed. Held to still water, the reflection moves first.","“Which of the two is the record?”"),
-C("palefen","Pale Fen Heron","苍沼鹭","Tide","Eidolon",3,90,"R",[["Wade",1,"Return a Companion to hand. Draw."],["Spearfall",2,"45 damage."]],"It stands so long in one place that recorders have used it as a survey stake.","“Patience, with a blade at the end of it.”"),
-C("drowned","The Drowned Watchtower","沉塔","Tide","Environment",3,null,"A",[["Standing",0,"First Switch each turn is free."],["Silt",0,"No Nightfall benefit on entering Active."]],"Built to watch the water. The water agreed to be watched from within.","“Still a watchtower. Still watching.”"),
-C("ebbcall","Ebb-Call","退潮之唤","Tide","Spell",1,null,"C",[["Cast",1,"Switch Active with a Companion. Draw a card."]],"A two-note whistle. The second note is the one the water answers.","“Go out, so that you may come in.”"),
-C("tidewrought","Tidewrought Sovereign","潮铸君王","Tide","Eidolon",6,170,"M",[["Sovereign Pull",0,"While Active, opposing Switches cost 1 more."],["Full Moon Draw",4,"90 damage if you switched this turn."]],"Crowned by consensus of water. No account agrees on its shape, and all agree it was enormous.","“The tide does not rise. It is summoned.”"),
+/* ---------------- WARFARE ---------------- */
+C("orcwar","Grukk, Warchief of Ash","Blood Standard","Orc","Warchief",5,6,6,"M",
+ [["Momentum","Whenever an allied unit attacks, this unit gains +1 power this turn."],
+  ["Warcry","When this enters play, all allied Orcs gain +1 power."]],
+ "He does not lead the charge. He is the reason it exists."),
+C("orcbrute","Ashfang Brute","Frontline","Orc","Brute",3,4,3,"C",
+ [["Reckless","This unit must attack each turn if able."]],
+ "Strategy is a word for people who arrive late."),
+C("orcbreaker","Skullbreaker","Siege Rite","Orc","Breaker",4,5,4,"R",
+ [["Shatter","When this unit damages a defender, destroy their equipment."]],
+ "Walls are simply a delay that has been formalised."),
+C("gobtrick","Snik the Unlucky","Bad Bargain","Goblin","Trickster",2,2,2,"R",
+ [["Trick","When this unit falls, deal 2 damage to a random enemy unit."],
+  ["Swarm","Costs 1 less for each other Goblin you control."]],
+ "Every plan works. Briefly."),
+C("gobswarm","Rat-Pack Runner","Numbers","Goblin","Runner",1,1,1,"C",
+ [["Swarm","When this enters play, if you control two other Goblins, draw 1 card."]],
+ "One is a nuisance. Forty is a policy."),
+C("gobbomb","Powder Keg Carrier","Last Errand","Goblin","Sapper",3,2,3,"C",
+ [["Sacrifice","Destroy this unit: deal 3 damage to all units in one line."]],
+ "He was told it was a delivery."),
+C("demigod","Aurelion, the Unbowed","Heroic Aura","Demigod","Champion",6,6,8,"M",
+ [["Aura","Allied units have +1 power while this unit stands."],
+  ["Unbowed","This unit cannot be reduced below 1 health by a single effect."]],
+ "The gods did not send him. He simply refused to stop."),
+C("demiherald","Bronze Herald","Field Blessing","Demigod","Herald",4,3,5,"A",
+ [["Blessing","When this enters play, heal all allied units 2."]],
+ "A voice loud enough to be believed at a distance."),
+C("dragonelder","Vhaeros, Ashen Wyrm","Ruin Descends","Dragon","Elder",7,8,8,"M",
+ [["Descend","When this enters play, deal 3 damage to every enemy unit."],
+  ["Aerial","This unit can only be blocked by units with Aerial."]],
+ "Three kingdoms are named after the year it woke."),
+C("dragonling","Cinder Drake","First Flight","Dragon","Drake",4,4,3,"R",
+ [["Aerial","This unit can only be blocked by units with Aerial."]],
+ "Small, by the standards of its family."),
 
-C("embertail","Embertail Lizard","烬尾蜥","Ember","Eidolon",1,60,"C",[["Scorch",1,"30 damage. This takes 10."],["Ashfeed",0,"Discard a card. Gain 1 temporary Aether."]],"It burns from the tail inward and regrows from the same wound. A lizard with no scars has not begun.","“Nothing here is given.”"),
-C("salamander","Ash-Crowned Salamander","灰冠火蜥","Ember","Eidolon",3,100,"A",[["Cinder Crown",2,"60 damage. This takes 20."],["Pyre Debt",3,"Damage equal to twice the damage on this."]],"The crown is ash that will not fall. Four recorders tried to collect it; in every account the ash is still warm.","“It is not dying. It has agreed to burn.”"),
-C("cinderling","Cinderling","余烬童","Ember","Eidolon",2,70,"C",[["Kindle",1,"Take 10. Deal 40."],["Scatter",2,"20 to each opposing Eidolon."]],"Made, some say, from the last warm thing in a house after everyone left it.","“It follows heat, and there is little heat left.”"),
-C("gravebell","Gravebell","冢钟","Ember","Relic",3,null,"A",[["Standing",0,"When an Eidolon you keep falls, deal 30."],["Toll",2,"Destroy this. Deal 50."]],"Cast from the fittings of a hall that burned with the covenant inside. It is rung only downward.","“It does not mourn. It reports.”"),
-C("tallow","Rite of Low Tallow","低烛之仪","Ember","Spell",1,null,"C",[["Cast",1,"Discard a card. Gain 2 temporary Aether."]],"Burned at the hour when the candle is shorter than the remaining need.","“Spend the light.”"),
-C("ashsworn","The Ashsworn Marshal","烬誓元帅","Ember","Eidolon",5,150,"M",[["Ash Command",0,"Your Ember Eidolons deal 10 more."],["Last Order",4,"100 damage. This takes 40."]],"He gave the order to burn the hall and then remained in it. The covenant kept his name; no account keeps his face.","“Say it while it still hurts, or it will not hold.”"),
+/* ---------------- NATURE & MYSTIC ---------------- */
+C("treeelder","Oakfather Mourn","Rootbound Vigil","Treekin","Elder",6,4,9,"M",
+ [["Rootbound","At the end of your turn, heal all allied units 2."],
+  ["Deep Roots","This unit cannot be moved or returned to hand."]],
+ "It was surveyed once, in 811. The notes describe only sounds."),
+C("treeward","Bramble Warden","Green Covenant","Treekin","Warden",3,2,5,"R",
+ [["Thornskin","When an enemy damages this unit, deal 1 damage back."]],
+ "The hedge is the contract. The warden is the seal."),
+C("treesap","Sapling Attendant","Quiet Growth","Treekin","Attendant",1,0,3,"C",
+ [["Tend","At the end of your turn, heal an allied unit 1."]],
+ "It grew toward whoever stayed."),
+C("insectbrood","Brood Matron","Hive Ascendant","Insectoid","Matron",5,3,6,"A",
+ [["Brood","At the start of your turn, create a 1/1 Insectoid."],
+  ["Evolve","When another Insectoid falls, this unit gains +1/+1."]],
+ "The nest does not mourn. It recalculates."),
+C("insectskit","Chitin Skitterer","Numbers","Insectoid","Skitterer",1,1,2,"C",
+ [["Scuttle","This unit cannot be attacked while you control another Insectoid."]],
+ "Uncountable, and therefore never counted properly."),
+C("merfolktide","Nerith, Tidecaller","Tidal Flow","Merfolk","Tidecaller",4,3,4,"A",
+ [["Tidal Flow","When this enters play, move any unit to the other line."],
+  ["Undertow","Your first repositioning each turn costs nothing."]],
+ "The water does not rise. It is summoned."),
+C("merfolkspear","Reef Spearhand","Shallow Guard","Merfolk","Spearhand",2,3,2,"C",
+ [["Reposition","After this unit attacks, move it to your backline."]],
+ "Patience, with a blade at the end of it."),
+C("slimecore","Prime Ooze","Split and Merge","Slime","Prime",4,3,5,"R",
+ [["Split","When this unit falls, create two 1/2 Slimes."],
+  ["Merge","Absorb an allied Slime: gain its power and health."]],
+ "It has been one thing, and many, and one again."),
+C("slimelet","Lesser Slime","Adaptive Body","Slime","Lesser",1,1,2,"C",
+ [["Adapt","This unit takes 1 less damage from repeated sources."]],
+ "It learns the shape of what hurts it."),
 
-C("larva","Microstar Larva","微星幼虫","Astral","Eidolon",1,50,"C",[["Observe",1,"Look at the top card. You may bury it."],["Faint Light",1,"20 damage."]],"It does not glow so much as hold a small amount of somewhere else.","“Attention is the only nourishment recorded.”"),
-C("moth","Star-Weaving Moth","织星蛾","Astral","Eidolon",4,110,"L",[["Loom of Nights",2,"Rearrange the top four. Gain 1 temporary Aether."],["Silver Thread",3,"50 damage, +10 per card observed."]],"The sky was not woven. It was recorded so carefully that it began to hold.","“By morning the pattern was load-bearing.”"),
-C("starfox","Star-Lamp Fox","星灯狐","Astral","Eidolon",2,90,"A",[["Lantern Watch",1,"Look at the top three. Take one."],["Guiding Flame",2,"30 damage, +20 if you searched."]],"Found only where mist thins enough to admit a single star. The lamp is a held reflection, cool to the touch.","“It carries the place the light was.”"),
-C("stag","The King of the Dayless Stag","无昼鹿王","Astral","Eidolon",6,180,"M",[["Dayless Reign",0,"Both players reveal the top of their deck."],["Long Night",4,"80 damage. If an Environment stands, heal 30."]],"It appears in archives centuries apart with no sighting between. The earliest covenant naming it is written in the second person.","“In eleven accounts, the sun does not rise.”"),
-C("observatory","The Old Observatory","旧观星台","Astral","Environment",3,null,"L",[["Standing",0,"Each player may look at the top of their deck."],["Vigil",0,"Astral Eidolons pay 1 less for their first skill."]],"Instruments calibrated for a sky that no longer matches.","“Abandoned in every account. The lamp is always lit.”"),
-C("recorder","Wandering Recorder","游历契录师","Astral","Traveler",2,null,"R",[["Once per turn",0,"Look at the top two. Take one."]],"Paid in nothing, travelling with one lamp, one book, and a rule against sleeping where they wrote.","“Record it before you understand it.”"),
-C("nightmoth","Lesser Night Moth","小夜蛾","Astral","Eidolon",1,40,"C",[["Flit",0,"Switch this to a Companion place."],["Dust",1,"15 damage. Observe the top card."]],"Uncountable, and therefore never counted properly.","“Even small records fill the drawer.”"),
-C("wardstone","Wardstone of the Grey Vigil","灰誓守石","Verdant","Relic",2,null,"R",[["Standing",0,"Your Active takes 10 less."],["Break",2,"Destroy this. Heal 40."]],"Set at the boundary of a monastery that no longer exists. It still marks the boundary.","“The vow outlived the wall.”"),
-/* --- common ranks: every Aspect needs enough records to bind a legal forty --- */
-C("saplingward","Sapling Ward","幼苗守","Verdant","Eidolon",2,80,"C",[["Shelter",1,"Heal 20. This takes 10 less next turn."],["Switch-cut",2,"35 damage."]],"Planted at doorways by people who did not expect to return, and were right.","“Something small, left standing watch.”"),
-C("bogwalker","Bogwalker","涉沼者","Verdant","Eidolon",3,110,"C",[["Mire",1,"Opposing Switch costs 1 more this turn."],["Heave",2,"40 damage."]],"It moves at the speed of the ground agreeing to be walked on.","“Slow is not the same as late.”"),
-C("greenrite","Rite of Quiet Growth","静长之仪","Verdant","Spell",2,null,"C",[["Cast",2,"Heal 40 across your Eidolons as you choose."]],"Spoken over roots, never over people.","“It asks for nothing but time, which is the expensive part.”"),
-C("saltling","Saltling","盐生子","Tide","Eidolon",1,50,"C",[["Drift",0,"Switch this to a Companion place."],["Sting",1,"20 damage."]],"Found in the line the tide leaves and forgets.","“Small, and always arriving.”"),
-C("coldcurrent","Cold Current","寒流","Tide","Spell",2,null,"C",[["Cast",2,"30 damage. Switch your Active freely."]],"The water that arrives before the weather does.","“You feel it in the ankles first.”"),
-C("harbourstone","Harbour Stone","泊石","Tide","Relic",2,null,"C",[["Standing",0,"Your first Switch each turn costs 1 less."]],"Worn concave by rope. The rope is centuries gone.","“The harbour is the habit, not the wall.”"),
-C("embermoth","Emberwing Moth","烬翼蛾","Ember","Eidolon",2,60,"C",[["Singe",1,"25 damage. This takes 10."],["Flare",2,"40 damage if this is damaged."]],"It is drawn to fire and is made worse by arriving.","“Every one of them is a small decision to burn.”"),
-C("sootkeeper","Sootkeeper","守煤人","Ember","Eidolon",3,100,"C",[["Bank the Coals",1,"Discard a card. Heal 30."],["Rake",2,"45 damage."]],"Someone must keep the fire low enough to survive the night.","“Not every Ember record is an act of ruin.”"),
-C("cindermark","Cinder Mark","烬印","Ember","Relic",1,null,"C",[["Standing",0,"When your Active takes damage, deal 10 back."]],"Pressed into the doorframe with a thumb, while it was still hot.","“A warning, and a signature.”"),
-C("dimstar","Dim Star Sprite","暗星精","Astral","Eidolon",2,70,"C",[["Glimpse",1,"Observe the top two. Reorder them."],["Pale Strike",2,"35 damage."]],"Barely visible, and only when not looked at directly.","“Averted vision is the older technique.”"),
-C("charting","Charting the Hours","刻录时辰","Astral","Spell",1,null,"C",[["Cast",1,"Observe the top three. Take one to hand."]],"A page of numbers that is also a prayer, depending on the reader.","“Write the hour down and the hour behaves.”"),
-C("astrolabe","Tarnished Astrolabe","锈蚀星盘","Astral","Relic",2,null,"C",[["Standing",0,"At Awakening, observe the top card of your deck."]],"Accurate for a sky that has since moved on.","“Still correct, about a night that no longer exists.”")
+/* ---------------- DARK & OTHERWORLDLY ---------------- */
+C("demonlord","Malephar, Ruin Sworn","Corrupt Bargain","Demon","Lord",6,7,6,"M",
+ [["Bargain","When this enters play, lose 3 health: draw 3 cards."],
+  ["Corruption","When an enemy unit falls, it returns under your control if it cost 3 or less."]],
+ "Everything offered was, technically, given freely."),
+C("demonimp","Ashpact Imp","Small Print","Demon","Imp",2,3,1,"C",
+ [["Risk","This unit deals 2 damage to you when it attacks."]],
+ "Read it. There is time. There is not much time."),
+C("bloodcount","Countess Sevrine","Blood Rite","Bloodborn","Countess",5,4,6,"A",
+ [["Drain","When this unit damages an enemy, heal this unit the same amount."],
+  ["Rite","At the start of your turn, you may sacrifice 2 health to draw a card."]],
+ "She is unfailingly polite. That is the frightening part."),
+C("bloodthrall","Crimson Thrall","Willing Vein","Bloodborn","Thrall",2,2,3,"C",
+ [["Offer","Sacrifice this unit: an allied unit gains +2/+2."]],
+ "He was asked. He is certain he was asked."),
+C("undeadking","The Hollow King","Grave Return","Undead","King",6,5,7,"M",
+ [["Return","When this unit falls, return it to your hand."],
+  ["Death Value","Whenever an allied unit falls, draw 1 card."]],
+ "Eleven accounts of his death. All of them accurate."),
+C("undeadrisen","Risen Footman","Persistence","Undead","Footman",2,2,3,"C",
+ [["Rise","The first time this unit falls, return it with 1 health."]],
+ "It does not remember the war. It remembers the order."),
+C("undeadgrave","Gravebell Tender","Toll","Undead","Tender",3,2,4,"R",
+ [["Toll","When an allied unit falls, deal 1 damage to the enemy front unit."]],
+ "It does not mourn. It reports."),
+C("monsterfear","The Thing Beneath","Unshaped","Monster","Aberration",5,5,5,"A",
+ [["Fear","Enemy units with 2 or less power cannot attack this unit."],
+  ["Mutate","At the start of your turn, this unit gains +1 power or +1 health."]],
+ "Every witness described something different. All were believed."),
+C("monsterspawn","Crawling Mass","Mutation","Monster","Spawn",3,3,3,"C",
+ [["Unpredictable","When this enters play, it gains +2 power or +2 health at random."]],
+ "It is still deciding what it is."),
+
+/* ---------------- SPELLS & RELICS ---------------- */
+S("spellvolley","Precision Volley","Marksman's Rite","Elf","Spell",2,"C",
+ [["Cast","Deal 2 damage to an enemy unit. Draw a card if you control an Elf."]],
+ "Aim is a discipline. Patience is the weapon."),
+S("spellrally","Muster the Vale","Field Order","Human","Spell",3,"R",
+ [["Cast","Allied units gain +1/+1 until end of turn."]],
+ "Everyone who could hold a spear, and several who could not."),
+S("relicanvil","Brann's Anvil","Forge Relic","Dwarf","Relic",3,"A",
+ [["Standing","At the start of your turn, give an allied unit +1 power."]],
+ "It has outlasted four halls and one language."),
+S("spellpyre","Ash Offering","Burning Rite","Orc","Spell",2,"C",
+ [["Cast","Deal 3 damage to a unit. Deal 1 damage to yourself."]],
+ "Nothing here is given. Everything here is paid for."),
+S("spellbrood","Call the Brood","Hive Rite","Insectoid","Spell",3,"R",
+ [["Cast","Create three 1/1 Insectoids."]],
+ "The nest answers before the question finishes."),
+S("relicmoon","Moonwell Stone","Tidal Relic","Merfolk","Relic",2,"R",
+ [["Standing","Your first repositioning each turn costs nothing."]],
+ "Still water, kept deliberately still."),
+S("spellgrave","Open the Graves","Death Rite","Undead","Spell",4,"A",
+ [["Cast","Return two units from your discard to play with 1 health."]],
+ "The ground was never really closed."),
+S("spellblood","Crimson Tithe","Blood Rite","Bloodborn","Spell",2,"C",
+ [["Cast","Lose 2 health. Draw 2 cards."]],
+ "The price is posted. It is simply posted quietly.")
 ];
 const BY=Object.fromEntries(CARDS.map(c=>[c.id,c]));
 
-/* ---------- THE TEN STARTER PARCELS ---------- */
+/* ============================================================
+   STARTER DECKS — eight, two per faction
+   ============================================================ */
 const PACKS=[
-{id:"p1",n:"Rootbound Covenant",cn:"根缚之契",a:"Verdant",tag:"Endure and outlast",
- desc:"Healing, patience and value that compounds if you are permitted to live.",
- cards:["mossling","mossling","guardian","lantern","wardstone"]},
-{id:"p2",n:"The Green Silence",cn:"碧寂",a:"Verdant",tag:"Deep forest, deeper roots",
- desc:"The heaviest Verdant record in the first binding, and the slowest to reward you.",
- cards:["mossling","thornwarden","fenmother","veilwood","lantern"]},
-{id:"p3",n:"Moon-Tide Accord",cn:"月潮之约",a:"Tide",tag:"Move, and be paid for moving",
- desc:"Position is the whole argument. Entering the forward place is itself the reward.",
- cards:["moontide","moontide","ebbcall","palefen","mirrormoon"]},
-{id:"p4",n:"The Drowned Watch",cn:"沉没之守",a:"Tide",tag:"Control the crossing",
- desc:"Slower Tide. It makes the ground itself argue on your behalf.",
- cards:["palefen","drowned","ebbcall","moontide","tidewrought"]},
-{id:"p5",n:"Cinder Rite",cn:"烬礼",a:"Ember",tag:"Pay in yourself",
- desc:"Self-damage and discard, exchanged for reach no other Aspect is permitted.",
- cards:["embertail","embertail","cinderling","tallow","salamander"]},
-{id:"p6",n:"The Ashsworn Order",cn:"烬誓之团",a:"Ember",tag:"Burn together",
- desc:"A command structure built from things already on fire.",
- cards:["cinderling","embertail","gravebell","tallow","ashsworn"]},
-{id:"p7",n:"Lantern Watch",cn:"提灯守夜",a:"Astral",tag:"Know before you strike",
- desc:"Search, arrange, and make the next three turns obey you.",
- cards:["larva","starfox","starfox","nightmoth","recorder"]},
-{id:"p8",n:"The Unnumbered Sky",cn:"无数之天",a:"Astral",tag:"Attention as a weapon",
- desc:"The longest Astral chain in the binding, ending in something woven.",
- cards:["larva","nightmoth","moth","observatory","recorder"]},
-{id:"p9",n:"Ash and Moon-Tide",cn:"灰烬月潮",a:"Ember",tag:"Two aspects, one debt",
- desc:"Ember burst carried on Tide movement. Volatile, and quick.",
- cards:["embertail","moontide","tallow","cinderling","mirrormoon"]},
-{id:"p10",n:"Guiding Stars Through the Veilwood",cn:"雾林引星",a:"Astral",tag:"The mythic road",
- desc:"Verdant patience beneath Astral planning. It holds the rarest record on the table.",
- cards:["mossling","starfox","larva","veilwood","stag"]}
+{id:"p1",n:"Silverleaf Accord",cn:"银叶之盟",a:"Civilization",race:"Elf",
+ tag:"Precision and draw",
+ desc:"Elven marksmanship. Strike exactly, draw deeply, and never be where the answer lands.",
+ cards:["liora","elfscout","elfsinger","spellvolley","humanrec"]},
+{id:"p2",n:"Shield of the Vale",cn:"谷地之盾",a:"Civilization",race:"Human",
+ tag:"Formation and forgecraft",
+ desc:"Humans and Dwarves holding a line together. Slow, stubborn, and very hard to move.",
+ cards:["humancap","humanknight","dwarfsmith","dwarfguard","spellrally"]},
+{id:"p3",n:"Blood Standard",cn:"血旗",a:"Warfare",race:"Orc",
+ tag:"Frontline momentum",
+ desc:"Orcish pressure that grows with every swing. It does not defend. It arrives.",
+ cards:["orcwar","orcbrute","orcbreaker","spellpyre","gobbomb"]},
+{id:"p4",n:"Wings Over Ash",cn:"烬空之翼",a:"Warfare",race:"Dragon",
+ tag:"Aerial finishers",
+ desc:"Goblin fodder buying time until something enormous lands on the board.",
+ cards:["dragonelder","dragonling","gobswarm","gobtrick","demiherald"]},
+{id:"p5",n:"Rootbound Vigil",cn:"根缚守夜",a:"Nature",race:"Treekin",
+ tag:"Growth and endurance",
+ desc:"Treekin patience. Heal, hold, and let the board become a forest you own.",
+ cards:["treeelder","treeward","treesap","slimelet","relicmoon"]},
+{id:"p6",n:"The Rising Brood",cn:"虫潮",a:"Nature",race:"Insectoid",
+ tag:"Numbers and tide",
+ desc:"Insectoid expansion carried on Merfolk movement. Small things, arriving constantly.",
+ cards:["insectbrood","insectskit","merfolktide","merfolkspear","spellbrood"]},
+{id:"p7",n:"Corrupt Bargain",cn:"堕契",a:"Dark",race:"Demon",
+ tag:"Risk for power",
+ desc:"Demonic acceleration paid for in your own health. Explosive, and expensive.",
+ cards:["demonlord","demonimp","bloodcount","bloodthrall","spellblood"]},
+{id:"p8",n:"The Hollow Court",cn:"空王之廷",a:"Dark",race:"Undead",
+ tag:"Death has value",
+ desc:"Undead persistence. Nothing you lose is really lost, and the graves keep answering.",
+ cards:["undeadking","undeadrisen","undeadgrave","spellgrave","monsterspawn"]}
 ];
+
 
 /* ---------- PLAYER ---------- */
 const P={
@@ -1171,50 +1374,174 @@ function owned(){return CARDS.filter(c=>P.owned[c.id]>0)}
 function toast(m){const t=$("#toast");const d=document.createElement("div");d.className="tm";d.textContent=m;t.appendChild(d);
   setTimeout(()=>{d.style.transition="opacity .8s";d.style.opacity=0;setTimeout(()=>d.remove(),800)},2200)}
 
-/* ---------- CARD PLATE ART ---------- */
-function plate(card,skin){
-  const s=[...card.id].reduce((a,ch)=>a+ch.charCodeAt(0),0),rr=rndSeed(s);
-  const A=card.a,col=ASP[A].c;
-  let bg=A==="Verdant"?"#0d1210":A==="Tide"?"#0b1016":A==="Ember"?"#140b09":"#0c0b13";
-  if(skin==="Moonlit")bg="#0a0e16";if(skin==="Ember-Touched")bg="#160a07";
-  if(skin==="Winter")bg="#0e1114";if(skin==="Corrupted")bg="#0e0810";if(skin==="Ancient")bg="#12100b";
-  let fig="";
-  if(A==="Astral"||skin==="Moonlit"){for(let i=0;i<26;i++)fig+=`<circle cx="${(rr()*120).toFixed(1)}" cy="${(rr()*96).toFixed(1)}" r="${(rr()*.9+.25).toFixed(2)}" fill="rgba(216,205,184,${(.2+rr()*.5).toFixed(2)})"/>`;
-    fig+=`<circle cx="60" cy="52" r="26" fill="none" stroke="${col}" stroke-width=".5" opacity=".5"/><circle cx="60" cy="52" r="34" fill="none" stroke="${col}" stroke-width=".3" opacity=".3"/>`}
-  if(A==="Tide"){for(let i=0;i<5;i++)fig+=`<path d="M-4 ${96+i*11} q18 -6 34 0 t34 0 t34 0 t34 0" fill="none" stroke="${col}" stroke-width=".55" opacity="${(.5-i*.07).toFixed(2)}"/>`;
-    fig+=`<circle cx="86" cy="34" r="13" fill="none" stroke="rgba(216,205,184,.4)" stroke-width=".6"/>`}
-  if(A==="Verdant"){for(let i=0;i<7;i++){const x=8+rr()*104;fig+=`<path d="M${x.toFixed(1)} 168 L${(x+rr()*6-3).toFixed(1)} ${(70+rr()*40).toFixed(1)}" stroke="rgba(216,205,184,.14)" stroke-width="${(.6+rr()).toFixed(1)}" fill="none"/>`}
-    fig+=`<circle cx="60" cy="60" r="30" fill="none" stroke="${col}" stroke-width=".5" opacity=".35"/>`}
-  if(A==="Ember"||skin==="Ember-Touched"){fig+=`<ellipse cx="60" cy="140" rx="44" ry="16" fill="rgba(150,52,26,.28)"/>`;
-    for(let i=0;i<14;i++)fig+=`<circle cx="${(20+rr()*80).toFixed(1)}" cy="${(80+rr()*60).toFixed(1)}" r="${(rr()*1.1+.3).toFixed(2)}" fill="rgba(196,90,46,${(.3+rr()*.6).toFixed(2)})"/>`}
-  const cx=60,cy=94;let body="";
-  if(card.t==="Eidolon"){const w=16+rr()*10,h=20+rr()*14;
-    body=`<g stroke="rgba(216,205,184,.55)" stroke-width="1" fill="rgba(6,5,5,.5)" stroke-linejoin="round">
-      <path d="M${cx-w} ${cy+h} q${(w*.3).toFixed(1)} ${(-h*1.5).toFixed(1)} ${w.toFixed(1)} ${(-h*1.6).toFixed(1)} q${(w*.7).toFixed(1)} ${(.1*h).toFixed(1)} ${w.toFixed(1)} ${(h*1.6).toFixed(1)} Z"/>
-      <path d="M${(cx-w*.55).toFixed(1)} ${(cy-h*.7).toFixed(1)} l${(-4-rr()*7).toFixed(1)} ${(-8-rr()*12).toFixed(1)}" stroke-width=".8"/>
-      <path d="M${(cx+w*.55).toFixed(1)} ${(cy-h*.7).toFixed(1)} l${(4+rr()*7).toFixed(1)} ${(-8-rr()*12).toFixed(1)}" stroke-width=".8"/>
-      <circle cx="${cx-4.5}" cy="${(cy-h*.55).toFixed(1)}" r="1.5" fill="${col}"/><circle cx="${cx+4.5}" cy="${(cy-h*.55).toFixed(1)}" r="1.5" fill="${col}"/></g>`}
-  else{body=`<g stroke="rgba(216,205,184,.5)" stroke-width="1" fill="rgba(6,5,5,.55)">
-      <rect x="${cx-20}" y="${cy-24}" width="40" height="52" rx="1"/><path d="M${cx-20} ${cy-24} l20 -14 l20 14"/>
-      <path d="M${cx} ${cy-14} v34 M${cx-11} ${cy+2} h22" stroke="${col}" stroke-width=".7"/></g>`}
-  const gid="g"+s+(skin||"");
-  return `<svg class="plate" viewBox="0 0 120 168" preserveAspectRatio="xMidYMid slice">
-    <defs><radialGradient id="${gid}" cx="50%" cy="42%"><stop offset="0" stop-color="rgba(255,255,255,.05)"/><stop offset="1" stop-color="rgba(0,0,0,.72)"/></radialGradient></defs>
-    <rect width="120" height="168" fill="${bg}"/><rect width="120" height="168" fill="url(#${gid})"/>
-    ${fig}<path d="M0 108 Q30 ${(100+rr()*8).toFixed(1)} 60 105 T120 106 L120 168 L0 168Z" fill="rgba(0,0,0,.55)"/>${body}
+/* ============================================================
+   FACTION SIGILS — the four crests from the reference
+   ============================================================ */
+function factionSigil(f,col){
+  const c=col||FACTION[f].c;
+  const S='fill="none" stroke="'+c+'" stroke-width="1.4" stroke-linejoin="round"';
+  if(f==="Civilization") return `<svg viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="14" ${S} opacity=".55"/>
+    <path d="M8 24V14l8-6 8 6v10Z" ${S}/><path d="M13 24v-6h6v6" ${S}/>
+    <path d="M11 13v-3M16 10V6M21 13v-3" ${S}/></svg>`;
+  if(f==="Warfare") return `<svg viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="14" ${S} opacity=".55"/>
+    <path d="M9 8l14 16M23 8L9 24" ${S}/>
+    <path d="M7 6h4v4M25 6h-4v4M7 26h4v-4M25 26h-4v-4" ${S}/></svg>`;
+  if(f==="Nature") return `<svg viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="14" ${S} opacity=".55"/>
+    <path d="M16 26V12" ${S}/>
+    <path d="M16 18c-5 0-8-3-8-8 5 0 8 3 8 8ZM16 20c5 0 8-3 8-8-5 0-8 3-8 8Z" ${S}/>
+    <path d="M12 26h8" ${S}/></svg>`;
+  return `<svg viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="14" ${S} opacity=".55"/>
+    <path d="M10 12c0-4 3-6 6-6s6 2 6 6c0 3-2 4-2 7H12c0-3-2-4-2-7Z" ${S}/>
+    <path d="M8 9l3 3M24 9l-3 3" ${S}/>
+    <path d="M13 22v3M19 22v3M16 22v4" ${S}/></svg>`;
+}
+
+/* ============================================================
+   CARD ART — a painted-looking scene per race
+   ============================================================ */
+function raceArt(card){
+  const seed=[...card.id].reduce((a,c)=>a+c.charCodeAt(0),0);
+  const R=(x=>()=>((x=x*16807%2147483647)/2147483647))(seed*97+11);
+  const f=card.a, F=FACTION[f], col=F.c;
+  const race=card.race;
+  let sky,ground,fig="";
+
+  if(f==="Civilization"){sky="#2a3a52";ground="#16202f"}
+  else if(f==="Warfare"){sky="#4a2418";ground="#2a1410"}
+  else if(f==="Nature"){sky="#1e3826";ground="#12241a"}
+  else{sky="#2a1840";ground="#170e26"}
+
+  // depth: distant shapes
+  let back="";
+  for(let i=0;i<7;i++){
+    const x=R()*120,h=18+R()*40;
+    back+=`<rect x="${x.toFixed(1)}" y="${(96-h).toFixed(1)}" width="${(7+R()*13).toFixed(1)}" height="${h.toFixed(1)}" fill="rgba(0,0,0,.28)"/>`;
+  }
+  if(race==="Elf"||race==="Treekin"){
+    back="";
+    for(let i=0;i<9;i++){const x=R()*120;
+      back+=`<path d="M${x.toFixed(1)} 100 L${(x+R()*5-2.5).toFixed(1)} ${(20+R()*40).toFixed(1)}" stroke="rgba(255,255,255,.07)" stroke-width="${(1.5+R()*4).toFixed(1)}" fill="none"/>`}
+    for(let i=0;i<26;i++)back+=`<ellipse cx="${(R()*120).toFixed(1)}" cy="${(R()*90).toFixed(1)}" rx="${(1+R()*2.6).toFixed(1)}" ry="${(.6+R()*1.3).toFixed(1)}" fill="rgba(150,190,120,.16)"/>`;
+  }
+  if(race==="Merfolk"||race==="Slime"){
+    for(let i=0;i<6;i++)back+=`<path d="M-4 ${72+i*8} q16 -5 32 0 t32 0 t32 0 t32 0" fill="none" stroke="${col}" stroke-width=".7" opacity="${(.32-i*.04).toFixed(2)}"/>`;
+  }
+  if(race==="Dragon"){
+    back+=`<circle cx="88" cy="24" r="13" fill="rgba(226,140,70,.22)"/>`;
+    for(let i=0;i<16;i++)back+=`<circle cx="${(R()*120).toFixed(1)}" cy="${(R()*80).toFixed(1)}" r="${(R()*1.1+.3).toFixed(2)}" fill="rgba(238,150,80,${(.25+R()*.5).toFixed(2)})"/>`;
+  }
+  if(f==="Dark"){
+    for(let i=0;i<20;i++)back+=`<circle cx="${(R()*120).toFixed(1)}" cy="${(R()*90).toFixed(1)}" r="${(R()*.9+.25).toFixed(2)}" fill="rgba(200,170,230,${(.15+R()*.35).toFixed(2)})"/>`;
+  }
+  if(race==="Insectoid"){
+    for(let i=0;i<8;i++){const x=8+R()*104,y=40+R()*50;
+      back+=`<path d="M${x} ${y} l4 -5 l4 5 l-4 5Z" fill="rgba(150,190,90,.18)"/>`}
+  }
+
+  // the figure — a painted silhouette, readable at any size
+  const cx=60, base=104;
+  const tall = ["Dragon","Demigod","Treekin","Monster"].includes(race);
+  const H = tall? 62 : 50;
+  const W = tall? 21 : 15;
+  fig+=`<ellipse cx="${cx}" cy="${base+2}" rx="${W+9}" ry="5" fill="rgba(0,0,0,.42)"/>`;
+  // cloak / body
+  fig+=`<path d="M${cx-W} ${base} q${(W*0.2).toFixed(1)} ${(-H*0.72).toFixed(1)} ${(W*0.72).toFixed(1)} ${(-H*0.92).toFixed(1)}
+        q${(W*0.28).toFixed(1)} ${(-H*0.1).toFixed(1)} ${(W*0.56).toFixed(1)} 0
+        q${(W*0.52).toFixed(1)} ${(H*0.2).toFixed(1)} ${(W*0.72).toFixed(1)} ${(H*0.92).toFixed(1)} Z"
+        fill="rgba(8,10,16,.72)" stroke="rgba(238,228,206,.62)" stroke-width="1.1" stroke-linejoin="round"/>`;
+  // head
+  const hy=base-H*0.94;
+  fig+=`<circle cx="${cx}" cy="${hy.toFixed(1)}" r="${(W*0.35).toFixed(1)}" fill="rgba(8,10,16,.8)" stroke="rgba(238,228,206,.62)" stroke-width="1.1"/>`;
+  // race silhouette details
+  if(race==="Elf"||race==="Demi-human")
+    fig+=`<path d="M${(cx-W*0.35).toFixed(1)} ${(hy-1).toFixed(1)} l-5 -5M${(cx+W*0.35).toFixed(1)} ${(hy-1).toFixed(1)} l5 -5" stroke="rgba(238,228,206,.6)" stroke-width="1.1" fill="none"/>`;
+  if(race==="Elf")
+    fig+=`<path d="M${cx+W+2} ${base-H*0.75} q9 ${(H*0.4).toFixed(1)} 0 ${(H*0.75).toFixed(1)}" stroke="rgba(238,228,206,.55)" stroke-width="1.1" fill="none"/>`;
+  if(race==="Dwarf")
+    fig+=`<path d="M${(cx-W*0.34).toFixed(1)} ${(hy+3).toFixed(1)} q${(W*0.34).toFixed(1)} 9 ${(W*0.68).toFixed(1)} 0" stroke="rgba(238,228,206,.55)" stroke-width="1.2" fill="none"/>`;
+  if(race==="Orc"||race==="Goblin")
+    fig+=`<path d="M${(cx-3).toFixed(1)} ${(hy+3).toFixed(1)} l-1.5 3M${(cx+3).toFixed(1)} ${(hy+3).toFixed(1)} l1.5 3" stroke="rgba(238,228,206,.7)" stroke-width="1.2" fill="none"/>`;
+  if(race==="Dragon")
+    fig+=`<path d="M${cx-W} ${base-H*0.6} q-24 -18 -30 -34 q18 6 30 18M${cx+W} ${base-H*0.6} q24 -18 30 -34 q-18 6 -30 18"
+      fill="rgba(8,10,16,.6)" stroke="rgba(238,228,206,.5)" stroke-width="1.1"/>`;
+  if(race==="Demigod")
+    fig+=`<circle cx="${cx}" cy="${(hy-11).toFixed(1)}" r="9" fill="none" stroke="rgba(240,210,140,.75)" stroke-width="1.1"/>`;
+  if(race==="Treekin"){
+    fig+=`<path d="M${cx-8} ${(hy-2).toFixed(1)} l-9 -12M${cx+8} ${(hy-2).toFixed(1)} l9 -12M${cx} ${(hy-6).toFixed(1)} v-13"
+      stroke="rgba(150,190,120,.7)" stroke-width="1.3" fill="none"/>`;
+  }
+  if(race==="Undead"||race==="Monster"||race==="Demon"){
+    fig+=`<circle cx="${(cx-4).toFixed(1)}" cy="${hy.toFixed(1)}" r="1.7" fill="${col}"/>
+          <circle cx="${(cx+4).toFixed(1)}" cy="${hy.toFixed(1)}" r="1.7" fill="${col}"/>`;
+  }else{
+    fig+=`<circle cx="${(cx-3.4).toFixed(1)}" cy="${hy.toFixed(1)}" r="1.3" fill="${col}"/>
+          <circle cx="${(cx+3.4).toFixed(1)}" cy="${hy.toFixed(1)}" r="1.3" fill="${col}"/>`;
+  }
+  if(race==="Demon")
+    fig+=`<path d="M${(cx-5).toFixed(1)} ${(hy-4).toFixed(1)} l-4 -8M${(cx+5).toFixed(1)} ${(hy-4).toFixed(1)} l4 -8"
+      stroke="${col}" stroke-width="1.3" fill="none"/>`;
+  if(race==="Merfolk")
+    fig+=`<path d="M${cx-W} ${base} q${W} 8 ${W*2} 0" stroke="${col}" stroke-width="1.2" fill="none"/>`;
+
+  const gid="a"+seed;
+  return `<svg viewBox="0 0 120 112" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${sky}"/><stop offset="1" stop-color="${ground}"/>
+      </linearGradient>
+      <radialGradient id="v${gid}" cx="50%" cy="42%">
+        <stop offset="0" stop-color="rgba(255,255,255,.10)"/>
+        <stop offset="1" stop-color="rgba(0,0,0,.72)"/>
+      </radialGradient>
+    </defs>
+    <rect width="120" height="112" fill="url(#${gid})"/>
+    ${back}
+    <path d="M0 96 Q30 92 60 95 T120 94 L120 112 L0 112Z" fill="rgba(0,0,0,.5)"/>
+    ${fig}
+    <rect width="120" height="112" fill="url(#v${gid})"/>
   </svg>`;
 }
+/* legacy name kept so existing calls still work */
+function plate(card){ return raceArt(card) }
+
+/* ============================================================
+   THE CARD ELEMENT
+   ============================================================ */
 function cardEl(card,o={}){
+  const F=FACTION[card.a];
   const d=document.createElement("div");
   d.className="card"+(o.sm?" sm":"")+(o.cls?" "+o.cls:"");
-  d.style.setProperty("--ag",ASP[card.a].glow);
+  d.style.setProperty("--ag",F.glow);
+  d.style.setProperty("--fr",F.frame);
+  d.style.setProperty("--fr2",F.frame2);
   const own=P.owned[card.id]||0;
   if(o.coll&&own===0)d.classList.add("locked");
-  d.innerHTML=`${plate(card,P.skin[card.id])}<div class="cost">${card.cost}</div><div class="rr">${RAR[card.r]}</div>
-    <div class="foot"><div class="nm">${card.n}</div>
-    <div class="mt"><span style="color:${ASP[card.a].c}">${card.a}</span><span>${card.hp?card.hp+" HP":card.t}</span></div></div>
+  const isUnit=card.t==="Unit";
+  const rules=card.sk.map(s=>`<div class="ab"><b>${s[0]}</b> — ${s[1]}</div>`).join('<div class="div"></div>');
+
+  d.innerHTML=`
+    <div class="brandbar">ELARIS</div>
+    <div class="titlebar"><div class="t">${card.n}</div></div>
+    ${card.sub?`<div class="subbar"><div class="s">${card.sub}</div></div>`:""}
+    <div class="cost"><b>${card.cost}</b></div>
+    <div class="rail">
+      <div class="sig">${factionSigil(card.a)}</div>
+      <div class="fx">${card.a==="Nature"?"Nature":card.a==="Dark"?"Dark":card.a}</div>
+    </div>
+    <div class="art">${raceArt(card)}</div>
+    <div class="band"><div class="b">${card.race}<i>✦</i>${card.role}</div></div>
+    <div class="rules">${rules}${card.fl?`<div class="fl">${card.fl}</div>`:""}</div>
+    ${isUnit?`<div class="pw"><b>${card.pow}</b></div><div class="hp"><b>${card.hp}</b></div>`:""}
+    <div class="rr">${RAR[card.r]}</div>
+    <div class="setline">Core Set</div>
+    <div class="keyline"></div>
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
     ${o.coll?`<div class="own">${own?"×"+own:"—"}</div>`:""}`;
-  // hovering a record stirs its affinity in the painted ground
   d.addEventListener("mouseenter",()=>awaken(card.a));
   if(!o.noclick)d.addEventListener("click",()=>inspect(card));
   return d;
@@ -1255,10 +1582,10 @@ const LOAD_STEPS=[
 const LOAD_HINTS=[
   "A record is a living being caught at one moment of its history.",
   "Rarity is not power. Rarity is how strange the moment was.",
-  "Ember pays in itself. Nothing there is given.",
-  "Tide is paid for moving. Position is the whole argument.",
-  "Verdant compounds, if you are permitted to live.",
-  "Astral knows before it strikes.",
+  "Civilization holds the line and out-thinks you.",
+  "Warfare does not defend. It arrives.",
+  "Nature grows, and keeps growing.",
+  "Dark trades something of yours for power.",
   "Resonance cannot be bought. It must be lived through.",
   "Three marks end a trial. The deck running dry ends it too.",
   "The card is the doorway. The character passes through it.",
@@ -1653,7 +1980,7 @@ function buildStarterDeck(pk){
   // 2. the parcel's aspects decide what else may be bound.
   //    a mono-aspect parcel is given a declared partner so the
   //    forty can be reached without breaking the two-aspect limit.
-  const PARTNER={Verdant:"Astral",Astral:"Verdant",Tide:"Ember",Ember:"Tide"};
+  const PARTNER={Civilization:"Nature",Nature:"Civilization",Warfare:"Dark",Dark:"Warfare"};
   const asps=[...new Set(pk.cards.map(id=>BY[id].a))].slice(0,2);
   if(asps.length===1)asps.push(PARTNER[asps[0]]);
   const pool=CARDS.filter(c=>asps.includes(c.a)).sort((a,b)=>a.cost-b.cost);
@@ -1744,7 +2071,7 @@ function buildHall(){
     </div>
     <div class="h-cname">
       <div class="n">${ch.n}</div>
-      <div class="a" style="color:${ASP[ch.a].c}">Your champion · ${ASP[ch.a].en}</div>
+      <div class="a" style="color:${ASP[ch.a].c}">Your champion · ${FACTION_FULL[ch.a]}</div>
     </div>
     <div style="height:26px"></div>
     <div class="h-gate" onclick="enterBattle()">
@@ -1844,8 +2171,9 @@ SCREEN.collection=el=>{
       rail.appendChild(d);
     });
   };
-  grp("Aspect",["Verdant","Tide","Ember","Astral"],"asp",{Verdant:ASP.Verdant.c,Tide:ASP.Tide.c,Ember:ASP.Ember.c,Astral:ASP.Astral.c});
-  grp("Kind",["Eidolon","Spell","Relic","Traveler","Environment"],"type");
+  grp("Faction",["Civilization","Warfare","Nature","Dark"],"asp",
+      {Civilization:FACTION.Civilization.c,Warfare:FACTION.Warfare.c,Nature:FACTION.Nature.c,Dark:FACTION.Dark.c});
+  grp("Kind",["Unit","Spell","Relic"],"type");
   rail.insertAdjacentHTML("beforeend",`<h4>Catalogue</h4>`);
   const ow=document.createElement("div");ow.className="tick";ow.innerHTML=`<span class="sw"></span><span>Held only</span>`;
   ow.addEventListener("click",()=>{F.own=!F.own;ow.classList.toggle("on");draw()});rail.appendChild(ow);
@@ -2019,10 +2347,10 @@ SCREEN.shop=el=>{
     </div>
     <div class="groupline"><span class="fn">Altered records</span><span class="ln"></span><span class="fn2">appearance only · no advantage in battle</span></div>
     <div class="shopgrid">
-      ${[["Ember-Touched","Star-Lamp Fox","starfox",120],["Moonlit","Moon-Tide Cat","moontide",120],["Ancient","Mossling","mossling",90],["Corrupted","Cinderling","cinderling",150]]
+      ${[["Ember-Touched","Liora, Silverleaf Warden","liora",120],["Moonlit","Nerith, Tidecaller","merfolktide",120],["Ancient","Oakfather Mourn","treeelder",90],["Corrupted","The Hollow King","undeadking",150]]
         .map(([sk,nm,id,pr])=>`
         <div class="wares" style="--wc:${ASP[BY[id].a].glow}" onclick="buySkin('${id}','${sk}',${pr})">
-          <div class="vis"><div style="width:88px" class="card" >${plate(BY[id],sk)}</div></div>
+          <div class="vis"><div style="width:96px;aspect-ratio:5/7;border:1px solid rgba(198,166,100,.4);border-radius:3px;overflow:hidden;position:relative"><div style="position:absolute;inset:0;filter:${SKINFX[sk]||''}">${raceArt(BY[id])}</div></div></div>
           <div style="font-size:16px;color:rgba(216,205,184,.9)">${sk}</div>
           <div class="fn2" style="margin-top:5px">${nm}</div>
           <div class="price"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8083a8" stroke-width="1.2"><path d="m12 3 2.6 6.4L21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6z"/></svg>
@@ -2049,23 +2377,30 @@ SCREEN.skins=el=>{
     <div>
       <div class="fn2">Champion</div>
       <h3 style="font-size:30px;margin-top:8px">${ch.n}</h3>
-      <div class="fn2" style="margin-top:8px;color:${ASP[ch.a].c}">Manifests as ${ASP[ch.a].en}</div>
+      <div class="fn2" style="margin-top:8px;color:${ASP[ch.a].c}">${FACTION_FULL[ch.a]} · ${ch.race}</div>
       <div class="groupline" style="margin-top:26px"><span class="fn">Records held</span><span class="ln"></span></div>
       <div class="skins" id="skRow"></div>
       <div class="li" style="margin-top:20px;font-size:14px">A skin changes what passes through the doorway, not what it does when it arrives.</div>
     </div></div></div>`;
   const prev=$("#skPreview",el);
-  const render=sk=>{prev.innerHTML="";const c=cardEl(ch,{noclick:true});c.querySelector(".plate").outerHTML=plate(ch,sk);
-    prev.innerHTML="";const c2=document.createElement("div");c2.className="card";c2.style.setProperty("--ag",ASP[ch.a].glow);
-    c2.style.filter="none";c2.innerHTML=`${plate(ch,sk)}<div class="cost">${ch.cost}</div><div class="rr">${RAR[ch.r]}</div>
-      <div class="foot"><div class="nm">${ch.n}</div><div class="mt"><span style="color:${ASP[ch.a].c}">${ch.a}</span><span>${sk}</span></div></div>`;
-    prev.appendChild(c2)};
+  const render=sk=>{
+    prev.innerHTML="";
+    const c=cardEl(ch,{noclick:true});
+    c.style.filter="none";
+    if(sk&&sk!=="Original"){
+      const art=c.querySelector(".art");
+      if(art)art.style.filter=SKINFX[sk]||"";
+      const band=c.querySelector(".band .b");
+      if(band)band.innerHTML=`${ch.race}<i>✦</i>${sk}`;
+    }
+    prev.appendChild(c);
+  };
   render(P.skin[ch.id]||"Original");
   const row=$("#skRow",el);
   list.forEach(sk=>{
     const owned=sk==="Original"||P.skin[ch.id]===sk;
     const d=document.createElement("div");d.className="skin"+((P.skin[ch.id]||"Original")===sk?" on":"");
-    d.innerHTML=plate(ch,sk)+`<div class="tag">${sk}</div>`+(owned?"":`<div class="lk">LOCKED</div>`);
+    d.innerHTML=`<div style="position:absolute;inset:0;filter:${SKINFX[sk]||""}">${raceArt(ch)}</div>`+`<div class="tag">${sk}</div>`+(owned?"":`<div class="lk">LOCKED</div>`);
     d.addEventListener("click",()=>{
       if(!owned)return toast(sk+" is not yet recovered. Seek it at the merchant's table.");
       P.skin[ch.id]=sk==="Original"?null:sk;
@@ -2077,6 +2412,30 @@ SCREEN.skins=el=>{
 };
 
 /* RANK / FRIENDS / PROFILE */
+SCREEN.ledger=el=>{
+  const held=owned().length;
+  const tasks=[
+    ["Win three covenant trials",Math.min(P.wins,3),3,"1 sealed parcel"],
+    ["Catalogue twenty records",Math.min(held,20),20,"40 Sigils"],
+    ["Bind a deck of forty",P.deck.length>=40?1:0,1,"1 sealed parcel"],
+    ["Field a unit from every faction",1,4,"an altered record"]
+  ];
+  el.innerHTML=schead("THE LEDGER","what is owed to the covenant")+
+  `<div class="scbody"><div class="gridwrap" style="max-width:760px">
+    ${tasks.map(([t,now,goal,rew])=>`
+      <div style="display:flex;gap:20px;align-items:center;padding:20px 0;border-bottom:1px solid var(--hair)">
+        <div style="width:32px;height:32px;flex:0 0 auto;opacity:.55">${mark(t.length*37)}</div>
+        <div style="flex:1">
+          <div style="font-size:17px;color:rgba(216,205,184,.88)">${t}</div>
+          <div style="height:2px;background:rgba(216,205,184,.1);margin-top:9px;max-width:280px;position:relative">
+            <i style="position:absolute;inset:0 auto 0 0;width:${Math.min(100,now/goal*100)}%;
+               background:linear-gradient(90deg,rgba(107,73,52,.9),rgba(196,85,44,.95));box-shadow:0 0 8px rgba(196,85,44,.6)"></i></div>
+          <div class="fn2" style="margin-top:7px">${now} of ${goal}</div>
+        </div>
+        <div class="fn2" style="color:rgba(138,100,70,1);text-align:right;width:150px">${rew}</div>
+      </div>`).join("")}
+  </div></div>`;
+};
 SCREEN.rank=el=>{
   el.innerHTML=schead("COVENANT RANK","season of the low tallow")+
   `<div class="scbody"><div class="gridwrap" style="max-width:840px">
@@ -2130,21 +2489,23 @@ function inspect(card){
     <div class="iart" id="iArt"></div>
     <div class="iinfo">
       <div class="fn2">${card.t} · ${RARN[card.r]} ${RAR[card.r]} · held ×${P.owned[card.id]||0}</div>
-      <h3>${card.n}</h3><div class="cn">${card.cn}</div>
+      <h3>${card.n}</h3><div class="cn">${card.sub||card.race}</div>
       <div class="chips">
         <span class="chip" style="color:${ASP[card.a].c}">${card.a}</span>
-        <span class="chip" style="color:rgba(216,205,184,.5)">${card.cost} Aether</span>
-        ${card.hp?`<span class="chip" style="color:rgba(216,205,184,.5)">${card.hp} HP</span>`:""}
+        <span class="chip" style="color:rgba(216,205,184,.5)">${card.cost} cost</span>
+        ${card.pow!==null&&card.pow!==undefined?`<span class="chip" style="color:rgba(216,205,184,.5)">${card.pow} power</span>`:""}
+        ${card.hp?`<span class="chip" style="color:rgba(216,205,184,.5)">${card.hp} health</span>`:""}
+        <span class="chip" style="color:rgba(216,205,184,.4)">${card.role}</span>
       </div>
       <div style="margin-top:16px;padding:11px 14px;border:1px solid rgba(107,73,52,.28);background:rgba(140,47,28,.05)">
         <div class="fn2">Manifestation</div>
-        <div style="font-size:14px;margin-top:5px;color:var(--ivory-2)">Summons through <b style="font-weight:400;color:${ASP[card.a].c}">${ASP[card.a].en}</b>.</div>
+        <div style="font-size:14px;margin-top:5px;color:var(--ivory-2)">A <b style="font-weight:400;color:${ASP[card.a].c}">${card.race}</b> of ${FACTION_FULL[card.a]}.</div>
       </div>
-      <div class="quick">${card.sk.map(s=>`<div class="sk"><div class="h"><b>${s[0]}</b><span class="c">${s[1]===0?"—":s[1]+" Æ"}</span></div><div class="t">${s[2]}</div></div>`).join("")}</div>
+      <div class="quick">${card.sk.map(s=>`<div class="sk"><div class="h"><b>${s[0]}</b></div><div class="t">${s[1]}</div></div>`).join("")}</div>
       <p class="li" style="margin-top:20px;font-size:15px">${card.fl}</p>
       <details class="deep"><summary>Read the field record</summary><div class="b">${card.lore}</div></details>
       <div class="fn2" style="margin-top:22px">Appearance</div>
-      <div class="skins">${skins.map(sk=>`<div class="skin ${(P.skin[card.id]||"Original")===sk?"on":""}" data-sk="${sk}">${plate(card,sk)}<div class="tag">${sk}</div>${sk==="Original"||P.skin[card.id]===sk?"":`<div class="lk">LOCKED</div>`}</div>`).join("")}</div>
+      <div class="skins">${skins.map(sk=>`<div class="skin ${(P.skin[card.id]||"Original")===sk?"on":""}" data-sk="${sk}"><div style="position:absolute;inset:0;filter:${SKINFX[sk]||""}">${raceArt(card)}</div><div class="tag">${sk}</div>${sk==="Original"||P.skin[card.id]===sk?"":`<div class="lk">LOCKED</div>`}</div>`).join("")}</div>
       <div class="iacts">
         <button class="rite" onclick="closeInsp()">Return it</button>
         ${P.owned[card.id]>0?`<button class="rite grave" onclick="P.champ='${card.id}';buildLobby();closeInsp();toast('${card.n} now stands as your champion.')">Set as champion</button>
@@ -2191,7 +2552,7 @@ async function startTutorial(){
   playCue("battle",1600);
   T.aether=1; T.max=1; T.marks=0; T.foeMarks=0; T.step=0; T.busy=false;
   T.you=null; T.foe=null; T.hand=[];
-  T.foeHp=60; T.foeMax=60;
+  T.foeHp=6; T.foeMax=6;
   renderTut();
   runTutStep();
 }
@@ -2200,7 +2561,7 @@ const TUT_STEPS=[
    hint:"Click anywhere to continue",wait:"click"},
   {k:"Aether",t:"Everything costs <b>Aether</b> — the light at the bottom of your screen.<br>It grows by one each turn. Spend it to bring records into the world.",
    hint:"Click to continue",wait:"click"},
-  {k:"Summon",t:"A card is a doorway. Play one and the creature steps through it.<br>Choose <b>Mossling</b> from your hand.",
+  {k:"Summon",t:"A card is a doorway. Play one and the creature steps through it.<br>Choose <b>Silverleaf Scout</b> from your hand.",
    hint:"Click the card",wait:"play"},
   {k:"Strike",t:"Your Eidolon stands. Now use it.<br>Click your creature to strike the one opposite.",
    hint:"Click your Eidolon",wait:"attack"},
@@ -2211,7 +2572,7 @@ const TUT_STEPS=[
 ];
 function renderTut(){
   const r=$("#s-tutorial .tut");
-  const foeCard=BY.embertail, youCard=T.you?BY[T.you.id]:null;
+  const foeCard=BY.gobswarm, youCard=T.you?BY[T.you.id]:null;
   r.innerHTML=`
   <div class="tut-foe">
     <div style="width:34px;height:34px;opacity:.6">${mark(4242)}</div>
@@ -2254,7 +2615,7 @@ function renderTut(){
   // hand
   const h=$("#tutHand");
   if(!T.you){
-    const c=BY.mossling;
+    const c=BY.elfscout;
     const d=document.createElement("div");
     d.className="tut-card";
     d.innerHTML=cardEl(c,{noclick:true}).outerHTML;
@@ -2292,7 +2653,7 @@ function tutPlay(){
   if(T.busy||T.you)return;
   T.busy=true;
   T.aether=Math.max(0,T.aether-1);
-  T.you={id:"mossling",hp:70,max:70};
+  T.you={id:"elfscout",hp:5,max:5};
   tutHide();
   renderTut();
   T.busy=false;
@@ -2307,7 +2668,7 @@ async function tutAttack(){
   $$(".tut-target").forEach(e=>e.classList.remove("tut-target"));
   const fs=$("#foeSlot");
   fs.classList.add("hurt");
-  T.foeHp-=st.wait==="finish"?60:35;
+  T.foeHp-=st.wait==="finish"?6:3;
   await wait(500);
   renderTut();
   if(T.foeHp<=0){
