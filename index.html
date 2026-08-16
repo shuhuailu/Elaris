@@ -38,8 +38,15 @@
 
   --lore:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
   --ui:ui-sans-serif,-apple-system,"Segoe UI",Inter,Roboto,"Helvetica Neue",sans-serif;
-  --cyan:#00E5FF;
-  --orange:#FF8C00;
+  /* --- vibrant accent set --- */
+  --cyan:#00E5FF;      --cyan-dim:rgba(0,229,255,.16);
+  --orange:#FF8C00;    --orange-dim:rgba(255,140,0,.16);
+  --red:#FF4757;       --red-dim:rgba(255,71,87,.16);
+  --gold-a:#FFD700;    --gold-dim-a:rgba(255,215,0,.16);
+  --violet:#A66BFF;    --violet-dim:rgba(166,107,255,.16);
+  --magenta:#FF3DBE;   --magenta-dim:rgba(255,61,190,.16);
+  --lime:#5DFF9F;      --lime-dim:rgba(93,255,159,.16);
+  --azure:#3D8BFF;     --azure-dim:rgba(61,139,255,.16);
   --panel:#16181F;
   --panel-2:#1A1C22;
   --label:#5C6370;
@@ -406,7 +413,7 @@ body.reduced #ground video{display:none}
 .e-err{font-family:var(--ui);font-size:12px;color:#ff7a5c;margin-top:10px;min-height:16px;text-align:left}
 .e-cta{margin-top:20px;width:100%;padding:14px;border-radius:10px;cursor:pointer;border:0;
   font-family:var(--ui);font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-  color:#0E0F13;background:linear-gradient(90deg,var(--cyan),var(--orange));
+  color:#0E0F13;background:linear-gradient(90deg,var(--cyan),var(--lime) 28%,var(--gold-a) 60%,var(--orange));
   transition:.18s ease-out}
 .e-cta:hover:not([disabled]){filter:brightness(1.08);transform:translateY(-1px)}
 .e-cta:active:not([disabled]){transform:translateY(0)}
@@ -426,11 +433,12 @@ body.reduced #ground video{display:none}
 .th-stage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .th-logo{width:min(300px,64vw);color:#fff;opacity:0;animation:eUp 1.1s ease-out .25s forwards}
 .th-tag{font-family:var(--ui);font-size:12.5px;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--label);margin-top:26px;opacity:0;animation:eUp .9s ease-out .85s forwards}
+  background:linear-gradient(90deg,var(--cyan),var(--lime),var(--gold-a),var(--orange));
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-top:26px;opacity:0;animation:eUp .9s ease-out .85s forwards}
 .th-go{margin-top:46px;opacity:0;animation:eUp .9s ease-out 1.15s forwards}
 .th-btn{position:relative;padding:16px 62px;border-radius:12px;cursor:pointer;border:0;
   font-family:var(--ui);font-size:14px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
-  color:#0E0F13;background:linear-gradient(90deg,var(--cyan),var(--orange));
+  color:#0E0F13;background:linear-gradient(90deg,var(--cyan),var(--lime) 30%,var(--gold-a) 62%,var(--orange));
   box-shadow:0 14px 34px -14px rgba(0,229,255,.5);transition:.2s ease-out;overflow:hidden}
 .th-btn:hover{transform:translateY(-2px);box-shadow:0 20px 44px -14px rgba(0,229,255,.62)}
 .th-btn:after{content:"";position:absolute;top:-60%;left:-70%;width:45%;height:220%;
@@ -487,8 +495,8 @@ body.reduced #ground video{display:none}
 .pick{position:relative;width:176px;cursor:pointer;border-radius:14px;padding:10px 10px 12px;
   background:var(--panel);border:1px solid var(--line);
   transition:transform .2s ease-out,border-color .2s ease-out,box-shadow .2s ease-out,opacity .5s}
-.pick:hover{transform:translateY(-6px);border-color:var(--cyan);
-  box-shadow:0 20px 40px -18px #000,0 0 24px rgba(0,229,255,.3)}
+.pick:hover{transform:translateY(-6px);border-color:var(--pc,var(--cyan));
+  box-shadow:0 20px 40px -18px #000,0 0 28px -6px var(--pc,rgba(0,229,255,.5))}
 .pick.legendary{border-color:rgba(255,215,0,.5)}
 .pick.legendary:hover{border-color:var(--gold);box-shadow:0 20px 40px -18px #000,0 0 26px rgba(255,215,0,.35)}
 .pick .card{filter:brightness(.94)}
@@ -500,10 +508,11 @@ body.reduced #ground video{display:none}
 .pick .nameplate .d{font-family:var(--ui);font-size:11.5px;color:var(--text-dim);margin-top:8px;line-height:1.45}
 .pick .press{margin-top:11px;width:100%;padding:10px 0;border-radius:9px;cursor:pointer;border:0;
   font-family:var(--ui);font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-  color:#0E0F13;background:linear-gradient(90deg,var(--cyan),var(--orange));transition:.18s ease-out}
-.pick:hover .press{filter:brightness(1.1)}
-.pick.taken{transform:translateY(-10px) scale(1.04);border-color:var(--cyan);
-  box-shadow:0 0 0 2px var(--cyan),0 0 34px rgba(0,229,255,.4);z-index:8}
+  color:#0E0F13;background:linear-gradient(90deg,var(--pc,var(--cyan)),var(--pc2,var(--orange)));
+  transition:.18s ease-out}
+.pick:hover .press{filter:brightness(1.12)}
+.pick.taken{transform:translateY(-10px) scale(1.04);border-color:var(--pc,var(--cyan));
+  box-shadow:0 0 0 2px var(--pc,var(--cyan)),0 0 38px -6px var(--pc,rgba(0,229,255,.5));z-index:8}
 .pick.gone{opacity:0;transform:translateY(18px) scale(.94);pointer-events:none}
 .pick-foot{position:absolute;bottom:5%;left:0;right:0;text-align:center;z-index:6;opacity:0;
   transition:opacity .5s ease-out;font-family:var(--ui)}
@@ -538,7 +547,15 @@ body.reduced #ground video{display:none}
   cursor:pointer;color:var(--parch-3);transition:.2s ease-out;
 }
 .rail-btn svg{width:20px;height:20px}
-.rail-btn:hover{color:var(--parch-lt);background:rgba(255,255,255,.04)}
+.rail-btn{--rc:var(--cyan)}
+.rail-btn:nth-of-type(2){--rc:var(--azure)}
+.rail-btn:nth-of-type(3){--rc:var(--lime)}
+.rail-btn:nth-of-type(4){--rc:var(--gold-a)}
+.rail-btn:nth-of-type(5){--rc:var(--magenta)}
+.rail-btn:nth-of-type(6){--rc:var(--orange)}
+.rail-btn:nth-of-type(7){--rc:var(--violet)}
+.rail-btn:hover{color:var(--rc);background:rgba(255,255,255,.05);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--rc) 30%,transparent)}
 .rail-btn.on{color:var(--cyan);background:rgba(0,229,255,.10);
   box-shadow:0 0 18px rgba(0,229,255,.22)}
 .rail-btn.on:before{content:"";position:absolute;left:-13px;top:50%;transform:translateY(-50%);
@@ -573,14 +590,18 @@ body.reduced #ground video{display:none}
 .h-xprow .pct{font-family:var(--ui);font-size:12px;font-weight:700;color:var(--text-dim);font-variant-numeric:tabular-nums}
 .h-xpbar{height:8px;border-radius:5px;background:rgba(255,255,255,.06);margin-top:7px;overflow:hidden}
 .h-xpbar i{display:block;height:100%;border-radius:5px;width:0;
-  background:linear-gradient(90deg,var(--cyan),var(--orange));
+  background:linear-gradient(90deg,var(--cyan),var(--lime) 26%,var(--gold-a) 58%,var(--orange) 82%,var(--red));
+  box-shadow:0 0 12px -2px var(--gold-a);
   transition:width 1s cubic-bezier(.22,.8,.24,1)}
 .h-xpnum{font-family:var(--ui);font-size:11.5px;color:var(--text-dim);margin-top:6px;font-variant-numeric:tabular-nums}
 
 .h-purse{margin-left:auto;display:flex;align-items:center;gap:10px}
 .h-coin{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:22px;
   border:1px solid var(--line);background:var(--panel);cursor:pointer;transition:.2s ease-out}
-.h-coin:hover{border-color:rgba(255,255,255,.16);background:var(--panel-2)}
+.h-coin{--cc:var(--gold-a)}
+.h-coin:hover{border-color:var(--cc);background:var(--panel-2);
+  box-shadow:0 0 16px -4px var(--cc)}
+.h-coin.gem{--cc:var(--cyan)}
 .h-coin .v{font-family:var(--ui);font-size:14px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
 .h-ico{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;
   border:1px solid var(--line);background:var(--panel);color:var(--text-dim);transition:.2s ease-out}
@@ -603,17 +624,20 @@ body.reduced #ground video{display:none}
   transition:transform .2s ease-out,box-shadow .2s ease-out,border-color .2s ease-out;
   display:flex;flex-direction:column;
 }
-.rcard:hover{transform:translateY(-6px);box-shadow:0 18px 34px -14px rgba(0,0,0,.8),var(--glow-c,none)}
+.rcard:hover{transform:translateY(-6px);
+  box-shadow:0 18px 34px -14px rgba(0,0,0,.85),0 0 26px -6px var(--fc,rgba(0,229,255,.5))}
 .rcard.rare{border-color:var(--cyan);box-shadow:0 0 20px rgba(0,229,255,.35)}
 .rcard.legendary{border-color:var(--gold);box-shadow:0 0 24px rgba(255,215,0,.35)}
 .rcard.featured{transform:scale(1.06) translateY(-6px);z-index:5;
-  border-color:var(--cyan);box-shadow:0 0 0 2px var(--cyan),0 0 34px rgba(0,229,255,.45),0 26px 44px -16px #000}
+  border-color:var(--fc,var(--cyan));
+  box-shadow:0 0 0 2px var(--fc,var(--cyan)),0 0 36px -4px var(--fc,rgba(0,229,255,.5)),0 26px 44px -16px #000}
 .rcard.featured:hover{transform:scale(1.07) translateY(-9px)}
 .rcard .art{position:relative;aspect-ratio:3/3.4;overflow:hidden;background:var(--navy-3)}
 .rcard .art img{width:100%;height:100%;object-fit:cover;display:block}
 .rcard .chip{position:absolute;top:9px;left:9px;width:26px;height:26px;border-radius:50%;
-  display:grid;place-items:center;background:rgba(9,12,15,.78);border:1px solid rgba(255,255,255,.14);
-  backdrop-filter:blur(6px)}
+  display:grid;place-items:center;background:rgba(9,12,15,.8);
+  border:1px solid var(--fc,rgba(255,255,255,.2));
+  box-shadow:0 0 12px -3px var(--fc,transparent);backdrop-filter:blur(6px)}
 .rcard .chip svg{width:14px;height:14px}
 .rcard .lock{position:absolute;inset:0;display:grid;place-items:center;background:rgba(9,12,15,.55)}
 .rcard.locked{opacity:.4;filter:grayscale(1)}
@@ -644,7 +668,13 @@ body.reduced #ground video{display:none}
 .quest .qrow{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .quest .qn{font-family:var(--ui);font-size:13.5px;font-weight:600;color:#fff}
 .quest .qc{font-family:var(--ui);font-size:13px;font-weight:700;color:var(--text-dim);font-variant-numeric:tabular-nums}
-.quest .qc b{color:var(--cyan);font-weight:700}
+.quest .qc b{color:var(--qc,var(--cyan));font-weight:700}
+.quest:nth-child(1){--qc:var(--lime)}
+.quest:nth-child(2){--qc:var(--azure)}
+.quest:nth-child(3){--qc:var(--magenta)}
+.quest:nth-child(1) .qbar i{background:linear-gradient(90deg,var(--lime),var(--cyan))}
+.quest:nth-child(2) .qbar i{background:linear-gradient(90deg,var(--azure),var(--violet))}
+.quest:nth-child(3) .qbar i{background:linear-gradient(90deg,var(--magenta),var(--orange))}
 .quest .qbar{height:5px;border-radius:4px;background:rgba(255,255,255,.06);margin-top:10px;overflow:hidden}
 .quest .qbar i{display:block;height:100%;border-radius:4px;width:0;
   background:linear-gradient(90deg,var(--cyan),var(--orange));
@@ -654,7 +684,18 @@ body.reduced #ground video{display:none}
 .h-right{display:flex;flex-direction:column;gap:14px;min-width:0}
 .mini{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
 .mini .lbl{font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--label);margin-bottom:12px}
+  text-transform:uppercase;color:var(--label);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+/* each panel owns a colour so the column is not one flat blue */
+.mini .lbl:before{content:"";width:6px;height:6px;border-radius:2px;background:var(--ac,var(--cyan));
+  box-shadow:0 0 8px var(--ac,var(--cyan))}
+.mini{--ac:var(--cyan)}
+.mini.p-stats{--ac:var(--azure)}
+.mini.p-syn{--ac:var(--lime)}
+.mini.p-win{--ac:var(--magenta)}
+.mini.p-next{--ac:var(--orange)}
+.mini.p-stats{border-color:rgba(61,139,255,.24)}
+.mini.p-syn{border-color:rgba(93,255,159,.22)}
+.mini.p-win{border-color:rgba(255,61,190,.22)}
 .mini.urgent{border-color:rgba(255,140,0,.34)}
 .radar{display:grid;place-items:center}
 .synergy{display:flex;align-items:center;gap:14px}
@@ -677,7 +718,7 @@ body.reduced #ground video{display:none}
 .mini .c2{font-family:var(--ui);font-size:12px;color:var(--text-dim);margin-top:4px}
 .mini .cta{margin-top:14px;width:100%;padding:12px;border-radius:9px;cursor:pointer;
   font-family:var(--ui);font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
-  color:#0E0F13;border:0;background:linear-gradient(90deg,var(--cyan),var(--orange));
+  color:#0E0F13;border:0;background:linear-gradient(90deg,var(--cyan),var(--azure) 34%,var(--violet) 64%,var(--magenta));
   transition:.2s ease-out}
 .mini .cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
 
@@ -1222,24 +1263,24 @@ function mark(seed,o={}){
    FACTIONS — four, each with four races
    ============================================================ */
 const FACTION={
-  Civilization:{cn:"文明系",c:"#8fa8c8",glow:"rgba(143,168,200,.5)",
+  Civilization:{cn:"文明系",c:"#3D8BFF",glow:"rgba(61,139,255,.55)",
     frame:"#16233f",frame2:"#0d1526",rail:"#1d2c4c",
     en:"order, knowledge and craft",
     line:"Order, knowledge, craft and cooperation shape a thriving world."},
-  Warfare:{cn:"战争系",c:"#c4713f",glow:"rgba(196,113,63,.5)",
-    frame:"#3a1c12",frame2:"#1d0e08",rail:"#4a251722",
+  Warfare:{cn:"战争系",c:"#FF4757",glow:"rgba(255,71,87,.55)",
+    frame:"#3a1219",frame2:"#1d0709",rail:"#4a1722",
     en:"strength, conflict and conquest",
     line:"Strength, conflict and conquest forge legends."},
-  Nature:{cn:"自然与秘灵系",c:"#7aa860",glow:"rgba(122,168,96,.5)",
-    frame:"#16301f",frame2:"#0a1810",rail:"#1d3d28",
+  Nature:{cn:"自然与秘灵系",c:"#5DFF9F",glow:"rgba(93,255,159,.5)",
+    frame:"#0e3324",frame2:"#061a12",rail:"#12432e",
     en:"life, nature and mystery",
     line:"Life, nature and mystery flow in endless harmony."},
-  Dark:{cn:"黑暗与异质系",c:"#a druid",glow:"rgba(150,106,180,.5)",
-    frame:"#241238",frame2:"#120820",rail:"#2e1745",
+  Dark:{cn:"黑暗与异质系",c:"#A66BFF",glow:"rgba(166,107,255,.55)",
+    frame:"#261440",frame2:"#130923",rail:"#331a52",
     en:"shadow and the beyond",
     line:"From shadows and beyond, powers defy reality."}
 };
-FACTION.Dark.c="#a06ab4";
+
 const FACTION_FULL={Civilization:"Civilization",Warfare:"Warfare",
   Nature:"Nature & Mystic",Dark:"Dark & Otherworldly"};
 
@@ -1924,6 +1965,10 @@ function buildFirstPack(){
     box.className="pick";
     box.tabIndex=0;
     box.style.setProperty("--pg",F.glow);
+    box.style.setProperty("--pc",F.c);
+    box.style.setProperty("--pc2",{Civilization:"#00E5FF",Warfare:"#FF8C00",
+      Nature:"#5DFF9F",Dark:"#FF3DBE"}[c.a]||"#FF8C00");
+    if(c.r==="M"||c.r==="L")box.classList.add("legendary");
     box.appendChild(cardEl(c,{noclick:true}));
     const plate=document.createElement("div");
     plate.className="nameplate";
@@ -2039,10 +2084,10 @@ const RAILICON={
 };
 /* faction chip icons — element shown only here, never on the frame */
 const FCHIP={
-  Civilization:'<svg viewBox="0 0 24 24" fill="none" stroke="#8fa8c8" stroke-width="1.9"><path d="M5 21V10l7-6 7 6v11Z"/><path d="M10 21v-6h4v6"/></svg>',
-  Warfare:'<svg viewBox="0 0 24 24" fill="none" stroke="#c4713f" stroke-width="1.9"><path d="M7 6l10 12M17 6 7 18"/></svg>',
-  Nature:'<svg viewBox="0 0 24 24" fill="none" stroke="#7aa860" stroke-width="1.9"><path d="M12 21V9"/><path d="M12 14c-4 0-6-2.4-6-6 4 0 6 2.4 6 6ZM12 16c4 0 6-2.4 6-6-4 0-6 2.4-6 6Z"/></svg>',
-  Dark:'<svg viewBox="0 0 24 24" fill="none" stroke="#a06ab4" stroke-width="1.9"><path d="M8 11c0-3.4 1.8-5 4-5s4 1.6 4 5c0 2.4-1.4 3.2-1.4 5H9.4C9.4 14.2 8 13.4 8 11Z"/><path d="M10 21h4"/></svg>'
+  Civilization:'<svg viewBox="0 0 24 24" fill="none" stroke="#3D8BFF" stroke-width="2"><path d="M5 21V10l7-6 7 6v11Z"/><path d="M10 21v-6h4v6"/></svg>',
+  Warfare:'<svg viewBox="0 0 24 24" fill="none" stroke="#FF4757" stroke-width="2"><path d="M7 6l10 12M17 6 7 18"/></svg>',
+  Nature:'<svg viewBox="0 0 24 24" fill="none" stroke="#5DFF9F" stroke-width="2"><path d="M12 21V9"/><path d="M12 14c-4 0-6-2.4-6-6 4 0 6 2.4 6 6ZM12 16c4 0 6-2.4 6-6-4 0-6 2.4-6 6Z"/></svg>',
+  Dark:'<svg viewBox="0 0 24 24" fill="none" stroke="#A66BFF" stroke-width="2"><path d="M8 11c0-3.4 1.8-5 4-5s4 1.6 4 5c0 2.4-1.4 3.2-1.4 5H9.4C9.4 14.2 8 13.4 8 11Z"/><path d="M10 21h4"/></svg>'
 };
 const STAR='<svg viewBox="0 0 24 24"><path d="m12 3 2.7 6.1 6.3.6-4.8 4.2 1.5 6.1L12 16.8 6.3 20l1.5-6.1L3 9.7l6.3-.6z"/></svg>';
 
@@ -2051,7 +2096,8 @@ function starCount(r){ return {C:2,R:3,A:4,L:4,M:5}[r]||3 }
 function powerOf(c){ return (c.pow||0)*180 + (c.hp||0)*120 + c.cost*90 }
 
 /* small svg helpers ---------------------------------------- */
-function radarSVG(vals,size){
+function radarSVG(vals,size,col){
+  col=col||"#3D8BFF";
   // vals: 5 numbers 0..1 in order ATK DEF SPD CRI HP
   const s=size||132,c=s/2,R=s*0.34;
   const labs=["ATK","DEF","SPD","CRI","HP"];
@@ -2072,18 +2118,20 @@ function radarSVG(vals,size){
       font-family="var(--ui)" font-size="9" font-weight="700" fill="#5C6370">${l}</text>`});
   return `<svg viewBox="0 0 ${s} ${s}" width="${s}" height="${s}" class="radar-svg">
     ${rings}${spokes}
-    <polygon class="radar-poly" points="${poly}" fill="rgba(0,229,255,.20)" stroke="#00E5FF" stroke-width="1.6"/>
+    <polygon class="radar-poly" points="${poly}" fill="${col}33" stroke="${col}" stroke-width="1.8"/>
     ${text}</svg>`;
 }
-function donutSVG(pct,size){
+function donutSVG(pct,size,col){
+  col=col||"#5DFF9F";
   const s=size||62,c=s/2,r=c-5,C=2*Math.PI*r;
   return `<svg viewBox="0 0 ${s} ${s}" width="${s}" height="${s}">
     <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="5"/>
-    <circle class="donut-arc" cx="${c}" cy="${c}" r="${r}" fill="none" stroke="#00E5FF" stroke-width="5"
+    <circle class="donut-arc" cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${col}" stroke-width="5"
       stroke-linecap="round" transform="rotate(-90 ${c} ${c})"
       stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C*(1-pct)).toFixed(1)}"/></svg>`;
 }
-function sparkSVG(pts,w,h){
+function sparkSVG(pts,w,h,col){
+  col=col||"#FF3DBE";
   const W=w||212,H=h||44;
   const mx=Math.max(...pts),mn=Math.min(...pts);
   const X=i=>i/(pts.length-1)*(W-6)+3;
@@ -2091,9 +2139,9 @@ function sparkSVG(pts,w,h){
   const d=pts.map((v,i)=>`${i?"L":"M"}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join("");
   const lx=X(pts.length-1),ly=Y(pts[pts.length-1]);
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">
-    <path d="${d}" fill="none" stroke="#00E5FF" stroke-width="1.8" stroke-linejoin="round"/>
-    <circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="3.4" fill="#00E5FF"/>
-    <circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="6.5" fill="rgba(0,229,255,.22)"/></svg>`;
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="3.6" fill="${col}"/>
+    <circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="7" fill="${col}3a"/></svg>`;
 }
 
 /* which cards are on the shelf ------------------------------- */
@@ -2165,7 +2213,7 @@ function buildHall(){
         <div class="h-coin" data-scr="shop">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10h5M9.5 14h5"/></svg>
           <span class="v">${P.points.toLocaleString()}</span></div>
-        <div class="h-coin" data-scr="shop">
+        <div class="h-coin gem" data-scr="shop">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="1.8"><path d="m12 3 3 6 6 1.5-4.5 4 1 6.5L12 18l-5.5 3 1-6.5L3 10.5 9 9z"/></svg>
           <span class="v">${P.shards}</span></div>
         <button class="h-ico" data-settings="1">
@@ -2200,15 +2248,15 @@ function buildHall(){
 
       <!-- ANALYTICS -->
       <div class="h-right">
-        <div class="mini">
+        <div class="mini p-stats">
           <div class="lbl">Champion stats</div>
           <div class="radar" id="radarBox"></div>
         </div>
 
-        <div class="mini">
+        <div class="mini p-syn">
           <div class="lbl">Deck synergy</div>
           <div class="synergy">
-            <div class="donut">${donutSVG(.68)}<div class="pct">68%</div></div>
+            <div class="donut">${donutSVG(.68,62,"#5DFF9F")}<div class="pct">68%</div></div>
             <div>
               <div class="team" id="teamAv"></div>
               <div class="tx" style="margin-top:6px">Active deck</div>
@@ -2216,14 +2264,14 @@ function buildHall(){
           </div>
         </div>
 
-        <div class="mini winrate">
+        <div class="mini winrate p-win">
           <div class="lbl">Win rate</div>
-          ${sparkSVG([38,42,40,51,47,58,55,62,60,65])}
+          ${sparkSVG([38,42,40,51,47,58,55,62,60,65],212,44,"#FF3DBE")}
           <div class="foot"><span class="a">${P.wins+P.losses?Math.round(P.wins/(P.wins+P.losses)*100):0}% wins</span>
             <span class="b">Last 30 days</span></div>
         </div>
 
-        <div class="mini urgent">
+        <div class="mini urgent p-next">
           <div class="lbl">Next match</div>
           <div class="countdown" id="cdown">00:00:00:00</div>
           <div class="c1">Ranked ladder</div>
@@ -2240,6 +2288,7 @@ function buildHall(){
     const featured=c.id===ch.id;
     const el=document.createElement("div");
     el.className="rcard "+rarityClass(c.r)+(featured?" featured":"");
+    el.style.setProperty("--fc",FACTION[c.a].c);
     const stars=starCount(c.r);
     el.innerHTML=`
       <div class="art">
@@ -2271,7 +2320,7 @@ function buildHall(){
   const mh=Math.max(...CARDS.filter(c=>c.t==="Unit").map(c=>c.hp||0));
   $("#radarBox").innerHTML=radarSVG([
     (ch.pow||0)/mx, (ch.hp||0)/mh*.85, 1-(ch.cost/8), .55, (ch.hp||0)/mh
-  ],142);
+  ],142,FACTION[ch.a].c);
 
   /* team avatars from the deck */
   const seen=[...new Set(P.deck)].slice(0,3);
