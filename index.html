@@ -240,7 +240,6 @@ body.reduced #ground video{display:none}
 /* scenes float above the painting */
 .scene{background-color:transparent!important}
 
-#s-threshold{background:radial-gradient(56% 44% at 50% 76%,rgba(52,20,14,.5),transparent 66%),linear-gradient(180deg,rgba(5,4,4,.93),rgba(11,9,8,.8) 58%,rgba(6,5,5,.95))}
 .thw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .wordmark{font-size:clamp(46px,8.4vw,112px);letter-spacing:.42em;text-indent:.42em;line-height:1;color:transparent;
   background:linear-gradient(180deg,#cfc4ae 10%,#6d6459 62%,#38322c 100%);-webkit-background-clip:text;background-clip:text;
@@ -388,27 +387,6 @@ body.reduced #ground video{display:none}
 .e-foot{font-family:var(--ui);font-size:12px;color:var(--text-dim);margin-top:16px}
 .e-foot a{color:var(--cyan);cursor:pointer;font-weight:600}
 .e-foot a:hover{text-decoration:underline}
-
-/* ---------- 01 THRESHOLD ---------- */
-#s-threshold{background:
-  radial-gradient(80% 60% at 50% 34%,rgba(0,229,255,.05),transparent 68%),
-  linear-gradient(180deg,#0b0d11,#0E0F13 55%,#08090c)}
-.th-stage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.th-logo{width:min(300px,64vw);color:#fff;opacity:0;animation:eUp 1.1s ease-out .25s forwards}
-.th-tag{font-family:var(--ui);font-size:12.5px;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--label);margin-top:26px;opacity:0;animation:eUp .9s ease-out .85s forwards}
-.th-go{margin-top:46px;opacity:0;animation:eUp .9s ease-out 1.15s forwards}
-.th-btn{position:relative;padding:16px 62px;border-radius:12px;cursor:pointer;border:0;
-  font-family:var(--ui);font-size:14px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--cyan);background:rgba(0,229,255,.09);border:1px solid rgba(0,229,255,.4);
-  transition:.2s ease-out;overflow:hidden}
-.th-btn:hover{transform:translateY(-2px);background:rgba(0,229,255,.16);border-color:var(--cyan);
-  box-shadow:0 0 26px -8px rgba(0,229,255,.55)}
-.th-btn:after{content:"";position:absolute;top:-60%;left:-70%;width:45%;height:220%;
-  background:linear-gradient(96deg,transparent,rgba(255,255,255,.10),transparent);
-  transform:rotate(14deg);transition:left .8s ease-out}
-.th-btn:hover:after{left:130%}
-@keyframes eUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
 /* ---------- 01b GATE ---------- */
 #s-gate{background:
@@ -993,14 +971,6 @@ details.deep .b{padding-top:14px;font-size:14.5px;line-height:1.75;color:var(--i
   </div>
 
   <!-- 01 THRESHOLD -->
-  <div class="scene" id="s-threshold">
-    <div class="th-stage">
-      <div class="th-logo" id="thLogo"></div>
-      <div class="th-tag">A collectible card game</div>
-      <div class="th-go"><button class="th-btn" id="doEnter">Enter</button></div>
-    </div>
-  </div>
-
   <!-- 01b GATE -->
   <div class="scene" id="s-gate">
     <div class="e-wrap">
@@ -1606,8 +1576,6 @@ function armAudio(){
 
 /* paint the crest wherever the world needs it */
 function paintLogos(){
-  const tl=$("#thLogo");
-  if(tl&&!tl.innerHTML)tl.innerHTML=elarisLockup({width:250});
   /* NOTE: the lockup viewBox is tightly cropped (198x267), so the artwork
      fills ~96% of its own frame. Widths here are therefore much smaller
      than they would be for an uncropped 600x327 canvas. */
@@ -1639,8 +1607,14 @@ async function runLoading(){
     $("#ldPct").textContent="100%";
     $("#ldLine").textContent="The hall is open";
     await wait(P.reduced?200:900);
+    // the sealed door parts, then the gate is behind it
+    const v=$("#veil");
+    v.classList.add("nofx","shut"); void v.offsetWidth; v.classList.remove("nofx");
+    await wait(60); v.classList.remove("shut");
+    await wait(P.reduced?100:400);
     $$(".scene").forEach(s=>s.classList.remove("live"));
-    $("#s-threshold").classList.add("live");
+    $("#s-gate").classList.add("live");
+    buildGate();
     bgVideo(false);                       // settle back to the painted still
   };
   $("#ldSkipBtn").onclick=finish;
@@ -1786,19 +1760,6 @@ async function enterHallDirect(){
 }
 
 /* ---------- 01 threshold ---------- */
-$("#doEnter").addEventListener("click",async()=>{
-  const v=$("#veil");
-  // snap the door shut with no animation, then let it swing open
-  v.classList.add("nofx","shut");
-  void v.offsetWidth;
-  v.classList.remove("nofx");
-  await wait(60);
-  v.classList.remove("shut");
-  await wait(400);
-  $$(".scene").forEach(s=>s.classList.remove("live"));
-  $("#s-gate").classList.add("live");
-  buildGate();
-});
 
 /* ---------- 02 covenant ---------- */
 function buildCovenant(prefilled){
