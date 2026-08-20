@@ -47,8 +47,8 @@
   --magenta:#A85B54;   --magenta-dim:rgba(168,91,84,.16); /* rose madder           */
   --lime:#8A9A5B;      --lime-dim:rgba(138,154,91,.16);   /* verdigris             */
   --azure:#5E7E8C;     --azure-dim:rgba(94,126,140,.16);  /* dusty teal            */
-  --panel:#1A1713;
-  --panel-2:#211C17;
+  --panel:#221c14;
+  --panel-2:#2a231a;
   --label:#7A6A55;
   --text-dim:#A8977C;
   --ez:cubic-bezier(.22,.8,.24,1);
@@ -69,47 +69,55 @@ img{display:block}
 #grain,#vig{position:fixed;inset:0;pointer-events:none}
 #vig{z-index:958}
 #grain{z-index:961}
-#vig{background:radial-gradient(125% 100% at 50% 44%,transparent 26%,rgba(26,15,6,.56) 72%,rgba(6,3,1,.96) 100%);
+#vig{background:radial-gradient(125% 100% at 50% 44%,transparent 34%,rgba(26,15,6,.34) 76%,rgba(6,3,1,.7) 100%);
   transition:opacity 1.4s var(--ez)}
 /* let the loading footage breathe to the edges */
 body.loading #vig{opacity:.42}
-#grain{opacity:.30;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='5' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='gamma' exponent='.55'/></feComponentTransfer></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");animation:gr .7s steps(3) infinite}
+/* ============================================================
+   VINTAGE STACK
+   NOTE: on a near-black page, multiply/overlay/soft-light are
+   mathematically invisible. Texture must ADD light, so these
+   layers use screen / plus-lighter with light-coloured noise.
+   ============================================================ */
 
-/* ---- VINTAGE STACK — heavy paper, not a filter ---- */
-
-/* 1. coarse laid-paper tooth: dense cross-hatched fibre */
-#fibre{position:fixed;inset:0;pointer-events:none;z-index:956;opacity:.20;mix-blend-mode:multiply;
+/* 1. paper tooth — light fibres catching across the surface */
+#fibre{position:fixed;inset:0;pointer-events:none;z-index:956;opacity:.5;mix-blend-mode:screen;
   background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='340' height='340'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.008 .62' numOctaves='4'/><feColorMatrix type='saturate' values='0'/></filter><rect width='340' height='340' filter='url(%23f)'/></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='340' height='340'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.62 .008' numOctaves='4'/><feColorMatrix type='saturate' values='0'/></filter><rect width='340' height='340' filter='url(%23g)'/></svg>");
-  background-size:340px 340px,340px 340px}
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.01 .7' numOctaves='4'/><feColorMatrix type='matrix' values='0 0 0 0 .78  0 0 0 0 .66  0 0 0 0 .45  0 0 0 .30 0'/></filter><rect width='320' height='320' filter='url(%23f)'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.7 .01' numOctaves='4'/><feColorMatrix type='matrix' values='0 0 0 0 .70 0 0 0 0 .58  0 0 0 0 .38  0 0 0 .22 0'/></filter><rect width='320' height='320' filter='url(%23g)'/></svg>");
+  background-size:320px 320px,320px 320px}
 
-/* 2. blotchy foxing — the uneven staining of old stock */
-#blotch{position:fixed;inset:0;pointer-events:none;z-index:957;opacity:.42;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='700' height='700'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='.004' numOctaves='4' seed='7'/><feColorMatrix type='matrix' values='0 0 0 0 .42  0 0 0 0 .30  0 0 0 0 .14  0 0 0 .55 0'/></filter><rect width='700' height='700' filter='url(%23b)'/></svg>");
+/* 2. foxing — warm blotches of aged stock */
+#blotch{position:fixed;inset:0;pointer-events:none;z-index:957;opacity:.55;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='.0035' numOctaves='4' seed='11'/><feColorMatrix type='matrix' values='0 0 0 0 .55  0 0 0 0 .38  0 0 0 0 .18  0 0 0 .42 0'/></filter><rect width='800' height='800' filter='url(%23b)'/></svg>");
   background-size:cover}
 
-/* 3. warm paper base tone pressed through everything */
-#sepia{position:fixed;inset:0;pointer-events:none;z-index:959;mix-blend-mode:soft-light;
+/* 3. warm paper tone */
+#sepia{position:fixed;inset:0;pointer-events:none;z-index:959;mix-blend-mode:screen;opacity:.32;
   background:
-    radial-gradient(80% 60% at 22% 18%,rgba(232,196,124,.42),transparent 62%),
-    radial-gradient(70% 60% at 82% 76%,rgba(96,62,28,.34),transparent 64%),
-    linear-gradient(150deg,rgba(214,170,96,.40),rgba(120,84,44,.22) 46%,rgba(38,24,12,.40))}
+    radial-gradient(80% 60% at 22% 18%,rgba(150,108,52,.55),transparent 62%),
+    radial-gradient(70% 60% at 82% 78%,rgba(78,52,22,.45),transparent 64%)}
 
-/* 4. dust, flecks and fibre specks caught in the stock */
-#speck{position:fixed;inset:0;pointer-events:none;z-index:960;opacity:.5;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><g fill='%23000' opacity='.5'><circle cx='38' cy='72' r='1.1'/><circle cx='210' cy='31' r='.8'/><circle cx='344' cy='118' r='1.3'/><circle cx='92' cy='196' r='.9'/><circle cx='268' cy='240' r='1'/><circle cx='150' cy='318' r='1.2'/><circle cx='396' cy='352' r='.85'/><circle cx='58' cy='384' r='1'/><circle cx='312' cy='402' r='.7'/></g><g fill='%23f4e3c0' opacity='.32'><circle cx='120' cy='60' r='.9'/><circle cx='300' cy='170' r='1.1'/><circle cx='70' cy='280' r='.8'/><circle cx='380' cy='250' r='.9'/><circle cx='200' cy='380' r='1'/></g></svg>");
-  background-size:420px 420px;animation:speckDrift 9s steps(3) infinite}
-@keyframes speckDrift{0%{transform:translate(0,0)}33%{transform:translate(-7px,5px)}66%{transform:translate(6px,-4px)}100%{transform:translate(0,0)}}
+/* 4. dust and flecks */
+#speck{position:fixed;inset:0;pointer-events:none;z-index:960;opacity:.75;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><g fill='%23e8d3a8'><circle cx='38' cy='72' r='1.2' opacity='.8'/><circle cx='210' cy='31' r='.9' opacity='.6'/><circle cx='344' cy='118' r='1.4' opacity='.75'/><circle cx='92' cy='196' r='1' opacity='.65'/><circle cx='268' cy='240' r='1.1' opacity='.7'/><circle cx='150' cy='318' r='1.3' opacity='.6'/><circle cx='376' cy='352' r='.9' opacity='.7'/><circle cx='58' cy='384' r='1.1' opacity='.55'/><circle cx='312' cy='392' r='.8' opacity='.65'/><circle cx='176' cy='140' r='.7' opacity='.5'/><circle cx='250' cy='96' r='1' opacity='.55'/></g><g stroke='%23d8c49c' stroke-width='.7' opacity='.35' fill='none'><path d='M120 60 l14 5'/><path d='M300 170 l-11 7'/><path d='M70 280 l9 -6'/><path d='M380 250 l-8 8'/></g></svg>");
+  background-size:400px 400px;animation:speckDrift 11s steps(4) infinite}
+@keyframes speckDrift{0%{transform:translate(0,0)}25%{transform:translate(-9px,6px)}
+  50%{transform:translate(5px,-7px)}75%{transform:translate(8px,4px)}100%{transform:translate(0,0)}}
 
-/* 5. heavy edge burn — the frame of an aged print */
+/* 5. film grain — the loud one, adds light so it reads on black */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:961;opacity:.55;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .62  0 0 0 0 .55  0 0 0 0 .42  0 0 0 .5 0'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>");
+  background-size:220px 220px;animation:gr .6s steps(4) infinite}
+
+/* 6. edge burn sits above everything and pulls the corners down */
 #burn{position:fixed;inset:0;pointer-events:none;z-index:962;
   background:
-    radial-gradient(120% 96% at 50% 46%,transparent 38%,rgba(52,30,12,.42) 72%,rgba(10,6,2,.86) 100%),
-    linear-gradient(180deg,rgba(28,16,6,.34),transparent 12%,transparent 88%,rgba(28,16,6,.4))}
+    radial-gradient(120% 96% at 50% 46%,transparent 36%,rgba(38,22,9,.5) 72%,rgba(8,4,1,.9) 100%),
+    linear-gradient(180deg,rgba(24,14,5,.4),transparent 11%,transparent 89%,rgba(24,14,5,.46))}
 
-/* the whole world printed rather than displayed */
-#world{filter:sepia(.42) saturate(.72) contrast(1.14) brightness(.93)}
+/* the page itself is warm stock, not black glass */
+#world{filter:sepia(.34) saturate(.80) contrast(1.10) brightness(1.02)}
 
 body.reduced #grain,body.reduced #speck{animation:none}
 @keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-4px)}75%{transform:translate(-2px,-2px)}100%{transform:translate(0,0)}}
@@ -435,7 +443,7 @@ body.reduced #ground video{display:none}
 /* ---------- 01b GATE ---------- */
 #s-gate{background:
   radial-gradient(80% 60% at 50% 8%,rgba(48,38,26,.5),transparent 70%),
-  linear-gradient(180deg,#0d0a07,#12100c 55%,#080604)}
+  linear-gradient(180deg,#171208,#1e1810 55%,#120d07)}
 /* the returning player card — the loudest thing on this screen */
 .g-return{display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;cursor:pointer;
   background:var(--panel-2);border:1px solid rgba(217,164,65,.3);text-align:left;width:100%;
@@ -462,12 +470,12 @@ body.reduced #ground video{display:none}
 /* ---------- 02 NAME ---------- */
 #s-covenant{background:
   radial-gradient(80% 60% at 50% 12%,rgba(48,38,26,.5),transparent 70%),
-  linear-gradient(180deg,#0d0a07,#12100c 55%,#080604)}
+  linear-gradient(180deg,#171208,#1e1810 55%,#120d07)}
 
 /* ---------- 03 PICK ---------- */
 #s-firstpack{background:
   radial-gradient(90% 60% at 50% -6%,rgba(48,38,26,.5),transparent 70%),
-  linear-gradient(180deg,#0d0a07,#12100c 50%,#080604)}
+  linear-gradient(180deg,#171208,#1e1810 50%,#120d07)}
 .pick-head{position:absolute;top:5.5%;left:0;right:0;text-align:center;z-index:5}
 .pick-head .step{display:inline-block;font-family:var(--ui);font-size:10.5px;font-weight:800;
   letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);
@@ -517,7 +525,7 @@ body.reduced #ground video{display:none}
   background:
     radial-gradient(120% 80% at 50% 108%,var(--stage,rgba(217,164,65,.16)),transparent 62%),
     radial-gradient(90% 60% at 50% -18%,rgba(227,184,92,.06),transparent 70%),
-    linear-gradient(180deg,#0b0906,#12100c 46%,#080604);
+    linear-gradient(180deg,#171208,#1e1810 46%,#120d07);
   transition:background 1.2s var(--ez);
   overflow:hidden;
 }
