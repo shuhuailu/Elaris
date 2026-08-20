@@ -552,213 +552,132 @@ body.reduced #ground video{display:none}
    ============================================================ */
 
 
+
 /* ============================================================
-   COMMAND SANCTUM — brick vault, god-rays, reflective marble
+   COMMAND SANCTUM — built on the supplied background plate.
+   The artwork provides the vault, pillars, icons and platform.
+   Everything here sits ON it and must not compete with it.
    ============================================================ */
 :root{
   --neon-cy:#00F0FF;
-  --neon-mg:#FF3DD0;
+  --neon-mg:#C24BFF;
   --neon-pu:#9B5CFF;
   --neon-am:#FFC24C;
 }
 
 .hall{
   position:absolute;inset:0;display:block;overflow:hidden;
-  background:#05070c;
+  background:#05070c url(bg/sanctum.jpg) center/cover no-repeat;
 }
+/* the plate keeps its own vignette; this only deepens the very edge */
+.sk-edge{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(125% 100% at 50% 46%,transparent 58%,rgba(2,4,8,.55) 88%,rgba(1,2,5,.85) 100%)}
 
-/* ---------- BRICK VAULT WALL ---------- */
-.sk-wall{position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:
-    /* mortar grid, offset every other course */
-    repeating-linear-gradient(0deg,
-      rgba(0,0,0,.55) 0 2px, transparent 2px 34px),
-    repeating-linear-gradient(90deg,
-      rgba(0,0,0,.45) 0 2px, transparent 2px 78px),
-    linear-gradient(180deg,#151a22,#0d1118 45%,#070a10);
-  background-size:auto,auto,auto}
-.sk-wall:before{content:"";position:absolute;inset:0;
-  /* half-brick offset for the alternating courses */
-  background:repeating-linear-gradient(90deg,
-    rgba(0,0,0,.45) 0 2px, transparent 2px 78px);
-  background-position:39px 0;
-  -webkit-mask:repeating-linear-gradient(0deg,#000 0 34px,transparent 34px 68px);
-  mask:repeating-linear-gradient(0deg,#000 0 34px,transparent 34px 68px)}
-/* brick surface grime + vignette */
-.sk-wall:after{content:"";position:absolute;inset:0;
-  background:
-    radial-gradient(70% 55% at 50% 8%,rgba(150,200,255,.10),transparent 66%),
-    radial-gradient(120% 90% at 50% 45%,transparent 34%,rgba(0,0,0,.72) 82%,rgba(0,0,0,.94) 100%)}
-
-/* ---------- GOD RAYS ---------- */
-.sk-rays{position:absolute;left:0;right:0;top:-12%;height:96%;z-index:1;pointer-events:none;
-  mix-blend-mode:screen;opacity:.5}
-.sk-rays i{position:absolute;top:0;left:50%;transform-origin:top center;
-  width:var(--w,90px);height:100%;
-  background:linear-gradient(180deg,rgba(178,226,255,.34),rgba(150,200,255,.08) 46%,transparent 78%);
-  filter:blur(14px);animation:rayBreathe 9s ease-in-out infinite}
-@keyframes rayBreathe{0%,100%{opacity:.55}50%{opacity:.95}}
-body.reduced .sk-rays i{animation:none}
-
-/* floating motes */
+/* extra motes riding the existing god-rays */
 .sk-dust{position:absolute;width:2px;height:2px;border-radius:50%;pointer-events:none;z-index:3;
-  background:#cfeeff;box-shadow:0 0 7px 1.5px rgba(140,225,255,.85);
+  background:#d6f4ff;box-shadow:0 0 7px 1.5px rgba(150,230,255,.85);
   animation:skFloat linear infinite}
-@keyframes skFloat{0%{transform:translate3d(0,0,0);opacity:0}12%{opacity:.95}
-  86%{opacity:.5}100%{transform:translate3d(26px,-340px,0);opacity:0}}
+@keyframes skFloat{0%{transform:translate3d(0,0,0);opacity:0}14%{opacity:.9}
+  84%{opacity:.45}100%{transform:translate3d(22px,-300px,0);opacity:0}}
+body.reduced .sk-dust{animation:none;opacity:.4}
+
+/* ---------- PILLAR HOTSPOTS — aligned to the painted icons ---------- */
+.sk-hot{position:absolute;z-index:8;cursor:pointer;border-radius:50%;
+  transform:translate(-50%,-50%);
+  width:clamp(54px,5.4vw,78px);aspect-ratio:1;
+  transition:.25s ease-out}
+.sk-hot .halo{position:absolute;inset:-14%;border-radius:50%;
+  box-shadow:0 0 0 0 rgba(0,240,255,0);transition:.25s ease-out}
+.sk-hot:hover .halo{
+  box-shadow:0 0 26px 6px rgba(0,240,255,.42),inset 0 0 26px 4px rgba(0,240,255,.30)}
+.sk-hot:hover{transform:translate(-50%,-50%) scale(1.07)}
+.sk-hot .cap{position:absolute;left:50%;top:calc(100% + 12px);transform:translateX(-50%);
+  white-space:nowrap;font-family:var(--ui);font-size:9px;font-weight:800;letter-spacing:.22em;
+  text-transform:uppercase;color:#bfeeff;opacity:0;transition:.25s ease-out;
+  text-shadow:0 0 10px rgba(0,240,255,.9),0 2px 4px #000;pointer-events:none}
+.sk-hot:hover .cap{opacity:1}
+.sk-hot .dot{position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;padding:0 5px;
+  border-radius:9px;display:grid;place-items:center;font-family:var(--ui);font-size:9.5px;
+  font-weight:800;background:var(--neon-cy);color:#04060c;box-shadow:0 0 12px var(--neon-cy)}
 
 /* ---------- TWIN EMBLEMS ---------- */
-.sk-top{position:absolute;top:2%;left:0;right:0;z-index:8;display:flex;
+.sk-top{position:absolute;top:1.2%;left:0;right:0;z-index:9;display:flex;
   flex-direction:column;align-items:center;pointer-events:none}
-.sk-emblems{display:flex;align-items:center;gap:clamp(30px,7vw,120px)}
-.sk-em{width:clamp(88px,10vw,142px);aspect-ratio:1;position:relative}
+.sk-emblems{display:flex;align-items:center;gap:clamp(26px,6vw,104px)}
+.sk-em{width:clamp(72px,8vw,116px);aspect-ratio:1;position:relative}
 .sk-em svg{position:absolute;inset:0;width:100%;height:100%}
-.sk-em.seal{filter:drop-shadow(0 0 18px rgba(255,194,76,.4)) drop-shadow(0 6px 14px #000)}
-.sk-em.clock{filter:drop-shadow(0 0 22px rgba(0,240,255,.5))}
+.sk-em.seal{filter:drop-shadow(0 0 16px rgba(255,194,76,.35)) drop-shadow(0 6px 14px #000)}
+.sk-em.clock{filter:drop-shadow(0 0 20px rgba(0,240,255,.5))}
 .sk-em .r-slow{animation:skSpin 100s linear infinite;transform-origin:50% 50%}
-.sk-em .r-fast{animation:skSpin 46s linear infinite reverse;transform-origin:50% 50%}
+.sk-em .r-fast{animation:skSpin 44s linear infinite reverse;transform-origin:50% 50%}
 @keyframes skSpin{to{transform:rotate(360deg)}}
 body.reduced .r-slow,body.reduced .r-fast{animation:none}
-.sk-title{margin-top:14px;text-align:center}
-.sk-title h1{font-family:var(--lore);font-size:clamp(20px,2.4vw,31px);font-weight:400;
-  letter-spacing:.32em;text-indent:.32em;color:#eaf7ff;
-  text-shadow:0 0 20px rgba(0,240,255,.55),0 2px 6px #000}
-.sk-title .rank{font-family:var(--ui);font-size:10.5px;font-weight:700;letter-spacing:.34em;
-  text-transform:uppercase;color:rgba(186,220,250,.6);margin-top:7px;
-  text-shadow:0 0 12px rgba(0,240,255,.45)}
+.sk-title{margin-top:8px;text-align:center}
+.sk-title h1{font-family:var(--lore);font-size:clamp(17px,2.1vw,27px);font-weight:400;
+  letter-spacing:.34em;text-indent:.34em;color:#eaf7ff;
+  text-shadow:0 0 20px rgba(0,240,255,.55),0 2px 8px #000}
+.sk-title .rank{font-family:var(--ui);font-size:9.5px;font-weight:700;letter-spacing:.32em;
+  text-transform:uppercase;color:rgba(186,220,250,.6);margin-top:6px;
+  text-shadow:0 0 12px rgba(0,240,255,.45),0 1px 4px #000}
 
-/* ---------- PILLARS ---------- */
-.sk-pillars{position:absolute;bottom:30%;z-index:6;display:flex;align-items:flex-end;
-  gap:clamp(3px,.6vw,10px)}
-.sk-pillars.left{left:1.2%}
-.sk-pillars.right{right:1.2%}
-.pillar{position:relative;width:clamp(48px,4.9vw,74px);cursor:pointer;
-  transition:transform .28s ease-out}
-.sk-pillars.left  .pillar:nth-child(1){height:clamp(196px,25vh,300px)}
-.sk-pillars.left  .pillar:nth-child(2){height:clamp(214px,27vh,326px)}
-.sk-pillars.left  .pillar:nth-child(3){height:clamp(232px,29vh,352px)}
-.sk-pillars.left  .pillar:nth-child(4){height:clamp(250px,31vh,378px)}
-.sk-pillars.right .pillar:nth-child(1){height:clamp(250px,31vh,378px)}
-.sk-pillars.right .pillar:nth-child(2){height:clamp(232px,29vh,352px)}
-.sk-pillars.right .pillar:nth-child(3){height:clamp(214px,27vh,326px)}
-.pillar .body{position:absolute;inset:0;border-radius:3px;
-  background:
-    linear-gradient(90deg,rgba(0,0,0,.5),transparent 22%,transparent 74%,rgba(0,0,0,.62)),
-    linear-gradient(180deg,#2a3140,#1a1f2a 52%,#10141c);
-  border:1px solid rgba(150,190,230,.15);
-  box-shadow:inset 0 1px 0 rgba(200,228,255,.16),inset 0 -30px 44px rgba(0,0,0,.7),
-    0 22px 40px -16px #000}
-/* capital + base blocks */
-.pillar .body:before,.pillar .body:after{content:"";position:absolute;left:-7%;right:-7%;height:16px;
-  background:linear-gradient(180deg,#333c4d,#1c222d);
-  border:1px solid rgba(150,190,230,.16);border-radius:2px;
-  box-shadow:0 3px 8px rgba(0,0,0,.6)}
-.pillar .body:before{top:-8px}
-.pillar .body:after{bottom:-8px;height:20px}
-/* the glowing engraved disc */
-.pillar .disc{position:absolute;left:50%;top:26%;transform:translateX(-50%);
-  width:76%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
-  border:2px solid var(--pc,var(--neon-cy));
-  background:radial-gradient(circle,rgba(0,240,255,.10),transparent 70%);
-  box-shadow:0 0 18px -2px var(--pc,var(--neon-cy)),inset 0 0 20px -6px var(--pc,var(--neon-cy));
-  transition:.28s ease-out}
-.pillar .disc svg{width:52%;height:auto;color:var(--pc,var(--neon-cy));
-  filter:drop-shadow(0 0 7px var(--pc,var(--neon-cy)))}
-.pillar .cap{position:absolute;left:-20%;right:-20%;bottom:-30px;text-align:center;
-  font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(190,225,255,.35);opacity:0;transition:.28s ease-out}
-.pillar:hover{transform:translateY(-8px)}
-.pillar:hover .disc{box-shadow:0 0 32px 0 var(--pc),inset 0 0 28px -4px var(--pc);
-  background:radial-gradient(circle,rgba(0,240,255,.2),transparent 70%)}
-.pillar:hover .cap{opacity:1;color:rgba(225,244,255,.9)}
-.pillar .dot{position:absolute;top:8px;right:6px;min-width:17px;height:17px;padding:0 5px;border-radius:9px;
-  display:grid;place-items:center;font-family:var(--ui);font-size:9.5px;font-weight:800;
-  background:var(--pc);color:#04060c;box-shadow:0 0 12px var(--pc);z-index:2}
-
-/* ---------- REFLECTIVE MARBLE PLATFORM ---------- */
-.sk-stage{position:absolute;left:50%;bottom:-14%;transform:translateX(-50%);
-  width:min(1240px,96vw);height:60%;z-index:2;pointer-events:none}
-.sk-disc{position:absolute;inset:0;border-radius:50%;
-  background:
-    radial-gradient(58% 62% at 50% 26%,rgba(46,60,88,.85),rgba(16,21,32,.95) 58%,rgba(7,10,16,.99)),
-    linear-gradient(180deg,#1b2230,#0a0e16);
-  border-top:1px solid rgba(170,210,250,.22);
-  box-shadow:0 -20px 70px rgba(0,240,255,.12),inset 0 3px 0 rgba(200,230,255,.12),
-    0 50px 100px -30px #000;
-  transform:perspective(900px) rotateX(66deg);transform-origin:50% 0}
-/* concentric neon rings */
-.sk-rings{position:absolute;left:50%;top:0;transform:translateX(-50%) perspective(900px) rotateX(66deg);
-  transform-origin:50% 0;width:100%;height:100%}
-.sk-rings i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  border-radius:50%;border:1px solid var(--rc,rgba(0,240,255,.5));
-  box-shadow:0 0 14px -2px var(--rc,rgba(0,240,255,.55)),inset 0 0 14px -4px var(--rc,rgba(0,240,255,.4));
-  animation:ringPulse 5s ease-in-out infinite}
-@keyframes ringPulse{0%,100%{opacity:.35}50%{opacity:.9}}
-body.reduced .sk-rings i{animation:none;opacity:.7}
-/* fracture lines */
-.sk-cracks{position:absolute;left:50%;top:0;transform:translateX(-50%) perspective(900px) rotateX(66deg);
-  transform-origin:50% 0;width:100%;height:100%}
-.sk-cracks path{fill:none;stroke-linecap:round}
-.sk-cracks .c1{stroke:var(--neon-cy);stroke-width:1.5;filter:drop-shadow(0 0 5px var(--neon-cy));
-  animation:crackPulse 4.6s ease-in-out infinite}
-.sk-cracks .c2{stroke:var(--neon-mg);stroke-width:1.4;filter:drop-shadow(0 0 5px var(--neon-mg));
-  animation:crackPulse 5.9s ease-in-out infinite .8s}
-@keyframes crackPulse{0%,100%{opacity:.35}50%{opacity:1}}
-body.reduced .sk-cracks path{animation:none;opacity:.75}
-
-/* ---------- CARD RING ---------- */
-.sk-arc{position:absolute;left:50%;bottom:27%;transform:translateX(-50%);z-index:9;
-  width:min(1160px,95vw);height:clamp(240px,36vh,360px)}
-.sk-card{position:absolute;left:50%;bottom:0;width:clamp(92px,9vw,138px);
-  transform-origin:bottom center;cursor:pointer;
+/* ---------- CARD RING on the platform ---------- */
+.sk-arc{position:absolute;left:50%;bottom:23%;transform:translateX(-50%);z-index:10;
+  width:min(1080px,92vw);height:clamp(190px,30vh,300px);pointer-events:none}
+.sk-card{position:absolute;left:50%;bottom:0;width:clamp(74px,7.4vw,112px);
+  transform-origin:bottom center;cursor:pointer;pointer-events:auto;
   transition:transform .3s ease-out,filter .3s ease-out}
 .sk-frame{position:relative;border-radius:5px;padding:4px 4px 0;
-  background:linear-gradient(180deg,#232a37,#0c1016);
-  border:1px solid var(--cc,rgba(0,240,255,.6));
-  box-shadow:0 0 18px -3px var(--cc,rgba(0,240,255,.55)),0 20px 32px -14px #000,
-    inset 0 1px 0 rgba(210,236,255,.18)}
+  background:linear-gradient(180deg,#1d2431,#0a0e15);
+  border:1px solid var(--cc,rgba(0,240,255,.65));
+  box-shadow:0 0 16px -2px var(--cc,rgba(0,240,255,.6)),0 16px 26px -12px #000,
+    inset 0 1px 0 rgba(210,236,255,.2)}
 .sk-frame:before{content:"";position:absolute;inset:2px;border-radius:3px;
-  border:1px solid rgba(210,236,255,.11);pointer-events:none;z-index:3}
+  border:1px solid rgba(210,236,255,.12);pointer-events:none;z-index:3}
 .sk-art{position:relative;aspect-ratio:5/7;border-radius:2px;overflow:hidden;background:#05070d}
-.sk-art img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.06) contrast(1.07)}
+.sk-art img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.06) contrast(1.08)}
 .sk-art:after{content:"";position:absolute;inset:0;mix-blend-mode:screen;
-  background:linear-gradient(180deg,transparent 54%,rgba(4,6,12,.8)),
-    radial-gradient(70% 50% at 50% 78%,var(--cg,rgba(0,240,255,.35)),transparent 70%)}
-.sk-plate{margin:0 -4px;padding:6px 3px 7px;text-align:center;
-  background:linear-gradient(180deg,#1a2029,#090d13);
-  border-top:1px solid var(--cc,rgba(0,240,255,.45))}
-.sk-plate .n{font-family:var(--lore);font-size:clamp(8.5px,.82vw,11.5px);letter-spacing:.09em;
-  color:#eef8ff;text-shadow:0 0 8px var(--cc,rgba(0,240,255,.7)),0 1px 2px #000;line-height:1.1}
-.sk-plate .t{font-family:var(--ui);font-size:clamp(6px,.58vw,8px);font-weight:700;
+  background:linear-gradient(180deg,transparent 56%,rgba(4,6,12,.82)),
+    radial-gradient(70% 50% at 50% 80%,var(--cg,rgba(0,240,255,.35)),transparent 70%)}
+.sk-plate{margin:0 -4px;padding:5px 3px 6px;text-align:center;
+  background:linear-gradient(180deg,#1a2029,#080c12);
+  border-top:1px solid var(--cc,rgba(0,240,255,.5))}
+.sk-plate .n{font-family:var(--lore);font-size:clamp(7.5px,.72vw,10px);letter-spacing:.08em;
+  color:#eef8ff;text-shadow:0 0 8px var(--cc,rgba(0,240,255,.75)),0 1px 2px #000;line-height:1.1}
+.sk-plate .t{font-family:var(--ui);font-size:clamp(5.5px,.52vw,7px);font-weight:700;
   letter-spacing:.14em;text-transform:uppercase;color:rgba(178,212,242,.55);margin-top:2px}
-/* the polished floor throws each card back */
-.sk-refl{position:absolute;top:100%;left:0;right:0;height:70%;pointer-events:none;
-  transform:scaleY(-1);opacity:.22;filter:blur(1.2px);
-  -webkit-mask:linear-gradient(180deg,rgba(0,0,0,.85),transparent 78%);
-  mask:linear-gradient(180deg,rgba(0,0,0,.85),transparent 78%)}
+/* reflection into the polished marble */
+.sk-refl{position:absolute;top:100%;left:0;right:0;height:64%;pointer-events:none;
+  transform:scaleY(-1);opacity:.20;filter:blur(1.4px);
+  -webkit-mask:linear-gradient(180deg,rgba(0,0,0,.8),transparent 74%);
+  mask:linear-gradient(180deg,rgba(0,0,0,.8),transparent 74%)}
 .sk-refl img{width:100%;height:100%;object-fit:cover;display:block}
-.sk-card:hover{transform:var(--tf) translateY(-18px) scale(1.07) !important;z-index:24}
-.sk-card:hover .sk-frame{box-shadow:0 0 38px -2px var(--cc),0 28px 44px -14px #000,
-  inset 0 1px 0 rgba(226,244,255,.26)}
-.sk-card.lead .sk-frame{box-shadow:0 0 46px -4px var(--cc),0 0 100px -22px var(--cc),
-  0 28px 48px -16px #000,inset 0 1px 0 rgba(236,250,255,.32)}
-.sk-card.lead .sk-plate .n{font-size:clamp(9.5px,.96vw,13px)}
+/* the glow each card throws down onto the floor */
+.sk-pool{position:absolute;left:50%;top:100%;transform:translateX(-50%);
+  width:150%;height:26px;pointer-events:none;filter:blur(9px);
+  background:radial-gradient(closest-side,var(--cc),transparent 72%);opacity:.4}
+.sk-card:hover{transform:var(--tf) translateY(-16px) scale(1.08) !important;z-index:24}
+.sk-card:hover .sk-frame{box-shadow:0 0 36px -1px var(--cc),0 24px 38px -12px #000,
+  inset 0 1px 0 rgba(226,244,255,.28)}
+.sk-card:hover .sk-pool{opacity:.75}
+.sk-card.lead .sk-frame{box-shadow:0 0 44px -3px var(--cc),0 0 96px -22px var(--cc),
+  0 26px 44px -14px #000,inset 0 1px 0 rgba(236,250,255,.34)}
+.sk-card.lead .sk-plate .n{font-size:clamp(8.5px,.86vw,11.5px)}
 
 /* ---------- ENTER DUEL ---------- */
-.sk-duel{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);z-index:14;
+.sk-duel{position:absolute;left:50%;bottom:3.5%;transform:translateX(-50%);z-index:14;
   cursor:pointer;border:0;background:none;padding:0}
-.sk-duel .plate{position:relative;padding:clamp(15px,2.1vh,24px) clamp(48px,6.4vw,96px);
+.sk-duel .plate{position:relative;padding:clamp(12px,1.8vh,20px) clamp(40px,5.6vw,84px);
   border-radius:3px;
   background:
-    linear-gradient(180deg,rgba(38,46,60,.96),rgba(12,16,24,.98)),
-    repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 2px,transparent 2px 6px);
+    linear-gradient(180deg,rgba(34,42,56,.94),rgba(10,14,22,.97)),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.028) 0 2px,transparent 2px 6px);
   border:2px solid rgba(0,240,255,.8);
-  box-shadow:0 0 30px -2px rgba(0,240,255,.6),0 0 80px -18px rgba(0,240,255,.55),
-    inset 0 0 38px -8px rgba(0,240,255,.5),inset 0 1px 0 rgba(220,248,255,.2),
-    0 26px 48px -18px #000;
+  box-shadow:0 0 28px -2px rgba(0,240,255,.6),0 0 76px -18px rgba(0,240,255,.55),
+    inset 0 0 36px -8px rgba(0,240,255,.5),inset 0 1px 0 rgba(220,248,255,.22),
+    0 22px 44px -18px #000;
   transition:.26s ease-out}
 .sk-duel .plate:before{content:"";position:absolute;inset:5px;border-radius:2px;
-  border:1px solid rgba(0,240,255,.32);pointer-events:none}
+  border:1px solid rgba(0,240,255,.34);pointer-events:none}
 .sk-duel .plate:after{content:"";position:absolute;inset:-9px;pointer-events:none;opacity:.8;
   filter:drop-shadow(0 0 6px var(--neon-cy));
   background:
@@ -771,70 +690,66 @@ body.reduced .sk-cracks path{animation:none;opacity:.75}
     linear-gradient(var(--neon-cy),var(--neon-cy)) right bottom/18px 2px no-repeat,
     linear-gradient(var(--neon-cy),var(--neon-cy)) right bottom/2px 18px no-repeat}
 .sk-duel .w{position:relative;z-index:2;font-family:var(--lore);
-  font-size:clamp(21px,2.9vw,38px);letter-spacing:.24em;text-indent:.24em;color:#f4fcff;
+  font-size:clamp(19px,2.6vw,34px);letter-spacing:.24em;text-indent:.24em;color:#f4fcff;
   text-shadow:0 0 18px rgba(0,240,255,.95),0 0 48px rgba(0,240,255,.55),0 2px 6px #000}
-.sk-duel .s{position:relative;z-index:2;margin-top:6px;font-family:var(--ui);
-  font-size:clamp(8px,.82vw,10.5px);font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+.sk-duel .s{position:relative;z-index:2;margin-top:5px;font-family:var(--ui);
+  font-size:clamp(7.5px,.76vw,9.5px);font-weight:700;letter-spacing:.3em;text-transform:uppercase;
   color:rgba(182,228,255,.7)}
 .sk-duel:hover .plate{border-color:#86f8ff;transform:translateY(-2px);
-  box-shadow:0 0 50px 0 rgba(0,240,255,.85),0 0 120px -14px rgba(0,240,255,.65),
-    inset 0 0 50px -6px rgba(0,240,255,.65),0 32px 54px -18px #000}
+  box-shadow:0 0 48px 0 rgba(0,240,255,.85),0 0 116px -14px rgba(0,240,255,.65),
+    inset 0 0 48px -6px rgba(0,240,255,.65),0 28px 50px -18px #000}
 .sk-duel:active .plate{transform:translateY(1px)}
 .sk-duel .spark{position:absolute;width:3px;height:3px;border-radius:50%;background:#ccf9ff;
   box-shadow:0 0 9px 2px rgba(0,240,255,.95);opacity:0;pointer-events:none}
 .sk-duel:hover .spark{animation:skSpark 1.15s ease-out infinite}
 @keyframes skSpark{0%{opacity:0;transform:translate(0,0) scale(.5)}
   22%{opacity:1}100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(.15)}}
+body.reduced .sk-duel .spark{animation:none}
 
 /* ---------- CORNER HUD ---------- */
-.sk-hud{position:absolute;z-index:16;display:flex;align-items:center;gap:10px}
-.sk-hud.tl{top:18px;left:18px}
-.sk-hud.tr{top:18px;right:18px}
-.sk-you{display:flex;align-items:center;gap:11px;padding:8px 15px 8px 8px;border-radius:3px;cursor:pointer;
-  background:linear-gradient(180deg,rgba(24,31,44,.92),rgba(8,11,18,.96));
+.sk-hud{position:absolute;z-index:16;display:flex;align-items:center;gap:9px}
+.sk-hud.tl{top:16px;left:16px}
+.sk-hud.tr{top:16px;right:16px}
+.sk-you{display:flex;align-items:center;gap:10px;padding:7px 14px 7px 7px;border-radius:3px;
+  cursor:pointer;background:linear-gradient(180deg,rgba(20,27,40,.9),rgba(6,9,15,.95));
   border:1px solid rgba(0,240,255,.28);
   box-shadow:0 0 18px -6px rgba(0,240,255,.5),inset 0 1px 0 rgba(200,236,255,.13);
   transition:.24s ease-out}
-.sk-you:hover{border-color:rgba(0,240,255,.65);box-shadow:0 0 28px -4px rgba(0,240,255,.72)}
-.sk-you .av{width:34px;height:34px;border-radius:2px;display:grid;place-items:center;flex:0 0 auto;
+.sk-you:hover{border-color:rgba(0,240,255,.65);box-shadow:0 0 26px -4px rgba(0,240,255,.7)}
+.sk-you .av{width:31px;height:31px;border-radius:2px;display:grid;place-items:center;flex:0 0 auto;
   background:#070b12;border:1px solid rgba(0,240,255,.36);color:var(--neon-cy);
   box-shadow:0 0 12px -3px var(--neon-cy)}
-.sk-you .nm{font-family:var(--lore);font-size:14.5px;color:#eaf7ff;letter-spacing:.06em;
+.sk-you .nm{font-family:var(--lore);font-size:13.5px;color:#eaf7ff;letter-spacing:.05em;
   text-shadow:0 0 10px rgba(0,240,255,.55)}
-.sk-you .lv{font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.18em;
-  text-transform:uppercase;color:rgba(166,208,242,.62);margin-top:3px}
-.sk-xp{width:96px;height:3px;background:rgba(0,240,255,.14);margin-top:6px;overflow:hidden;border-radius:2px}
+.sk-you .lv{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(166,208,242,.62);margin-top:2px}
+.sk-xp{width:88px;height:3px;background:rgba(0,240,255,.14);margin-top:5px;overflow:hidden;border-radius:2px}
 .sk-xp i{display:block;height:100%;width:0;background:var(--neon-cy);
   box-shadow:0 0 8px var(--neon-cy);transition:width 1s var(--ez)}
-.sk-chip{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:3px;cursor:pointer;
-  background:linear-gradient(180deg,rgba(24,31,44,.92),rgba(8,11,18,.96));
+.sk-chip{display:flex;align-items:center;gap:7px;padding:8px 13px;border-radius:3px;cursor:pointer;
+  background:linear-gradient(180deg,rgba(20,27,40,.9),rgba(6,9,15,.95));
   border:1px solid var(--chc,rgba(255,194,76,.32));
   box-shadow:0 0 16px -6px var(--chc,rgba(255,194,76,.5));transition:.24s ease-out}
 .sk-chip:hover{border-color:var(--chc);box-shadow:0 0 24px -4px var(--chc);transform:translateY(-1px)}
-.sk-chip .v{font-family:var(--ui);font-size:13.5px;font-weight:700;color:#eef8ff;
+.sk-chip .v{font-family:var(--ui);font-size:12.5px;font-weight:700;color:#eef8ff;
   font-variant-numeric:tabular-nums;text-shadow:0 0 8px var(--chc)}
-.sk-ico{width:36px;height:36px;display:grid;place-items:center;border-radius:3px;cursor:pointer;
-  background:linear-gradient(180deg,rgba(24,31,44,.92),rgba(8,11,18,.96));
+.sk-ico{width:33px;height:33px;display:grid;place-items:center;border-radius:3px;cursor:pointer;
+  background:linear-gradient(180deg,rgba(20,27,40,.9),rgba(6,9,15,.95));
   border:1px solid rgba(155,92,255,.32);color:rgba(206,188,255,.78);
   box-shadow:0 0 14px -6px var(--neon-pu);transition:.24s ease-out}
 .sk-ico:hover{border-color:var(--neon-pu);color:#ece2ff;box-shadow:0 0 22px -4px var(--neon-pu)}
-.sk-deck{position:absolute;left:50%;bottom:20.5%;transform:translateX(-50%);z-index:13;
-  font-family:var(--ui);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
-  color:rgba(172,208,242,.5);white-space:nowrap;text-shadow:0 0 10px rgba(0,0,0,.95)}
-.sk-deck b{color:rgba(224,244,255,.85);font-weight:700}
+.sk-deck{position:absolute;left:50%;bottom:17.5%;transform:translateX(-50%);z-index:13;
+  font-family:var(--ui);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(172,208,242,.55);white-space:nowrap;text-shadow:0 0 10px rgba(0,0,0,.95)}
+.sk-deck b{color:rgba(224,244,255,.88);font-weight:700}
 .sk-deck a{color:var(--neon-cy);cursor:pointer;font-weight:700}
 .sk-deck a:hover{text-shadow:0 0 10px var(--neon-cy)}
 
-@media(max-width:1100px){
-  .sk-pillars{bottom:auto;top:20%}
-  .sk-pillars .pillar{width:42px}
-  .sk-pillars.left .pillar:nth-child(n),.sk-pillars.right .pillar:nth-child(n){height:120px}
-  .sk-arc{bottom:30%}
-}
-@media(max-width:760px){
-  .sk-em{width:74px}
-  .sk-hud.tl,.sk-hud.tr{position:static;justify-content:center;margin:10px auto}
-  .sk-pillars{display:none}
+@media(max-width:900px){
+  .sk-arc{bottom:26%;width:96vw}
+  .sk-em{width:64px}
+  .sk-hot{width:44px}
+  .sk-hud.tl,.sk-hud.tr{position:static;justify-content:center;margin:8px auto}
 }
 
 /* ---- reward ceremony after a battle ---- */
@@ -2164,20 +2079,23 @@ const NAVICON={
    CONSOLE HALL — a carousel is the interface
    ============================================================ */
 /* ============================================================
-   COMMAND SANCTUM — brick vault build
+   COMMAND SANCTUM — on the supplied background plate
+   Hotspot coordinates were measured from the artwork itself.
    ============================================================ */
-const SKI={
-  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 6.6C10.4 5 7.9 4.3 4 4.6v12.8c3.9-.3 6.4.4 8 1.9 1.6-1.5 4.1-2.2 8-1.9V4.6c-3.9-.3-6.4.4-8 2Z"/><path d="M12 6.6v12.7"/></svg>',
-  anvil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9h11a5 5 0 0 0 5-4h2v3.5a7 7 0 0 1-7 7h-.6l1.1 3H8.5l1.1-3H6a3 3 0 0 1-3-3Z"/><path d="M6.5 21h11"/></svg>',
-  tower:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h3v2h2V3h3v2h3V3h1v5l-2 2v7l2 3H6l2-3v-7L6 8Z"/></svg>',
-  scroll:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3h11v15a3 3 0 0 1-3 3H6a3 3 0 0 0 3-3V5"/><path d="M4 6a2 2 0 0 1 2-2h1M11 8h4M11 12h4M11 16h3"/></svg>',
-  rings:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="12" r="5.4"/><circle cx="15" cy="12" r="5.4"/></svg>',
-  chest:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3.5 10a8.5 8.5 0 0 1 17 0v9h-17Z"/><path d="M3.5 13.5h17M11 13.5h2v4h-2z"/></svg>',
-  bust:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4.2"/><path d="M4.5 21c.8-4.7 3.8-7.2 7.5-7.2s6.7 2.5 7.5 7.2"/></svg>'
-};
 function powerOf(c){ return (c.pow||0)*180+(c.hp||0)*120+c.cost*90 }
-const SKGLOW={Civilization:"#00F0FF",Warfare:"#FFC24C",Nature:"#4DFFC3",Dark:"#FF3DD0"};
+const SKGLOW={Civilization:"#00F0FF",Warfare:"#FFC24C",Nature:"#4DFFC3",Dark:"#C24BFF"};
 function skCol(c){ return SKGLOW[c.a]||"#9B5CFF" }
+
+/* measured centres of the painted pillar icons, in % of the plate */
+const SKHOT=[
+  {x:8.64, y:35.13, label:"Collection", scr:"collection"},
+  {x:19.10,y:36.53, label:"Deck",       scr:"decks"},
+  {x:28.41,y:38.00, label:"Rank",       scr:"rank"},
+  {x:36.42,y:38.25, label:"Quests",     scr:"ledger"},
+  {x:68.95,y:38.01, label:"Friends",    scr:"friends"},
+  {x:79.59,y:37.21, label:"Packs",      scr:"packs", badge:true},
+  {x:91.37,y:36.03, label:"Profile",    scr:"profile"}
+];
 
 let SKLIST=[];
 function sanctumRoster(){
@@ -2195,18 +2113,8 @@ function buildHall(){
   SKLIST=sanctumRoster();
   const xpPct=Math.min(1,P.xp/P.xpMax);
 
-  const LEFT=[["book","Collection","collection"],["anvil","Deck","decks"],
-              ["tower","Rank","rank"],["scroll","Quests","ledger"]];
-  const RIGHT=[["rings","Friends","friends"],["chest","Packs","packs"],
-               ["bust","Profile","profile"]];
-
   r.innerHTML=`
-  <div class="sk-wall"></div>
-  <div class="sk-rays">
-    ${[[-26,110,0],[-9,74,1.4],[6,92,2.6],[22,66,3.8],[-40,58,5]]
-      .map(([deg,wd,dl])=>`<i style="--w:${wd}px;transform:translateX(-50%) rotate(${deg}deg);
-        animation-delay:${dl}s"></i>`).join("")}
-  </div>
+  <div class="sk-edge"></div>
 
   <!-- EMBLEMS -->
   <div class="sk-top">
@@ -2220,22 +2128,15 @@ function buildHall(){
     </div>
   </div>
 
-  <!-- PILLARS -->
-  <div class="sk-pillars left">${LEFT.map(([k,l,s])=>pillar(k,l,s)).join("")}</div>
-  <div class="sk-pillars right">${RIGHT.map(([k,l,s])=>pillar(k,l,s,k==="chest"?P.packs:0)).join("")}</div>
+  <!-- PILLAR HOTSPOTS -->
+  ${SKHOT.map(h=>`
+    <div class="sk-hot" style="left:${h.x}%;top:${h.y}%" data-scr="${h.scr}">
+      <div class="halo"></div>
+      <div class="cap">${h.label}</div>
+      ${h.badge&&P.packs?`<span class="dot">${P.packs}</span>`:""}
+    </div>`).join("")}
 
-  <!-- PLATFORM -->
-  <div class="sk-stage">
-    <div class="sk-disc"></div>
-    <div class="sk-rings">
-      ${[[92,"rgba(0,240,255,.55)",0],[74,"rgba(255,61,208,.5)",.9],
-         [56,"rgba(155,92,255,.45)",1.8],[36,"rgba(0,240,255,.4)",2.7]]
-        .map(([p,c,d])=>`<i style="width:${p}%;height:${p}%;--rc:${c};animation-delay:${d}s"></i>`).join("")}
-    </div>
-    ${cracksSVG()}
-  </div>
-
-  <!-- CARDS -->
+  <!-- CARDS ON THE PLATFORM -->
   <div class="sk-arc" id="skArc"></div>
   <div class="sk-deck">Deck <b>${P.deckName}</b> · ${P.deck.length}/40 · <a data-scr="decks">Change</a></div>
 
@@ -2254,7 +2155,7 @@ function buildHall(){
   <!-- HUD -->
   <div class="sk-hud tl">
     <div class="sk-you" data-scr="profile">
-      <div class="av">${elarisCrest({size:20})}</div>
+      <div class="av">${elarisCrest({size:19})}</div>
       <div><div class="nm">${P.name||"Warden"}</div>
         <div class="lv">Level ${P.level}</div>
         <div class="sk-xp"><i id="skXp"></i></div></div>
@@ -2262,23 +2163,23 @@ function buildHall(){
   </div>
   <div class="sk-hud tr">
     <div class="sk-chip" style="--chc:#FFC24C" data-scr="shop">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFC24C" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10h5M9.5 14h5"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFC24C" stroke-width="1.9"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10h5M9.5 14h5"/></svg>
       <span class="v">${P.points.toLocaleString()}</span></div>
     <div class="sk-chip" style="--chc:#00F0FF" data-scr="shop">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="1.8"><path d="m12 3 3 6 6 1.5-4.5 4 1 6.5L12 18l-5.5 3 1-6.5L3 10.5 9 9z"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="1.9"><path d="m12 3 3 6 6 1.5-4.5 4 1 6.5L12 18l-5.5 3 1-6.5L3 10.5 9 9z"/></svg>
       <span class="v">${P.shards}</span></div>
     <button class="sk-ico" data-settings="1">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
     </button>
   </div>`;
 
   layoutArc();
-  for(let i=0;i<30;i++){
+  for(let i=0;i<22;i++){
     const d=document.createElement("div");d.className="sk-dust";
-    d.style.left=(3+Math.random()*94)+"%";d.style.top=(28+Math.random()*70)+"%";
-    d.style.animationDuration=(12+Math.random()*20)+"s";
-    d.style.animationDelay=(-Math.random()*30)+"s";
-    d.style.opacity=String(.25+Math.random()*.65);
+    d.style.left=(6+Math.random()*88)+"%";d.style.top=(26+Math.random()*66)+"%";
+    d.style.animationDuration=(13+Math.random()*18)+"s";
+    d.style.animationDelay=(-Math.random()*28)+"s";
+    d.style.opacity=String(.25+Math.random()*.6);
     r.appendChild(d);
   }
   $$("[data-scr]",r).forEach(b=>b.addEventListener("click",e=>{
@@ -2289,78 +2190,42 @@ function buildHall(){
   P.seenHall=true;
 }
 
-function pillar(icon,label,scr,badge){
-  return `<div class="pillar" style="--pc:#00F0FF" data-scr="${scr}">
-    <div class="body"></div>
-    <div class="disc">${SKI[icon]}</div>
-    <div class="cap">${label}</div>
-    ${badge?`<span class="dot">${badge}</span>`:""}</div>`;
-}
-
 /* left emblem: metallic crown seal */
 function sealSVG(){
   let studs="";
   for(let i=0;i<20;i++){const a=i/20*6.283;
-    studs+=`<circle cx="${100+Math.cos(a)*78}" cy="${100+Math.sin(a)*78}" r="2.6"
-      fill="#c9a24a" opacity=".8"/>`}
+    studs+=`<circle cx="${(100+Math.cos(a)*78).toFixed(1)}" cy="${(100+Math.sin(a)*78).toFixed(1)}" r="2.6" fill="#c9a24a" opacity=".8"/>`}
   return `<svg viewBox="0 0 200 200">
-    <defs><radialGradient id="sg" cx="42%" cy="34%">
-      <stop offset="0" stop-color="#6a6f7c"/><stop offset="1" stop-color="#20242e"/></radialGradient></defs>
-    <circle cx="100" cy="100" r="92" fill="url(#sg)" stroke="#c9a24a" stroke-width="2.4"/>
+    <defs><radialGradient id="sgz" cx="42%" cy="34%">
+      <stop offset="0" stop-color="#6a6f7c"/><stop offset="1" stop-color="#1c2029"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="92" fill="url(#sgz)" stroke="#c9a24a" stroke-width="2.4"/>
     <circle cx="100" cy="100" r="78" fill="none" stroke="#8a7a4a" stroke-width="1"/>
     <g class="r-slow">${studs}</g>
-    <circle cx="100" cy="100" r="58" fill="#141821" stroke="#c9a24a" stroke-width="1.6"/>
+    <circle cx="100" cy="100" r="58" fill="#12161e" stroke="#c9a24a" stroke-width="1.6"/>
     <path d="M62 112 66 74l20 20 14-30 14 30 20-20 4 38Z" fill="#d8b25c" stroke="#8a6f2e" stroke-width="1.6"/>
     <path d="M62 118h76v9H62z" fill="#c9a24a" stroke="#8a6f2e" stroke-width="1.2"/>
     <circle cx="100" cy="70" r="4.5" fill="#ffe9a8"/>
     <circle cx="76" cy="84" r="3" fill="#ffe9a8" opacity=".8"/>
-    <circle cx="124" cy="84" r="3" fill="#ffe9a8" opacity=".8"/>
-  </svg>`;
+    <circle cx="124" cy="84" r="3" fill="#ffe9a8" opacity=".8"/></svg>`;
 }
 /* right emblem: ornate neon clock */
 function clockSVG(){
-  const ring=(r,w,c,o,d)=>`<circle cx="100" cy="100" r="${r}" fill="none" stroke="${c}"
-    stroke-width="${w}" opacity="${o}" ${d?`stroke-dasharray="${d}"`:""}/>`;
+  const ring=(r,w,c,o,d)=>`<circle cx="100" cy="100" r="${r}" fill="none" stroke="${c}" stroke-width="${w}" opacity="${o}" ${d?`stroke-dasharray="${d}"`:""}/>`;
   let ticks="";
   for(let i=0;i<36;i++){const a=i/36*6.283,r1=i%3?70:62;
-    ticks+=`<line x1="${100+Math.cos(a)*r1}" y1="${100+Math.sin(a)*r1}"
-      x2="${100+Math.cos(a)*78}" y2="${100+Math.sin(a)*78}"
-      stroke="#8fe6ff" stroke-width="${i%3?.8:1.6}" opacity="${i%3?.45:.9}"/>`}
+    ticks+=`<line x1="${(100+Math.cos(a)*r1).toFixed(1)}" y1="${(100+Math.sin(a)*r1).toFixed(1)}" x2="${(100+Math.cos(a)*78).toFixed(1)}" y2="${(100+Math.sin(a)*78).toFixed(1)}" stroke="#8fe6ff" stroke-width="${i%3?.8:1.6}" opacity="${i%3?.45:.9}"/>`}
   let spokes="";
   for(let i=0;i<8;i++){const a=i/8*6.283+.4;
-    spokes+=`<line x1="${100+Math.cos(a)*18}" y1="${100+Math.sin(a)*18}"
-      x2="${100+Math.cos(a)*42}" y2="${100+Math.sin(a)*42}"
-      stroke="#cba4ff" stroke-width="1.2" opacity=".75"/>`}
+    spokes+=`<line x1="${(100+Math.cos(a)*18).toFixed(1)}" y1="${(100+Math.sin(a)*18).toFixed(1)}" x2="${(100+Math.cos(a)*42).toFixed(1)}" y2="${(100+Math.sin(a)*42).toFixed(1)}" stroke="#cba4ff" stroke-width="1.2" opacity=".75"/>`}
   return `<svg viewBox="0 0 200 200">
-    <circle cx="100" cy="100" r="92" fill="rgba(10,14,22,.82)" />
-    <circle cx="100" cy="100" r="90" fill="none" stroke="#3d4a60" stroke-width="3"/>
+    <circle cx="100" cy="100" r="90" fill="rgba(8,12,20,.8)" stroke="#3d4a60" stroke-width="3"/>
     <g class="r-slow">${ring(84,1.2,"#5b8fc7",.4)}${ticks}</g>
-    <g class="r-fast">${ring(56,2,"#FF3DD0",.65,"6 10")}${ring(48,1,"#9B5CFF",.55)}</g>
+    <g class="r-fast">${ring(56,2,"#C24BFF",.65,"6 10")}${ring(48,1,"#9B5CFF",.55)}</g>
     <g class="r-slow">${spokes}</g>
-    ${ring(40,2.4,"#00F0FF",.95)}
-    ${ring(28,1,"#7fe9ff",.6,"3 6")}
-    ${ring(14,1.8,"#cba4ff",.9)}
+    ${ring(40,2.4,"#00F0FF",.95)}${ring(28,1,"#7fe9ff",.6,"3 6")}${ring(14,1.8,"#cba4ff",.9)}
     <circle cx="100" cy="100" r="5.5" fill="#00F0FF"/>
     <line x1="100" y1="100" x2="100" y2="58" stroke="#eafcff" stroke-width="2.2" opacity=".9"/>
-    <line x1="100" y1="100" x2="128" y2="112" stroke="#8fe6ff" stroke-width="1.8" opacity=".8"/>
-  </svg>`;
-}
-
-function cracksSVG(){
-  const R=(x=>()=>((x=x*16807%2147483647)/2147483647))(131);
-  const line=(sx,sy,cls)=>{
-    let d=`M${sx} ${sy}`,x=sx,y=sy;
-    for(let i=0,n=4+Math.floor(R()*4);i<n;i++){
-      x+=(R()-.5)*280;y+=R()*70;
-      d+=`L${x.toFixed(0)} ${y.toFixed(0)}`;
-      if(R()>.55){d+=`M${x.toFixed(0)} ${y.toFixed(0)}L${(x+(R()-.5)*130).toFixed(0)} ${(y+R()*50).toFixed(0)}M${x.toFixed(0)} ${y.toFixed(0)}`}
-    }
-    return `<path class="${cls}" d="${d}"/>`;
-  };
-  let p="";
-  for(let i=0;i<8;i++)p+=line(60+R()*880,60+R()*180,"c1");
-  for(let i=0;i<7;i++)p+=line(40+R()*900,120+R()*220,"c2");
-  return `<svg class="sk-cracks" viewBox="0 0 1000 500" preserveAspectRatio="none">${p}</svg>`;
+    <line x1="100" y1="100" x2="128" y2="112" stroke="#8fe6ff" stroke-width="1.8" opacity=".8"/></svg>`;
 }
 
 function layoutArc(){
@@ -2373,14 +2238,17 @@ function layoutArc(){
     el.className="sk-card"+(lead?" lead":"");
     el.style.setProperty("--cc",col);
     el.style.setProperty("--cg",col+"55");
-    const x=off*13.2;
-    const lift=(mid*mid-off*off)*7.5;
-    const rot=off*4.6;
-    const sc=lead?1.2:1-Math.abs(off)*.04;
-    const tf=`translateX(calc(-50% + ${x}vw)) translateY(${-lift}px) rotate(${rot}deg) scale(${sc})`;
+    /* the platform is an ellipse, so the ring follows a cosine in x
+       and a shallow sine in y: cards at the sides sit lower and turn */
+    const t=off/mid;                       // -1 .. 1
+    const x=t*30;                          // % across the platform
+    const lift=(1-t*t)*54;                 // centre highest
+    const rot=t*11;                        // face outward slightly
+    const sc=lead?1.22:1-Math.abs(t)*.16;
+    const tf=`translateX(calc(-50% + ${x}%)) translateY(${-lift}px) rotate(${rot}deg) scale(${sc})`;
     el.style.setProperty("--tf",tf);
     el.style.transform=tf;
-    el.style.zIndex=String(10+(4-Math.abs(off)));
+    el.style.zIndex=String(10+Math.round((1-Math.abs(t))*8));
     el.innerHTML=`
       <div class="sk-frame">
         <div class="sk-art"><img src="cards/liora-sm.jpg" alt="${c.n}" loading="lazy"></div>
@@ -2389,6 +2257,7 @@ function layoutArc(){
           <div class="t">${c.race}</div>
         </div>
       </div>
+      <div class="sk-pool"></div>
       <div class="sk-refl"><img src="cards/liora-sm.jpg" alt="" loading="lazy"></div>`;
     el.onclick=()=>inspect(c);
     arc.appendChild(el);
