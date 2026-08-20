@@ -620,48 +620,113 @@ body.reduced .r-slow,body.reduced .r-fast{animation:none}
   text-transform:uppercase;color:rgba(186,220,250,.6);margin-top:6px;
   text-shadow:0 0 12px rgba(0,240,255,.45),0 1px 4px #000}
 
-/* ---------- CARD RING on the platform ---------- */
-.sk-arc{position:absolute;left:50%;bottom:23%;transform:translateX(-50%);z-index:10;
-  width:min(1080px,92vw);height:clamp(190px,30vh,300px);pointer-events:none}
-.sk-card{position:absolute;left:50%;bottom:0;width:clamp(74px,7.4vw,112px);
-  transform-origin:bottom center;cursor:pointer;pointer-events:auto;
-  transition:transform .3s ease-out,filter .3s ease-out}
-.sk-frame{position:relative;border-radius:5px;padding:4px 4px 0;
-  background:linear-gradient(180deg,#1d2431,#0a0e15);
-  border:1px solid var(--cc,rgba(0,240,255,.65));
-  box-shadow:0 0 16px -2px var(--cc,rgba(0,240,255,.6)),0 16px 26px -12px #000,
-    inset 0 1px 0 rgba(210,236,255,.2)}
-.sk-frame:before{content:"";position:absolute;inset:2px;border-radius:3px;
-  border:1px solid rgba(210,236,255,.12);pointer-events:none;z-index:3}
-.sk-art{position:relative;aspect-ratio:5/7;border-radius:2px;overflow:hidden;background:#05070d}
-.sk-art img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.06) contrast(1.08)}
-.sk-art:after{content:"";position:absolute;inset:0;mix-blend-mode:screen;
-  background:linear-gradient(180deg,transparent 56%,rgba(4,6,12,.82)),
-    radial-gradient(70% 50% at 50% 80%,var(--cg,rgba(0,240,255,.35)),transparent 70%)}
-.sk-plate{margin:0 -4px;padding:5px 3px 6px;text-align:center;
-  background:linear-gradient(180deg,#1a2029,#080c12);
-  border-top:1px solid var(--cc,rgba(0,240,255,.5))}
-.sk-plate .n{font-family:var(--lore);font-size:clamp(7.5px,.72vw,10px);letter-spacing:.08em;
-  color:#eef8ff;text-shadow:0 0 8px var(--cc,rgba(0,240,255,.75)),0 1px 2px #000;line-height:1.1}
-.sk-plate .t{font-family:var(--ui);font-size:clamp(5.5px,.52vw,7px);font-weight:700;
-  letter-spacing:.14em;text-transform:uppercase;color:rgba(178,212,242,.55);margin-top:2px}
-/* reflection into the polished marble */
-.sk-refl{position:absolute;top:100%;left:0;right:0;height:64%;pointer-events:none;
-  transform:scaleY(-1);opacity:.20;filter:blur(1.4px);
-  -webkit-mask:linear-gradient(180deg,rgba(0,0,0,.8),transparent 74%);
-  mask:linear-gradient(180deg,rgba(0,0,0,.8),transparent 74%)}
+
+/* ============================================================
+   ORBITAL CARD WHEEL — cards on a circle around the platform
+   ============================================================ */
+.sk-arc{position:absolute;left:50%;bottom:20%;transform:translateX(-50%);z-index:10;
+  perspective:1400px;perspective-origin:50% 60%;transform-style:preserve-3d;
+  width:min(1120px,94vw);height:clamp(210px,32vh,320px);
+  pointer-events:auto;cursor:grab;touch-action:none;user-select:none}
+.sk-arc.dragging{cursor:grabbing}
+
+/* the glowing path the cards ride */
+.sk-path{position:absolute;left:50%;bottom:6%;transform:translate(-50%,0);
+  width:82%;height:24%;pointer-events:none;z-index:0;
+  border-radius:50%;
+  border:1px solid rgba(214,170,90,.34);
+  box-shadow:
+    0 0 18px -2px rgba(214,170,90,.4),
+    inset 0 0 26px -6px rgba(214,170,90,.32);
+  animation:pathPulse 6s ease-in-out infinite}
+.sk-path:before{content:"";position:absolute;inset:6% 3%;border-radius:50%;
+  border:1px solid rgba(196,142,66,.18)}
+@keyframes pathPulse{0%,100%{opacity:.55}50%{opacity:.95}}
+body.reduced .sk-path{animation:none}
+
+.sk-card{position:absolute;left:50%;bottom:12%;width:clamp(78px,7.8vw,116px);
+  margin-left:calc(clamp(78px,7.8vw,116px) / -2);
+  transform-origin:50% 100%;cursor:pointer;will-change:transform,filter;
+  transition:filter .35s ease-out}
+.sk-arc.dragging .sk-card{transition:none}
+
+/* --- vintage frame: dark metal, aged parchment, bronze edge --- */
+.sk-frame{position:relative;border-radius:4px;padding:4px 4px 0;
+  background:
+    linear-gradient(180deg,#2b2418,#171208 62%,#0d0a05),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.22) 0 2px,transparent 2px 5px);
+  border:1px solid var(--cc,rgba(206,158,78,.75));
+  box-shadow:
+    0 0 14px -3px var(--cc,rgba(206,158,78,.55)),
+    0 16px 26px -12px #000,
+    inset 0 1px 0 rgba(246,222,168,.24),
+    inset 0 -1px 0 rgba(0,0,0,.6)}
+/* corner rivets */
+.sk-frame:before{content:"";position:absolute;inset:2px;border-radius:3px;pointer-events:none;z-index:3;
+  border:1px solid rgba(246,222,168,.14)}
+.sk-frame:after{content:"";position:absolute;inset:-1px;border-radius:5px;pointer-events:none;z-index:4;
+  background:
+    radial-gradient(circle at 4px 4px,rgba(246,222,168,.5) 0 1.4px,transparent 1.6px),
+    radial-gradient(circle at calc(100% - 4px) 4px,rgba(246,222,168,.5) 0 1.4px,transparent 1.6px),
+    radial-gradient(circle at 4px calc(100% - 4px),rgba(246,222,168,.4) 0 1.4px,transparent 1.6px),
+    radial-gradient(circle at calc(100% - 4px) calc(100% - 4px),rgba(246,222,168,.4) 0 1.4px,transparent 1.6px)}
+.sk-art{position:relative;aspect-ratio:5/7;border-radius:2px;overflow:hidden;background:#0a0803}
+.sk-art img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:sepia(.32) saturate(.88) contrast(1.06) brightness(.96)}
+.sk-art:after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 52%,rgba(10,7,3,.86)),
+    radial-gradient(72% 50% at 50% 82%,var(--cg,rgba(214,170,90,.34)),transparent 72%);
+  mix-blend-mode:screen}
+/* aged parchment nameplate */
+.sk-plate{margin:0 -4px;padding:5px 3px 6px;text-align:center;position:relative;
+  background:linear-gradient(180deg,#cdbb95,#a2906c 58%,#7d6d4e);
+  border-top:1px solid rgba(246,222,168,.4);
+  box-shadow:inset 0 1px 0 rgba(255,244,214,.5),inset 0 -3px 6px rgba(60,44,20,.4)}
+.sk-plate:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.3;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='90' height='90' filter='url(%23p)'/></svg>")}
+.sk-plate .n{position:relative;font-family:var(--lore);font-size:clamp(7.5px,.74vw,10px);
+  letter-spacing:.07em;color:#2a1f0c;line-height:1.1;
+  text-shadow:0 1px 0 rgba(255,246,220,.55)}
+.sk-plate .t{position:relative;font-family:var(--ui);font-size:clamp(5.5px,.52vw,7px);font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:rgba(58,42,16,.72);margin-top:2px}
+
+/* reflection into the marble */
+.sk-refl{position:absolute;top:100%;left:0;right:0;height:62%;pointer-events:none;
+  transform:scaleY(-1);opacity:.18;filter:blur(1.5px);
+  -webkit-mask:linear-gradient(180deg,rgba(0,0,0,.8),transparent 72%);
+  mask:linear-gradient(180deg,rgba(0,0,0,.8),transparent 72%)}
 .sk-refl img{width:100%;height:100%;object-fit:cover;display:block}
-/* the glow each card throws down onto the floor */
+/* light pooled on the floor beneath each card */
 .sk-pool{position:absolute;left:50%;top:100%;transform:translateX(-50%);
-  width:150%;height:26px;pointer-events:none;filter:blur(9px);
-  background:radial-gradient(closest-side,var(--cc),transparent 72%);opacity:.4}
-.sk-card:hover{transform:var(--tf) translateY(-16px) scale(1.08) !important;z-index:24}
-.sk-card:hover .sk-frame{box-shadow:0 0 36px -1px var(--cc),0 24px 38px -12px #000,
-  inset 0 1px 0 rgba(226,244,255,.28)}
-.sk-card:hover .sk-pool{opacity:.75}
-.sk-card.lead .sk-frame{box-shadow:0 0 44px -3px var(--cc),0 0 96px -22px var(--cc),
-  0 26px 44px -14px #000,inset 0 1px 0 rgba(236,250,255,.34)}
-.sk-card.lead .sk-plate .n{font-size:clamp(8.5px,.86vw,11.5px)}
+  width:150%;height:22px;pointer-events:none;filter:blur(9px);
+  background:radial-gradient(closest-side,var(--cc),transparent 72%);opacity:.32;
+  transition:opacity .35s ease-out}
+
+/* the card at the front of the wheel */
+.sk-card.front .sk-frame{
+  border-color:rgba(246,222,168,.95);
+  box-shadow:
+    0 0 30px -2px var(--cc,rgba(214,170,90,.85)),
+    0 0 70px -18px var(--cc,rgba(214,170,90,.7)),
+    0 22px 38px -14px #000,
+    inset 0 1px 0 rgba(255,246,214,.45)}
+.sk-card.front .sk-pool{opacity:.7}
+.sk-card.front .sk-art img{filter:sepia(.2) saturate(1) contrast(1.1) brightness(1.06)}
+/* a soft halo marking the selected card */
+.sk-card.front .sk-frame:after{box-shadow:0 0 0 1px rgba(246,222,168,.35)}
+.sk-halo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:190%;height:130%;pointer-events:none;z-index:-1;opacity:0;
+  background:radial-gradient(closest-side,var(--cc),transparent 70%);
+  filter:blur(22px);transition:opacity .4s ease-out}
+.sk-card.front .sk-halo{opacity:.4}
+
+/* the wheel hint */
+.sk-hint{position:absolute;left:50%;bottom:12.5%;transform:translateX(-50%);z-index:13;
+  font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(214,180,120,.42);white-space:nowrap;pointer-events:none;
+  text-shadow:0 0 10px rgba(0,0,0,.95)}
+.sk-hint b{color:rgba(246,222,168,.75);font-weight:700}
 
 /* ---------- ENTER DUEL ---------- */
 .sk-duel{position:absolute;left:50%;bottom:3.5%;transform:translateX(-50%);z-index:14;
@@ -2138,7 +2203,8 @@ function buildHall(){
 
   <!-- CARDS ON THE PLATFORM -->
   <div class="sk-arc" id="skArc"></div>
-  <div class="sk-deck">Deck <b>${P.deckName}</b> · ${P.deck.length}/40 · <a data-scr="decks">Change</a></div>
+  <div class="sk-hint">Scroll or drag to turn the wheel · <b>Enter</b> to duel</div>
+  <div class="sk-deck"><span id="skFront"></span> &nbsp;·&nbsp; Deck <b>${P.deckName}</b> ${P.deck.length}/40 · <a data-scr="decks">Change</a></div>
 
   <!-- DUEL -->
   <button class="sk-duel" id="skDuel">
@@ -2228,41 +2294,187 @@ function clockSVG(){
     <line x1="100" y1="100" x2="128" y2="112" stroke="#8fe6ff" stroke-width="1.8" opacity=".8"/></svg>`;
 }
 
+/* ============================================================
+   ORBITAL WHEEL
+   Cards ride a circle in 3D. Wheel, drag and swipe rotate it.
+   Angle is continuous; the nearest card snaps to the front.
+   ============================================================ */
+const ORB={
+  ang:0,          // current rotation, radians
+  target:0,       // where momentum is heading
+  vel:0,          // angular velocity
+  drag:false,
+  lastX:0,
+  moved:0,
+  raf:null,
+  front:-1
+};
+
 function layoutArc(){
-  const arc=$("#skArc");if(!arc)return;
-  arc.innerHTML="";
-  const n=SKLIST.length,mid=(n-1)/2;
+  const arc=$("#skArc"); if(!arc)return;
+  arc.innerHTML=`<div class="sk-path"></div>`;
+  const n=SKLIST.length;
   SKLIST.forEach((c,i)=>{
-    const off=i-mid,col=skCol(c),lead=c.id===P.champ;
+    const col=skCol(c);
     const el=document.createElement("div");
-    el.className="sk-card"+(lead?" lead":"");
+    el.className="sk-card";
+    el.dataset.i=String(i);
     el.style.setProperty("--cc",col);
     el.style.setProperty("--cg",col+"55");
-    /* the platform is an ellipse, so the ring follows a cosine in x
-       and a shallow sine in y: cards at the sides sit lower and turn */
-    const t=off/mid;                       // -1 .. 1
-    const x=t*30;                          // % across the platform
-    const lift=(1-t*t)*54;                 // centre highest
-    const rot=t*11;                        // face outward slightly
-    const sc=lead?1.22:1-Math.abs(t)*.16;
-    const tf=`translateX(calc(-50% + ${x}%)) translateY(${-lift}px) rotate(${rot}deg) scale(${sc})`;
-    el.style.setProperty("--tf",tf);
-    el.style.transform=tf;
-    el.style.zIndex=String(10+Math.round((1-Math.abs(t))*8));
     el.innerHTML=`
+      <div class="sk-halo"></div>
       <div class="sk-frame">
-        <div class="sk-art"><img src="cards/liora-sm.jpg" alt="${c.n}" loading="lazy"></div>
+        <div class="sk-art"><img src="cards/liora-sm.jpg" alt="${c.n}" loading="lazy" draggable="false"></div>
         <div class="sk-plate">
           <div class="n">${c.n.split(",")[0].toUpperCase()}</div>
           <div class="t">${c.race}</div>
         </div>
       </div>
       <div class="sk-pool"></div>
-      <div class="sk-refl"><img src="cards/liora-sm.jpg" alt="" loading="lazy"></div>`;
-    el.onclick=()=>inspect(c);
+      <div class="sk-refl"><img src="cards/liora-sm.jpg" alt="" loading="lazy" draggable="false"></div>`;
+    el.addEventListener("click",()=>{
+      if(ORB.moved>6)return;                    // that was a drag, not a click
+      const step=2*Math.PI/n;
+      const idx=+el.dataset.i;
+      if(idx===ORB.front) inspect(SKLIST[idx]); // front card opens
+      else spinTo(idx);                         // others rotate forward
+    });
     arc.appendChild(el);
   });
+
+  // start with the champion at the front
+  const ci=SKLIST.findIndex(c=>c.id===P.champ);
+  const step=2*Math.PI/n;
+  ORB.ang=ORB.target=(ci>-1?-ci*step:0);
+  ORB.vel=0;
+  ORB.front=-1;              // force the label to paint on first render
+  renderOrbit();
+  wireOrbit(arc);
+  if(!ORB.raf)ORB.raf=requestAnimationFrame(orbitTick);
 }
+
+/* place every card on the circle for the current angle */
+function renderOrbit(){
+  const arc=$("#skArc"); if(!arc)return;
+  const cards=$$(".sk-card",arc);
+  const n=cards.length; if(!n)return;
+  const step=2*Math.PI/n;
+  const RX=arc.clientWidth*0.36;      // horizontal radius
+  const RZ=arc.clientWidth*0.30;      // depth radius
+  let bestI=0,bestCos=-2;
+
+  cards.forEach((el,i)=>{
+    const a=ORB.ang+i*step;
+    const sin=Math.sin(a), cos=Math.cos(a);
+    // cos = +1 at the front of the wheel, -1 at the back
+    const x=sin*RX;
+    const depth=cos;                                  // -1 .. 1
+    const y=-depth*10;                                // back cards ride a touch higher
+    const sc=0.62+0.46*((depth+1)/2);                 // .62 back -> 1.08 front
+    const rot=-sin*16;                                // turn to face the centre
+    el.style.transform=`translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotateY(${rot.toFixed(1)}deg) scale(${sc.toFixed(3)})`;
+    el.style.zIndex=String(100+Math.round(depth*100));
+    const lit=0.42+0.58*((depth+1)/2);
+    el.style.filter=`brightness(${lit.toFixed(2)}) saturate(${(0.6+0.4*((depth+1)/2)).toFixed(2)})`;
+    el.style.opacity=String(0.5+0.5*((depth+1)/2));
+    if(cos>bestCos){bestCos=cos;bestI=i}
+  });
+
+  if(bestI!==ORB.front){
+    ORB.front=bestI;
+    cards.forEach((el,i)=>el.classList.toggle("front",i===bestI));
+    const c=SKLIST[bestI];
+    if(c){
+      const lbl=$("#skFront");
+      if(lbl)lbl.innerHTML=`<b>${c.n.split(",")[0]}</b> · ${c.race} · ${FACTION_FULL[c.a]}`;
+    }
+  }
+}
+
+/* momentum + snap */
+function orbitTick(){
+  const n=SKLIST.length||1;
+  const step=2*Math.PI/n;
+  if(!ORB.drag){
+    if(Math.abs(ORB.vel)>0.00025){
+      ORB.ang+=ORB.vel;
+      ORB.vel*=0.94;                       // weighty friction
+      ORB.target=Math.round(ORB.ang/step)*step;
+    }else{
+      ORB.vel=0;
+      const d=ORB.target-ORB.ang;
+      if(Math.abs(d)>0.0004) ORB.ang+=d*0.12;   // ease into the detent
+      else ORB.ang=ORB.target;
+    }
+    renderOrbit();
+  }
+  ORB.raf=requestAnimationFrame(orbitTick);
+}
+
+function spinTo(i){
+  const n=SKLIST.length;
+  const step=2*Math.PI/n;
+  let want=-i*step;
+  // take the shortest way round
+  const full=2*Math.PI;
+  while(want-ORB.ang>Math.PI) want-=full;
+  while(want-ORB.ang<-Math.PI) want+=full;
+  ORB.target=want; ORB.vel=0;
+}
+function spinBy(k){
+  const n=SKLIST.length;
+  ORB.target=ORB.ang - k*(2*Math.PI/n);
+  ORB.vel=0;
+}
+
+function wireOrbit(arc){
+  if(arc.dataset.wired)return;
+  arc.dataset.wired="1";
+  const n=()=>SKLIST.length||1;
+
+  arc.addEventListener("wheel",e=>{
+    e.preventDefault();
+    const d=(Math.abs(e.deltaY)>Math.abs(e.deltaX)?e.deltaY:e.deltaX);
+    ORB.vel += Math.max(-0.06,Math.min(0.06, d*0.00022));
+  },{passive:false});
+
+  const down=x=>{ORB.drag=true;ORB.lastX=x;ORB.moved=0;ORB.vel=0;arc.classList.add("dragging")};
+  const move=x=>{
+    if(!ORB.drag)return;
+    const dx=x-ORB.lastX; ORB.lastX=x; ORB.moved+=Math.abs(dx);
+    const k=dx/Math.max(240,arc.clientWidth*0.4);
+    ORB.ang+=k; ORB.vel=k*0.5;
+    renderOrbit();
+  };
+  const up=()=>{
+    if(!ORB.drag)return;
+    ORB.drag=false;arc.classList.remove("dragging");
+    const step=2*Math.PI/n();
+    ORB.target=Math.round((ORB.ang+ORB.vel*6)/step)*step;
+  };
+
+  arc.addEventListener("pointerdown",e=>{
+    try{ if(arc.setPointerCapture) arc.setPointerCapture(e.pointerId) }catch(_){}
+    down(e.clientX);
+  });
+  arc.addEventListener("pointermove",e=>move(e.clientX));
+  arc.addEventListener("pointerup",up);
+  arc.addEventListener("pointercancel",up);
+  arc.addEventListener("pointerleave",up);
+  addEventListener("resize",()=>renderOrbit());
+}
+
+/* keyboard, when the hall is the live scene */
+document.addEventListener("keydown",e=>{
+  const live=$("#s-lobby")&&$("#s-lobby").classList.contains("live");
+  const busy=$("#insp").classList.contains("live")||$("#settings").classList.contains("on")
+    ||$$(".screen.live").length||$("#spoils").classList.contains("on");
+  if(!live||busy||!SKLIST.length)return;
+  if(e.key==="ArrowLeft"){e.preventDefault();spinBy(-1)}
+  if(e.key==="ArrowRight"){e.preventDefault();spinBy(1)}
+  if(e.key==="Enter"){e.preventDefault();enterBattle()}
+});
+
 function buildLobby(){ buildHall() }
 
 function buildLobby(){ buildHall() }
