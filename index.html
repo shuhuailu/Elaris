@@ -551,20 +551,59 @@ body.reduced #ground video{display:none}
    Nothing floats in the middle except the cards.
    ============================================================ */
 .hall{
-  position:absolute;inset:0;display:block;
-  background:
-    radial-gradient(120% 80% at 50% 108%,var(--stage,rgba(217,164,65,.16)),transparent 62%),
-    radial-gradient(90% 60% at 50% -18%,rgba(227,184,92,.07),transparent 70%),
-    linear-gradient(180deg,#120e08,#191309 46%,#0d0a05);
+  position:absolute;inset:0;display:block;overflow:hidden;
   transition:background 1.2s var(--ez);
-  overflow:hidden;
+  /* aged stock: warm in the middle, scorched toward the edges */
+  background:
+    radial-gradient(120% 80% at 50% 108%,var(--stage,rgba(217,164,65,.14)),transparent 60%),
+    radial-gradient(58% 46% at 46% 34%,#3a2c19 0%,#2c2113 46%,transparent 74%),
+    radial-gradient(70% 58% at 50% 50%,#241a10 0%,#1a130b 58%,#120c06 100%);
 }
-/* a soft floor the cards stand on */
+
+/* --- scorch: the burn creeping in from every edge --- */
 .hall:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    /* charred corners, deepest bite */
+    radial-gradient(46% 40% at 0% 0%,rgba(28,12,3,.94),rgba(58,26,8,.5) 48%,transparent 76%),
+    radial-gradient(46% 40% at 100% 0%,rgba(24,10,2,.92),rgba(52,23,7,.46) 48%,transparent 76%),
+    radial-gradient(50% 44% at 0% 100%,rgba(26,11,3,.94),rgba(56,25,8,.48) 48%,transparent 78%),
+    radial-gradient(50% 44% at 100% 100%,rgba(22,9,2,.9),rgba(50,22,6,.44) 48%,transparent 76%),
+    /* the singed band that runs around the whole sheet */
+    radial-gradient(112% 92% at 50% 50%,transparent 40%,rgba(120,58,18,.30) 66%,
+      rgba(74,32,9,.62) 80%,rgba(26,11,3,.92) 100%);
+}
+
+/* --- tonal foxing and heat blooms in the paper itself --- */
+.hall:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='900'><filter id='fox'><feTurbulence type='fractalNoise' baseFrequency='.0028' numOctaves='5' seed='23'/><feColorMatrix type='matrix' values='0 0 0 0 .50  0 0 0 0 .32  0 0 0 0 .12  0 0 0 .40 0'/></filter><rect width='900' height='900' filter='url(%23fox)'/></svg>");
+  background-size:cover}
+
+/* --- the paper tooth, kept very light --- */
+.hall .tooth{position:absolute;inset:0;pointer-events:none;z-index:0;
   background-image:var(--tooth-coarse);background-size:340px;opacity:.05;mix-blend-mode:screen}
+
+/* --- a torn, blackened edge around the sheet --- */
+.hall .edge{position:absolute;inset:0;pointer-events:none;z-index:2;
+  box-shadow:
+    inset 0 0 60px rgba(24,10,2,.85),
+    inset 0 0 160px rgba(38,17,4,.6),
+    inset 0 2px 0 rgba(214,152,74,.10);}
+.hall .edge:before{content:"";position:absolute;inset:0;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='t'><feTurbulence type='fractalNoise' baseFrequency='.02' numOctaves='4' seed='5'/><feDisplacementMap in='SourceGraphic' scale='26'/></filter><rect x='6' y='6' width='588' height='588' rx='4' fill='none' stroke='rgba(30,13,3,.85)' stroke-width='12' filter='url(%23t)'/></svg>");
+  background-size:100% 100%;opacity:.7}
+
+/* --- faint ember glow along the burnt border --- */
+.hall .ember{position:absolute;inset:0;pointer-events:none;z-index:2;mix-blend-mode:screen;opacity:.34;
+  background:
+    radial-gradient(110% 90% at 50% 50%,transparent 62%,rgba(196,104,32,.34) 84%,rgba(120,48,10,.18) 96%,transparent 100%);
+  animation:emberBreath 7s ease-in-out infinite}
+@keyframes emberBreath{0%,100%{opacity:.28}50%{opacity:.42}}
+body.reduced .hall .ember{animation:none}
+
 .hall>*{position:relative;z-index:1}
-.stage-floor{position:absolute;left:0;right:0;bottom:0;height:38%;pointer-events:none;
-  background:linear-gradient(180deg,transparent,rgba(0,0,0,.55));}
+.stage-floor{position:absolute;left:0;right:0;bottom:0;height:40%;pointer-events:none;z-index:0;
+  background:linear-gradient(180deg,transparent,rgba(30,14,4,.5) 55%,rgba(14,6,1,.78));}
 
 /* ---------- CORNERS ---------- */
 .c-tl{position:absolute;top:26px;left:34px;z-index:30;display:flex;align-items:center;gap:14px}
@@ -2071,6 +2110,9 @@ function buildHall(){
   const xpPct=Math.min(1,P.xp/P.xpMax);
 
   r.innerHTML=`
+  <div class="tooth"></div>
+  <div class="edge"></div>
+  <div class="ember"></div>
   <div class="stage-floor"></div>
 
   <div class="c-tl">
