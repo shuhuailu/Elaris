@@ -82,9 +82,9 @@ body.loading #vig{opacity:.42}
 
 /* --- reusable paper tooth, three scales --- */
 :root{
-  --tooth-fine:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='t'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .70  0 0 0 0 .60  0 0 0 0 .44  0 0 0 .55 0'/></filter><rect width='120' height='120' filter='url(%23t)'/></svg>");
-  --tooth-mid:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='t'><feTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .68  0 0 0 0 .57  0 0 0 0 .40  0 0 0 .6 0'/></filter><rect width='200' height='200' filter='url(%23t)'/></svg>");
-  --tooth-coarse:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='340' height='340'><filter id='t'><feTurbulence type='fractalNoise' baseFrequency='.3' numOctaves='5' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .62  0 0 0 0 .52  0 0 0 0 .36  0 0 0 .55 0'/></filter><rect width='340' height='340' filter='url(%23t)'/></svg>");
+  --tooth-fine:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='t'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .70  0 0 0 0 .60  0 0 0 0 .44  0 0 0 .34 0'/></filter><rect width='120' height='120' filter='url(%23t)'/></svg>");
+  --tooth-mid:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='t'><feTurbulence type='fractalNoise' baseFrequency='.62' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .68  0 0 0 0 .57  0 0 0 0 .40  0 0 0 .34 0'/></filter><rect width='200' height='200' filter='url(%23t)'/></svg>");
+  --tooth-coarse:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='340' height='340'><filter id='t'><feTurbulence type='fractalNoise' baseFrequency='.3' numOctaves='5' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .62  0 0 0 0 .52  0 0 0 0 .36  0 0 0 .3 0'/></filter><rect width='340' height='340' filter='url(%23t)'/></svg>");
   --laid:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='l'><feTurbulence type='fractalNoise' baseFrequency='.012 .8' numOctaves='3'/><feColorMatrix type='matrix' values='0 0 0 0 .74  0 0 0 0 .62  0 0 0 0 .44  0 0 0 .34 0'/></filter><rect width='300' height='300' filter='url(%23l)'/></svg>");
 }
 
@@ -126,13 +126,13 @@ body.loading #vig{opacity:.42}
     radial-gradient(70% 55% at 24% 16%,rgba(150,108,52,.5),transparent 64%),
     radial-gradient(60% 55% at 84% 82%,rgba(70,46,20,.4),transparent 66%)}
 /* dust hanging in the room — sparse, drifting, clearly in front */
-#speck{position:fixed;inset:0;pointer-events:none;z-index:960;opacity:.5;mix-blend-mode:screen;
+#speck{position:fixed;inset:0;pointer-events:none;z-index:960;opacity:.22;mix-blend-mode:screen;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='520' height='520'><g fill='%23e8d3a8'><circle cx='48' cy='82' r='1.1' opacity='.7'/><circle cx='260' cy='41' r='.8' opacity='.5'/><circle cx='424' cy='138' r='1.3' opacity='.6'/><circle cx='112' cy='236' r='.9' opacity='.55'/><circle cx='338' cy='300' r='1' opacity='.6'/><circle cx='190' cy='398' r='1.2' opacity='.5'/><circle cx='476' cy='432' r='.9' opacity='.55'/><circle cx='68' cy='464' r='1' opacity='.45'/></g></svg>");
   background-size:520px 520px;animation:speckDrift 16s steps(5) infinite}
 @keyframes speckDrift{0%{transform:translate(0,0)}25%{transform:translate(-10px,7px)}
   50%{transform:translate(6px,-8px)}75%{transform:translate(9px,5px)}100%{transform:translate(0,0)}}
 /* a very light air grain so the empty room is not sterile */
-#grain{position:fixed;inset:0;pointer-events:none;z-index:961;opacity:.16;mix-blend-mode:screen;
+#grain{position:fixed;inset:0;pointer-events:none;z-index:961;opacity:.06;mix-blend-mode:screen;
   background-image:var(--tooth-fine);background-size:120px;animation:gr .8s steps(4) infinite}
 /* these two are retired as global sheets — the texture moved into surfaces */
 #fibre,#blotch{display:none}
@@ -433,7 +433,7 @@ body.reduced #ground video{display:none}
     0 8px 14px rgba(0,0,0,.5),0 34px 66px -18px rgba(0,0,0,.85)}
 .e-panel:before{content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;z-index:0;
   background-image:var(--laid),var(--tooth-fine);background-size:300px,120px;
-  opacity:.5;mix-blend-mode:screen}
+  opacity:.20;mix-blend-mode:screen}
 .e-panel>*{position:relative;z-index:1}
 .e-crest{width:56px;height:56px;margin:0 auto 18px;color:var(--gold);opacity:.95}
 .e-title{font-family:var(--ui);font-size:21px;font-weight:700;color:#F2E4C8;letter-spacing:-.01em}
@@ -516,7 +516,7 @@ body.reduced #ground video{display:none}
     0 3px 6px rgba(0,0,0,.45),0 14px 26px -10px rgba(0,0,0,.7);
   transition:transform .2s ease-out,border-color .2s ease-out,box-shadow .2s ease-out,opacity .5s}
 .pick:before{content:"";position:absolute;inset:0;border-radius:9px;pointer-events:none;z-index:0;
-  background-image:var(--tooth-mid);background-size:200px;opacity:.36;mix-blend-mode:screen}
+  background-image:var(--tooth-mid);background-size:200px;opacity:.16;mix-blend-mode:screen}
 .pick>*{position:relative;z-index:1}
 .pick:hover{transform:translateY(-6px);border-color:var(--pc,var(--cyan));
   box-shadow:0 20px 40px -18px #000,0 0 28px -6px var(--pc,rgba(217,164,65,.5))}
@@ -561,7 +561,7 @@ body.reduced #ground video{display:none}
 }
 /* a soft floor the cards stand on */
 .hall:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-  background-image:var(--tooth-coarse);background-size:340px;opacity:.15;mix-blend-mode:screen}
+  background-image:var(--tooth-coarse);background-size:340px;opacity:.05;mix-blend-mode:screen}
 .hall>*{position:relative;z-index:1}
 .stage-floor{position:absolute;left:0;right:0;bottom:0;height:38%;pointer-events:none;
   background:linear-gradient(180deg,transparent,rgba(0,0,0,.55));}
@@ -643,7 +643,7 @@ body.reduced #ground video{display:none}
   box-shadow:inset 0 1px 0 rgba(244,220,172,.1),inset 0 -1px 0 rgba(0,0,0,.5),
     0 3px 6px rgba(0,0,0,.42),0 16px 30px -12px rgba(0,0,0,.68)}
 .c-stats:before{content:"";position:absolute;inset:0;border-radius:9px;pointer-events:none;z-index:0;
-  background-image:var(--tooth-mid);background-size:200px;opacity:.34;mix-blend-mode:screen}
+  background-image:var(--tooth-mid);background-size:200px;opacity:.15;mix-blend-mode:screen}
 .c-stats>*{position:relative;z-index:1}
 .c-stat{padding:0 26px;text-align:center;border-right:1px solid rgba(240,214,164,.1)}
 .c-stat:last-child{border-right:0}
@@ -662,7 +662,7 @@ body.reduced #ground video{display:none}
     0 2px 3px rgba(0,0,0,.45),0 6px 12px -6px rgba(0,0,0,.6);
   transition:.2s ease-out}
 .c-act:before{content:"";position:absolute;inset:0;border-radius:7px;pointer-events:none;z-index:0;
-  background-image:var(--tooth-fine);background-size:120px;opacity:.34;mix-blend-mode:screen}
+  background-image:var(--tooth-fine);background-size:120px;opacity:.14;mix-blend-mode:screen}
 .c-act>*{position:relative;z-index:1}
 .c-act:hover{transform:translateX(3px) translateY(-1px);border-color:rgba(240,214,164,.3);
   box-shadow:inset 0 1px 0 rgba(244,220,172,.2),inset 0 -1px 0 rgba(0,0,0,.5),
@@ -683,7 +683,7 @@ body.reduced #ground video{display:none}
   box-shadow:inset 0 1px 0 rgba(255,248,232,.5),inset 0 -2px 0 rgba(0,0,0,.3),
     0 3px 5px rgba(0,0,0,.5),0 12px 30px -12px var(--stage-solid,#5E7E8C)}
 .c-play:before{content:"";position:absolute;inset:0;border-radius:7px;pointer-events:none;z-index:0;
-  background-image:var(--tooth-fine);background-size:120px;opacity:.3;mix-blend-mode:multiply}
+  background-image:var(--tooth-fine);background-size:120px;opacity:.14;mix-blend-mode:multiply}
 .c-play:hover{transform:translateY(-2px);filter:brightness(1.08);
   box-shadow:inset 0 1px 0 rgba(255,248,232,.6),inset 0 -2px 0 rgba(0,0,0,.3),
     0 6px 9px rgba(0,0,0,.5),0 20px 40px -12px var(--stage-solid,#5E7E8C)}
@@ -701,7 +701,7 @@ body.reduced #ground video{display:none}
   box-shadow:inset 0 1px 0 rgba(244,220,172,.1),inset 0 -1px 0 rgba(0,0,0,.45),
     0 2px 4px rgba(0,0,0,.4),0 8px 16px -8px rgba(0,0,0,.6)}
 .c-br .deck:before{content:"";position:absolute;inset:0;border-radius:7px;pointer-events:none;z-index:0;
-  background-image:var(--tooth-fine);background-size:120px;opacity:.3;mix-blend-mode:screen}
+  background-image:var(--tooth-fine);background-size:120px;opacity:.13;mix-blend-mode:screen}
 .c-br .deck:hover{border-color:rgba(240,214,164,.3);color:#F2E4C8}
 .c-br .deck b{color:#F2E4C8;font-weight:700}
 
