@@ -1157,6 +1157,480 @@ details.deep .b{padding-top:14px;font-size:14.5px;line-height:1.75;color:var(--i
   .fp-grid{grid-template-columns:repeat(3,1fr)}
   .istage{grid-template-columns:1fr;padding:0 6vw;overflow:auto}
 }
+
+/* ============================================================
+   SANCTUM PAGES — one shared chrome for every secondary hall
+   Stone, blackened metal, aged gold. No neon anywhere.
+   ============================================================ */
+.pg{position:absolute;inset:0;overflow:hidden;
+  --pg-gold:#D9A441; --pg-hi:#F0D79B; --pg-lo:#8a6446; --pg-ember:#B5762E;
+  --pg-ink:rgba(228,213,183,.86); --pg-ink2:rgba(216,197,160,.5); --pg-ink3:rgba(210,190,150,.28);
+  font-family:var(--lore)}
+
+/* ---- the room: dark brick, stone floor, haze ---- */
+.pg-room{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(120% 78% at 50% 6%,rgba(84,62,32,.20),transparent 58%),
+    radial-gradient(70% 46% at 50% 96%,rgba(58,42,22,.30),transparent 72%),
+    linear-gradient(180deg,#0b0908 0%,#0e0b09 38%,#080706 72%,#050404 100%)}
+.pg-room:before{content:"";position:absolute;inset:0;opacity:.5;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(0,0,0,.55) 0 1px,transparent 1px 34px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.42) 0 1px,transparent 1px 78px);
+  -webkit-mask:linear-gradient(180deg,#000 0 58%,transparent 88%);
+  mask:linear-gradient(180deg,#000 0 58%,transparent 88%)}
+.pg-room:after{content:"";position:absolute;inset:0;opacity:.16;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='linear' slope='.55'/></feComponentTransfer></filter><rect width='180' height='180' filter='url(%23n)'/></svg>")}
+/* stone floor line */
+.pg-floor{position:absolute;left:0;right:0;bottom:0;height:34%;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(24,18,12,.5) 40%,rgba(6,5,4,.9));
+  border-top:1px solid rgba(196,158,90,.06)}
+
+/* ---- volumetric god-rays ---- */
+.pg-ray{position:absolute;top:-22%;z-index:1;pointer-events:none;width:26vw;height:150%;
+  transform-origin:50% 0;filter:blur(22px);mix-blend-mode:screen;opacity:.5;
+  background:linear-gradient(180deg,rgba(226,184,104,.30),rgba(196,150,70,.10) 46%,transparent 78%);
+  -webkit-mask:linear-gradient(180deg,#000,transparent 82%);mask:linear-gradient(180deg,#000,transparent 82%);
+  animation:pgRay 15s ease-in-out infinite}
+.pg-ray.a{left:14%;transform:rotate(11deg)}
+.pg-ray.b{left:44%;transform:rotate(-5deg);animation-delay:-6s;opacity:.4}
+.pg-ray.c{right:12%;transform:rotate(-13deg);animation-delay:-11s;opacity:.34}
+@keyframes pgRay{0%,100%{opacity:.28}50%{opacity:.6}}
+body.reduced .pg-ray{animation:none}
+.pg-dust{position:absolute;width:2px;height:2px;border-radius:50%;z-index:2;pointer-events:none;
+  background:rgba(246,224,168,.85);box-shadow:0 0 6px rgba(226,184,104,.7);
+  animation:pgDrift 22s linear infinite}
+@keyframes pgDrift{0%{transform:translate3d(0,10px,0);opacity:0}
+  12%{opacity:.85}88%{opacity:.6}100%{transform:translate3d(26px,-150px,0);opacity:0}}
+body.reduced .pg-dust{animation:none;opacity:.4}
+
+/* ---- head ---- */
+.pg-head{position:absolute;top:0;left:0;right:0;z-index:20;padding:22px 26px 0;
+  display:flex;align-items:flex-start;gap:18px;pointer-events:none}
+.pg-head > *{pointer-events:auto}
+.pg-titlewrap{position:absolute;left:50%;top:20px;transform:translateX(-50%);text-align:center}
+.pg-title{font-family:var(--lore);font-size:clamp(20px,2.5vw,34px);letter-spacing:.42em;
+  text-indent:.42em;font-weight:400;
+  color:#e6d3a7;
+  text-shadow:0 1px 0 rgba(255,238,196,.16),0 -1px 0 rgba(0,0,0,.9),
+    0 0 24px rgba(214,166,80,.34),0 6px 18px rgba(0,0,0,.9)}
+.pg-rule{width:min(46vw,520px);height:14px;margin:8px auto 0;position:relative}
+.pg-rule:before{content:"";position:absolute;left:0;right:0;top:6px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(214,170,90,.55),transparent)}
+.pg-rule:after{content:"";position:absolute;left:50%;top:2px;width:9px;height:9px;margin-left:-4.5px;
+  transform:rotate(45deg);border:1px solid rgba(226,184,104,.8);background:rgba(20,15,8,.9);
+  box-shadow:0 0 12px rgba(214,170,90,.6)}
+.pg-sub{margin-top:8px;font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.34em;
+  text-transform:uppercase;color:rgba(206,178,124,.42)}
+
+/* ---- return button (engraved metal) ---- */
+.pg-back{margin-left:auto;position:relative;padding:10px 20px;border-radius:2px;
+  font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(214,186,132,.72);
+  background:linear-gradient(180deg,#221b12,#14100a 62%,#0c0906);
+  border:1px solid rgba(150,116,58,.5);
+  box-shadow:inset 0 1px 0 rgba(240,214,155,.18),inset 0 -2px 4px rgba(0,0,0,.7),0 8px 18px -10px #000;
+  transition:.5s var(--ez)}
+.pg-back:hover{color:#f4e3bb;border-color:rgba(226,184,104,.9);
+  box-shadow:inset 0 1px 0 rgba(240,214,155,.3),0 0 22px -4px rgba(214,170,90,.7)}
+
+/* ---- body grid: pillar | stage | panel ---- */
+.pg-body{position:absolute;inset:0;z-index:10;display:grid;
+  grid-template-columns:186px minmax(0,1fr) 0;
+  padding:112px 26px 92px;gap:22px;transition:grid-template-columns .8s var(--ez)}
+.pg.panel-open .pg-body{grid-template-columns:186px minmax(0,1fr) clamp(300px,25vw,368px)}
+
+/* ---- LEFT: one tall stone pillar, segmented into categories ---- */
+.pg-pillar{position:relative;display:flex;flex-direction:column;min-height:0}
+.pg-cap,.pg-base{flex:0 0 auto;height:22px;position:relative;
+  background:linear-gradient(180deg,#3a3129,#231c15 52%,#151009);
+  border:1px solid rgba(150,116,58,.34);
+  box-shadow:inset 0 1px 0 rgba(240,214,155,.2),0 10px 22px -14px #000}
+.pg-cap{border-radius:3px 3px 0 0;margin:0 -9px}
+.pg-base{border-radius:0 0 3px 3px;margin:0 -13px;height:26px}
+.pg-cap:after,.pg-base:after{content:"";position:absolute;inset:4px 8px;
+  border-top:1px solid rgba(226,184,104,.16);border-bottom:1px solid rgba(0,0,0,.55)}
+.pg-shaft{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.6),transparent 22%,transparent 76%,rgba(0,0,0,.62)),
+    linear-gradient(180deg,#241d16,#191410 40%,#120e0a);
+  border-left:1px solid rgba(150,116,58,.26);border-right:1px solid rgba(0,0,0,.7);
+  box-shadow:inset 0 0 40px rgba(0,0,0,.8)}
+.pg-shaft::-webkit-scrollbar{width:0}
+.pgf{position:relative;display:flex;align-items:center;gap:11px;padding:15px 13px;
+  border-bottom:1px solid rgba(0,0,0,.6);text-align:left;transition:.55s var(--ez)}
+.pgf:after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(226,184,104,.07)}
+.pgf .rune{flex:0 0 auto;width:22px;height:22px;display:grid;place-items:center;
+  color:rgba(200,164,104,.5);transition:.55s var(--ez);filter:drop-shadow(0 0 0 transparent)}
+.pgf .lb{font-family:var(--ui);font-size:9.5px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(206,180,130,.5);transition:.55s var(--ez)}
+.pgf .ct{margin-left:auto;font-family:var(--ui);font-size:9px;color:rgba(206,180,130,.24)}
+.pgf:hover{background:linear-gradient(90deg,rgba(160,112,40,.16),transparent)}
+.pgf:hover .lb,.pgf:hover .rune{color:rgba(238,214,164,.9)}
+.pgf.on{background:linear-gradient(90deg,rgba(176,124,44,.28),rgba(120,84,28,.05) 70%)}
+.pgf.on .lb{color:#f6e6bd;text-shadow:0 0 14px rgba(226,184,104,.6)}
+.pgf.on .rune{color:#f2d99b;filter:drop-shadow(0 0 8px rgba(226,184,104,.85))}
+.pgf.on:before{content:"";position:absolute;left:0;top:8%;bottom:8%;width:2px;
+  background:linear-gradient(180deg,transparent,var(--pg-gold),transparent);
+  box-shadow:0 0 12px rgba(226,184,104,.9)}
+
+/* ---- CENTRE: the stage and its marble platform ---- */
+.pg-stage{position:relative;min-width:0;display:flex;flex-direction:column}
+.pg-plat{position:absolute;left:50%;bottom:-4%;transform:translateX(-50%);
+  width:min(96%,860px);aspect-ratio:2.55/1;border-radius:50%;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(closest-side,rgba(30,24,17,.92),rgba(12,9,7,.96) 66%,rgba(4,3,3,.4)),
+    radial-gradient(closest-side at 50% 30%,rgba(120,92,44,.16),transparent 70%);
+  box-shadow:0 0 90px -20px rgba(180,132,54,.24),inset 0 0 60px rgba(0,0,0,.9);
+  border:1px solid rgba(196,150,70,.22)}
+.pg-plat:before,.pg-plat:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.pg-plat:before{inset:8% 5%;border:1px solid rgba(214,170,90,.26);
+  box-shadow:0 0 26px -6px rgba(214,170,90,.36),inset 0 0 22px -6px rgba(214,170,90,.22);
+  animation:pgRing 7s ease-in-out infinite}
+.pg-plat:after{inset:20% 12%;border:1px solid rgba(196,142,66,.14)}
+@keyframes pgRing{0%,100%{opacity:.55}50%{opacity:1}}
+body.reduced .pg-plat:before{animation:none}
+.pg-scroll{position:relative;z-index:2;flex:1;min-height:0;overflow:auto;padding:6px 8px 26px;
+  scrollbar-width:thin;scrollbar-color:rgba(150,116,58,.4) transparent}
+.pg-scroll::-webkit-scrollbar{width:6px}
+.pg-scroll::-webkit-scrollbar-thumb{background:rgba(150,116,58,.35);border-radius:3px}
+
+/* ---- RIGHT: engraved stone detail panel that slides in ---- */
+.pg-panel{position:relative;min-width:0;overflow:hidden;
+  opacity:0;transform:translateX(40px);pointer-events:none;transition:.85s var(--ez)}
+.pg.panel-open .pg-panel{opacity:1;transform:none;pointer-events:auto}
+.pg-slab{position:relative;height:100%;display:flex;flex-direction:column;border-radius:3px;
+  background:
+    linear-gradient(180deg,rgba(38,31,23,.96),rgba(20,16,12,.97) 44%,rgba(10,8,6,.98)),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 3px,transparent 3px 7px);
+  border:1px solid rgba(150,116,58,.42);
+  box-shadow:inset 0 1px 0 rgba(240,214,155,.16),inset 0 -2px 8px rgba(0,0,0,.8),
+    0 26px 50px -26px #000,0 0 40px -22px rgba(214,170,90,.5)}
+.pg-slab:before{content:"";position:absolute;inset:6px;border:1px solid rgba(226,184,104,.14);
+  border-radius:2px;pointer-events:none}
+.pg-slab:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:3px;
+  background:
+    radial-gradient(circle at 12px 12px,rgba(240,214,155,.42) 0 1.6px,transparent 2px),
+    radial-gradient(circle at calc(100% - 12px) 12px,rgba(240,214,155,.42) 0 1.6px,transparent 2px),
+    radial-gradient(circle at 12px calc(100% - 12px),rgba(240,214,155,.32) 0 1.6px,transparent 2px),
+    radial-gradient(circle at calc(100% - 12px) calc(100% - 12px),rgba(240,214,155,.32) 0 1.6px,transparent 2px)}
+.pg-slab-in{position:relative;z-index:2;flex:1;min-height:0;overflow:auto;padding:22px 20px 18px;
+  scrollbar-width:thin;scrollbar-color:rgba(150,116,58,.4) transparent}
+.pg-slab-in::-webkit-scrollbar{width:5px}
+.pg-slab-in::-webkit-scrollbar-thumb{background:rgba(150,116,58,.35)}
+.pg-pk{font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.3em;
+  text-transform:uppercase;color:rgba(206,178,124,.4)}
+.pg-pt{font-family:var(--lore);font-size:23px;letter-spacing:.05em;color:#eddcb4;margin-top:7px;line-height:1.15;
+  text-shadow:0 0 18px rgba(214,170,90,.28)}
+.pg-pd{font-size:13.5px;line-height:1.62;color:var(--pg-ink2);margin-top:9px}
+.pg-close{position:absolute;top:10px;right:12px;z-index:5;width:24px;height:24px;border-radius:2px;
+  display:grid;place-items:center;color:rgba(206,178,124,.45);
+  border:1px solid rgba(150,116,58,.3);background:rgba(10,8,6,.7);transition:.4s}
+.pg-close:hover{color:#f2dcaa;border-color:rgba(226,184,104,.8)}
+.pg-line{height:1px;margin:16px 0;background:linear-gradient(90deg,rgba(214,170,90,.34),transparent)}
+
+/* engraved stat rows */
+.pg-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.pg-stat{padding:10px 11px;border-radius:2px;
+  background:linear-gradient(180deg,rgba(30,24,17,.9),rgba(12,10,7,.9));
+  border:1px solid rgba(150,116,58,.24);box-shadow:inset 0 1px 0 rgba(240,214,155,.1)}
+.pg-stat .k{font-family:var(--ui);font-size:8px;font-weight:700;letter-spacing:.24em;
+  text-transform:uppercase;color:rgba(206,178,124,.36)}
+.pg-stat .v{font-family:var(--ui);font-variant-numeric:tabular-nums;font-size:19px;margin-top:4px;color:#ecd9ae}
+.pg-ab{margin-top:11px;padding:11px 13px;border-radius:2px;
+  background:linear-gradient(180deg,rgba(44,33,17,.5),rgba(14,11,8,.6));
+  border-left:2px solid rgba(214,170,90,.55)}
+.pg-ab b{display:block;font-family:var(--lore);font-size:14.5px;color:#e9d5a6;letter-spacing:.03em}
+.pg-ab span{display:block;margin-top:5px;font-size:12.8px;line-height:1.55;color:var(--pg-ink2)}
+.pg-lore{margin-top:14px;font-style:italic;font-size:13.5px;line-height:1.65;color:rgba(210,190,150,.42)}
+
+/* ---- FOOT: stone buttons, the ENTER DUEL family in gold ---- */
+.pg-foot{position:absolute;left:0;right:0;bottom:0;z-index:24;padding:0 26px 20px;
+  display:flex;justify-content:center;align-items:center;gap:16px;pointer-events:none}
+.pg-foot > *{pointer-events:auto}
+.pg-btn{position:relative;padding:12px 34px;border-radius:2px;
+  background:linear-gradient(180deg,#2a2116,#181209 58%,#0d0a06);
+  border:1px solid rgba(178,136,62,.7);
+  box-shadow:inset 0 1px 0 rgba(240,214,155,.24),inset 0 -3px 8px rgba(0,0,0,.75),
+    0 14px 28px -16px #000,0 0 24px -12px rgba(214,170,90,.7);
+  transition:.55s var(--ez)}
+.pg-btn:before{content:"";position:absolute;inset:4px;border-radius:1px;pointer-events:none;
+  border:1px solid rgba(226,184,104,.2)}
+.pg-btn .w{position:relative;z-index:2;font-family:var(--lore);font-size:14px;letter-spacing:.3em;
+  text-indent:.3em;color:#e8d5a8;text-shadow:0 1px 0 rgba(0,0,0,.9),0 0 16px rgba(214,170,90,.4)}
+.pg-btn .s{position:relative;z-index:2;margin-top:4px;font-family:var(--ui);font-size:7.5px;
+  font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(206,178,124,.4)}
+.pg-btn:hover{transform:translateY(-2px);border-color:rgba(240,206,126,.95);
+  box-shadow:inset 0 1px 0 rgba(255,236,186,.34),0 0 40px -8px rgba(226,184,104,.8),0 18px 32px -18px #000}
+.pg-btn:hover .w{color:#fdf0cf}
+.pg-btn:active{transform:translateY(1px)}
+.pg-btn.lg{padding:15px 58px}
+.pg-btn.lg .w{font-size:17px}
+.pg-btn[disabled]{opacity:.4;pointer-events:none}
+.pg-btn.ghost{background:linear-gradient(180deg,#1b1610,#100c08);border-color:rgba(150,116,58,.4)}
+.pg-btn.ghost .w{font-size:12px;color:rgba(214,186,132,.72)}
+.pg-spark{position:absolute;width:3px;height:3px;border-radius:50%;background:#ffe6b0;
+  opacity:0;pointer-events:none;box-shadow:0 0 8px #e8bd6e}
+.pg-btn:hover .pg-spark{animation:pgSpark 1.2s ease-out infinite}
+@keyframes pgSpark{0%{opacity:0;transform:translate(0,0) scale(.5)}
+  25%{opacity:.95}100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(.2)}}
+body.reduced .pg-btn:hover .pg-spark{animation:none}
+
+/* ============================================================
+   VINTAGE CARD — the dashboard frame, reusable at any size
+   ============================================================ */
+.vc{position:relative;cursor:pointer;transition:transform .6s var(--ez),filter .6s var(--ez)}
+.vc:hover{transform:translateY(-7px)}
+.vc-frame{position:relative;border-radius:4px;padding:4px 4px 0;
+  background:linear-gradient(180deg,#2b2418,#171208 62%,#0d0a05),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.22) 0 2px,transparent 2px 5px);
+  border:1px solid var(--cc,rgba(206,158,78,.7));
+  box-shadow:0 0 12px -4px var(--cc,rgba(206,158,78,.5)),0 16px 26px -14px #000,
+    inset 0 1px 0 rgba(246,222,168,.22),inset 0 -1px 0 rgba(0,0,0,.6);
+  transition:.6s var(--ez)}
+.vc:hover .vc-frame{border-color:rgba(246,222,168,.95);
+  box-shadow:0 0 28px -4px var(--cc,rgba(214,170,90,.8)),0 22px 36px -16px #000,
+    inset 0 1px 0 rgba(255,246,214,.4)}
+.vc.sel .vc-frame{border-color:rgba(250,228,176,1);
+  box-shadow:0 0 34px -2px rgba(226,184,104,.9),0 0 76px -20px rgba(214,170,90,.6),
+    0 22px 38px -14px #000,inset 0 1px 0 rgba(255,246,214,.5)}
+.vc-frame:before{content:"";position:absolute;inset:2px;border-radius:3px;pointer-events:none;z-index:3;
+  border:1px solid rgba(246,222,168,.13)}
+.vc-frame:after{content:"";position:absolute;inset:-1px;border-radius:5px;pointer-events:none;z-index:4;
+  background:
+    radial-gradient(circle at 4px 4px,rgba(246,222,168,.5) 0 1.3px,transparent 1.6px),
+    radial-gradient(circle at calc(100% - 4px) 4px,rgba(246,222,168,.5) 0 1.3px,transparent 1.6px),
+    radial-gradient(circle at 4px calc(100% - 4px),rgba(246,222,168,.4) 0 1.3px,transparent 1.6px),
+    radial-gradient(circle at calc(100% - 4px) calc(100% - 4px),rgba(246,222,168,.4) 0 1.3px,transparent 1.6px)}
+.vc-art{position:relative;aspect-ratio:5/7;border-radius:2px;overflow:hidden;background:#0a0803}
+.vc-art img{width:100%;height:100%;object-fit:cover;display:block}
+.vc-art:after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 54%,rgba(10,7,3,.84)),
+    radial-gradient(72% 50% at 50% 84%,var(--cg,rgba(214,170,90,.3)),transparent 72%);
+  mix-blend-mode:screen}
+.vc-plate{margin:0 -4px;padding:5px 4px 6px;text-align:center;position:relative;
+  background:linear-gradient(180deg,#cdbb95,#a2906c 58%,#7d6d4e);
+  border-top:1px solid rgba(246,222,168,.4);
+  box-shadow:inset 0 1px 0 rgba(255,244,214,.5),inset 0 -3px 6px rgba(60,44,20,.4)}
+.vc-plate:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.3;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='90' height='90' filter='url(%23p)'/></svg>")}
+.vc-plate .n{position:relative;font-family:var(--lore);font-size:9.5px;letter-spacing:.06em;
+  color:#2a1f0c;line-height:1.12;text-shadow:0 1px 0 rgba(255,246,220,.55)}
+.vc-plate .t{position:relative;font-family:var(--ui);font-size:6.5px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(58,42,16,.72);margin-top:2px}
+.vc-cost{position:absolute;top:7px;left:7px;z-index:6;width:19px;height:19px;border-radius:50%;
+  display:grid;place-items:center;font-family:var(--ui);font-size:10px;font-weight:700;color:#f5e5bd;
+  background:radial-gradient(circle at 34% 30%,#3a2c15,#120d06);
+  border:1px solid rgba(226,184,104,.75);box-shadow:0 0 10px -2px rgba(214,170,90,.8),inset 0 1px 0 rgba(255,238,190,.3)}
+.vc-own{position:absolute;top:7px;right:7px;z-index:6;padding:2px 6px;border-radius:2px;
+  font-family:var(--ui);font-size:8px;font-weight:700;letter-spacing:.1em;color:rgba(244,228,190,.9);
+  background:rgba(8,6,4,.82);border:1px solid rgba(196,158,90,.42)}
+.vc-fav{position:absolute;bottom:26px;right:7px;z-index:6;color:#f0cf85;
+  filter:drop-shadow(0 0 6px rgba(226,184,104,.9))}
+.vc.locked{filter:brightness(.4) saturate(.25)}
+.vc.locked:hover{filter:brightness(.6) saturate(.4)}
+.vc-pool{position:absolute;left:50%;top:100%;transform:translateX(-50%);width:140%;height:18px;
+  pointer-events:none;filter:blur(8px);opacity:.3;
+  background:radial-gradient(closest-side,var(--cc,rgba(214,170,90,.7)),transparent 72%)}
+
+/* the collection grid, laid on the platform */
+.pg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));
+  gap:26px 20px;padding:10px 4px 30px}
+.pg-groupline{display:flex;align-items:center;gap:14px;margin:18px 0 14px}
+.pg-groupline .k{font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.3em;
+  text-transform:uppercase;color:rgba(206,178,124,.5)}
+.pg-groupline .ln{flex:1;height:1px;background:linear-gradient(90deg,rgba(214,170,90,.28),transparent)}
+.pg-groupline .n{font-family:var(--ui);font-size:8.5px;letter-spacing:.2em;color:rgba(206,178,124,.26)}
+.pg-empty{padding:60px 20px;text-align:center;font-style:italic;color:rgba(210,190,150,.3)}
+
+/* ============================================================
+   FORGE
+   ============================================================ */
+.pg-forge{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.pg-anvil{position:relative;width:min(46%,300px);margin-bottom:2%;filter:drop-shadow(0 24px 34px rgba(0,0,0,.9))}
+.pg-anvil svg{width:100%;height:auto;display:block}
+.pg-heat{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);width:70%;height:56%;
+  pointer-events:none;filter:blur(26px);mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(226,132,42,.75),rgba(168,84,24,.28) 55%,transparent 75%);
+  animation:pgHeat 3.4s ease-in-out infinite}
+@keyframes pgHeat{0%,100%{opacity:.55;transform:translateX(-50%) scale(1)}
+  50%{opacity:.95;transform:translateX(-50%) scale(1.08)}}
+body.reduced .pg-heat{animation:none}
+.pg-ember{position:absolute;width:3px;height:3px;border-radius:50%;pointer-events:none;z-index:6;
+  background:#ffb454;box-shadow:0 0 8px #e8842a,0 0 16px rgba(226,132,42,.6);
+  animation:pgEmber 4.6s ease-out infinite}
+@keyframes pgEmber{0%{transform:translate(0,0) scale(1);opacity:0}
+  10%{opacity:1}60%{opacity:.8}100%{transform:translate(var(--ex,10px),-230px) scale(.3);opacity:0}}
+body.reduced .pg-ember{animation:none;opacity:.35}
+.pg-orbit{position:absolute;inset:0;z-index:8}
+.pg-ware{position:absolute;width:clamp(96px,10vw,132px);transform:translate(-50%,-50%);
+  cursor:pointer;transition:transform .7s var(--ez),filter .7s var(--ez);
+  animation:pgFloat 7s ease-in-out infinite}
+@keyframes pgFloat{0%,100%{margin-top:0}50%{margin-top:-9px}}
+body.reduced .pg-ware{animation:none}
+.pg-ware:hover{filter:brightness(1.16)}
+.pg-ware.sel .vc-frame,.pg-ware:hover .vc-frame{border-color:rgba(250,228,176,.95)}
+.pg-chest{position:relative;border-radius:3px;padding:12px 10px 11px;text-align:center;
+  background:linear-gradient(180deg,#2c2418,#181207 60%,#0d0a05),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.2) 0 2px,transparent 2px 6px);
+  border:1px solid var(--cc,rgba(206,158,78,.7));
+  box-shadow:0 0 16px -5px var(--cc,rgba(206,158,78,.6)),0 18px 30px -16px #000,
+    inset 0 1px 0 rgba(246,222,168,.22)}
+.pg-chest .ic{height:52px;display:grid;place-items:center;color:#e6c485}
+.pg-chest .nm{margin-top:8px;font-family:var(--lore);font-size:12.5px;color:#e9d5a6;letter-spacing:.04em;line-height:1.2}
+.pg-chest .pr{margin-top:7px;display:flex;align-items:center;justify-content:center;gap:5px;
+  font-family:var(--ui);font-size:10.5px;font-weight:700;color:#f0d79b;letter-spacing:.08em}
+.pg-chest .pr i{width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#f3d089,#9d6c22);
+  box-shadow:0 0 7px rgba(226,184,104,.8)}
+
+/* ============================================================
+   LADDER TOWER
+   ============================================================ */
+.pg-tower{position:relative;height:100%;display:flex;flex-direction:column-reverse;
+  align-items:center;justify-content:flex-start;gap:9px;padding:24px 0 8px;overflow:auto}
+.pg-tab{position:relative;width:min(78%,520px);padding:12px 18px;display:flex;align-items:center;gap:14px;
+  border-radius:2px;cursor:pointer;transition:.6s var(--ez);
+  background:linear-gradient(180deg,rgba(34,27,19,.92),rgba(15,12,8,.94));
+  border:1px solid rgba(150,116,58,.28);
+  box-shadow:inset 0 1px 0 rgba(240,214,155,.12),0 12px 24px -18px #000}
+.pg-tab:nth-child(odd){width:min(72%,486px)}
+.pg-tab:hover{border-color:rgba(226,184,104,.7);transform:translateY(-2px)}
+.pg-tab.me{background:linear-gradient(180deg,rgba(88,62,22,.85),rgba(32,23,11,.95));
+  border-color:rgba(240,206,126,.9);
+  box-shadow:0 0 38px -8px rgba(226,184,104,.85),inset 0 1px 0 rgba(255,238,190,.35)}
+.pg-tab .rk{font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.22em;
+  color:rgba(206,178,124,.4);width:26px}
+.pg-tab .nm{flex:1;font-family:var(--lore);font-size:15px;color:#e6d3a7;letter-spacing:.05em}
+.pg-tab.me .nm{color:#fdf0cf;text-shadow:0 0 16px rgba(226,184,104,.8)}
+.pg-tab .sc{font-family:var(--ui);font-variant-numeric:tabular-nums;font-size:12px;color:rgba(226,196,140,.7)}
+.pg-tab .gl{width:22px;height:22px;opacity:.75;color:#e0bd7d}
+
+/* ============================================================
+   CONTRACTS
+   ============================================================ */
+.pg-tablets{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;padding:8px 4px 30px}
+.pg-q{position:relative;padding:16px 17px 15px;border-radius:2px;cursor:pointer;transition:.6s var(--ez);
+  background:linear-gradient(180deg,rgba(38,31,22,.94),rgba(16,13,9,.96)),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.16) 0 3px,transparent 3px 8px);
+  border:1px solid rgba(150,116,58,.3);
+  box-shadow:inset 0 1px 0 rgba(240,214,155,.14),0 18px 32px -22px #000}
+.pg-q:hover{transform:translateY(-3px);border-color:rgba(226,184,104,.75);
+  box-shadow:0 0 30px -12px rgba(226,184,104,.7),0 20px 34px -22px #000}
+.pg-q.sel{border-color:rgba(246,216,150,.95);box-shadow:0 0 34px -10px rgba(226,184,104,.85)}
+.pg-q .seal{position:absolute;top:-9px;right:14px;width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;font-size:11px;color:#2a1a09;
+  background:radial-gradient(circle at 34% 30%,#e0a94e,#8a5c1a);
+  border:1px solid rgba(255,232,176,.5);box-shadow:0 0 14px rgba(226,150,60,.7)}
+.pg-q .qk{font-family:var(--ui);font-size:7.5px;font-weight:700;letter-spacing:.28em;
+  text-transform:uppercase;color:rgba(206,178,124,.38)}
+.pg-q .qn{margin-top:7px;font-family:var(--lore);font-size:16px;color:#e9d5a6;line-height:1.24}
+.pg-q .qd{margin-top:6px;font-size:12.5px;line-height:1.5;color:rgba(210,190,150,.42);font-style:italic}
+.pg-bar{height:3px;margin-top:12px;background:rgba(0,0,0,.6);border-radius:2px;overflow:hidden;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.9)}
+.pg-bar i{display:block;height:100%;background:linear-gradient(90deg,rgba(150,104,34,.9),#e0b062);
+  box-shadow:0 0 10px rgba(226,184,104,.8)}
+.pg-q .qf{margin-top:9px;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--ui);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(206,178,124,.34)}
+.pg-q .qf b{color:rgba(232,196,132,.85);font-weight:700}
+.pg-q.done{opacity:.5}
+.pg-q.done:before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:2px;
+  background:
+    linear-gradient(114deg,transparent 43%,rgba(0,0,0,.75) 44%,rgba(0,0,0,.75) 45%,transparent 46%),
+    linear-gradient(72deg,transparent 61%,rgba(0,0,0,.6) 62%,transparent 63%)}
+.pg-q.done .qn{color:rgba(206,186,150,.5)}
+.pg-q.claimable{border-color:rgba(240,206,126,.85);
+  box-shadow:0 0 28px -10px rgba(226,184,104,.8),inset 0 1px 0 rgba(255,238,190,.24);
+  animation:pgClaim 3.2s ease-in-out infinite}
+@keyframes pgClaim{0%,100%{box-shadow:0 0 22px -12px rgba(226,184,104,.6)}
+  50%{box-shadow:0 0 42px -8px rgba(226,184,104,.95)}}
+body.reduced .pg-q.claimable{animation:none}
+
+/* ============================================================
+   CODEX
+   ============================================================ */
+.pg-codex{position:relative;height:100%;display:grid;place-items:center}
+.pg-rings{position:relative;width:min(96%,540px);aspect-ratio:1}
+.pg-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(196,150,70,.18);pointer-events:none}
+.pg-ring.r2{inset:9%;border-color:rgba(214,170,90,.24)}
+.pg-ring.r3{inset:19%;border-style:dashed;border-color:rgba(196,150,70,.16)}
+.pg-ring.spin{animation:pgSpin 120s linear infinite}
+.pg-ring.spin2{animation:pgSpin 84s linear infinite reverse}
+@keyframes pgSpin{to{transform:rotate(360deg)}}
+body.reduced .pg-ring.spin,body.reduced .pg-ring.spin2{animation:none}
+.pg-statue{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34%;z-index:4}
+.pg-statue .vc{cursor:default}
+.pg-statue .vc:hover{transform:none}
+.pg-node{position:absolute;transform:translate(-50%,-50%);z-index:6;text-align:center;
+  min-width:86px;padding:9px 10px;border-radius:2px;
+  background:linear-gradient(180deg,rgba(34,27,19,.95),rgba(13,10,7,.96));
+  border:1px solid rgba(150,116,58,.42);
+  box-shadow:inset 0 1px 0 rgba(240,214,155,.16),0 0 22px -12px rgba(214,170,90,.8),0 14px 26px -18px #000}
+.pg-node .k{font-family:var(--ui);font-size:7.5px;font-weight:700;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(206,178,124,.4)}
+.pg-node .v{font-family:var(--ui);font-variant-numeric:tabular-nums;font-size:17px;margin-top:3px;color:#f0dcae}
+.pg-glowfloor{position:absolute;left:50%;bottom:-6%;transform:translateX(-50%);
+  width:80%;height:16%;border-radius:50%;pointer-events:none;filter:blur(16px);
+  background:radial-gradient(closest-side,rgba(214,170,90,.4),transparent 72%)}
+
+/* ============================================================
+   SETTINGS TABLETS
+   ============================================================ */
+.pg-tabs{display:grid;gap:14px;padding:8px 4px 30px;max-width:760px;margin:0 auto}
+.pg-set{position:relative;display:flex;align-items:center;gap:20px;padding:17px 20px;border-radius:2px;
+  background:linear-gradient(180deg,rgba(38,31,22,.94),rgba(16,13,9,.96)),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.14) 0 4px,transparent 4px 9px);
+  border:1px solid rgba(150,116,58,.28);
+  box-shadow:inset 0 1px 0 rgba(240,214,155,.14),inset 0 -2px 6px rgba(0,0,0,.7),0 16px 30px -22px #000}
+.pg-set:before{content:"";position:absolute;inset:5px;border:1px solid rgba(226,184,104,.09);
+  border-radius:1px;pointer-events:none}
+.pg-set .t{flex:1;min-width:0;position:relative;z-index:2}
+.pg-set .t b{display:block;font-family:var(--lore);font-size:16px;color:#e9d5a6;letter-spacing:.05em;font-weight:400}
+.pg-set .t small{display:block;margin-top:5px;font-size:12.5px;line-height:1.5;color:rgba(210,190,150,.4)}
+.pg-set .ctl{position:relative;z-index:2;flex:0 0 auto}
+/* blackened metal toggle */
+.pg-sw{width:56px;height:26px;border-radius:14px;cursor:pointer;position:relative;
+  background:linear-gradient(180deg,#0a0806,#181310);
+  border:1px solid rgba(150,116,58,.42);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.9),inset 0 -1px 0 rgba(240,214,155,.08);transition:.6s var(--ez)}
+.pg-sw i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;transition:.6s var(--ez);
+  background:radial-gradient(circle at 34% 28%,#4a4038,#191512);
+  border:1px solid rgba(150,116,58,.5);box-shadow:0 2px 5px rgba(0,0,0,.8)}
+.pg-sw.on{border-color:rgba(226,184,104,.85);box-shadow:inset 0 2px 5px rgba(0,0,0,.8),0 0 18px -4px rgba(226,184,104,.8)}
+.pg-sw.on i{left:32px;background:radial-gradient(circle at 34% 28%,#f2d492,#9d6c22);
+  border-color:rgba(255,238,190,.6);box-shadow:0 0 14px rgba(226,184,104,.9)}
+/* metal slider */
+.pg-sl{width:170px;height:26px;position:relative;display:flex;align-items:center;cursor:pointer}
+.pg-sl .tr{position:absolute;left:0;right:0;height:5px;border-radius:3px;
+  background:linear-gradient(180deg,#090706,#1a1512);
+  border:1px solid rgba(150,116,58,.34);box-shadow:inset 0 2px 4px rgba(0,0,0,.9)}
+.pg-sl .fl{position:absolute;left:1px;height:3px;top:11.5px;border-radius:2px;
+  background:linear-gradient(90deg,rgba(150,104,34,.9),#e6bc72);box-shadow:0 0 10px rgba(226,184,104,.75)}
+.pg-sl .kb{position:absolute;width:16px;height:16px;border-radius:50%;transform:translateX(-8px);
+  background:radial-gradient(circle at 34% 28%,#f2d492,#8a5f1e);
+  border:1px solid rgba(255,238,190,.55);box-shadow:0 0 14px rgba(226,184,104,.85),0 2px 5px rgba(0,0,0,.8)}
+.pg-seg{display:flex;border-radius:2px;overflow:hidden;border:1px solid rgba(150,116,58,.4)}
+.pg-seg button{padding:8px 14px;font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(206,178,124,.5);
+  background:linear-gradient(180deg,#1d1710,#100c08);border-right:1px solid rgba(0,0,0,.7);transition:.4s}
+.pg-seg button:last-child{border-right:0}
+.pg-seg button:hover{color:#f0dcae}
+.pg-seg button.on{color:#fdf0cf;background:linear-gradient(180deg,#5c4116,#2a1d0b);
+  text-shadow:0 0 12px rgba(226,184,104,.8);box-shadow:inset 0 0 18px -6px rgba(226,184,104,.9)}
+
+/* small gold chip button used inside panels */
+.pg-mini{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:2px;
+  font-family:var(--ui);font-size:8.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(226,196,140,.8);background:linear-gradient(180deg,#241d14,#120e09);
+  border:1px solid rgba(150,116,58,.5);box-shadow:inset 0 1px 0 rgba(240,214,155,.14);transition:.5s var(--ez)}
+.pg-mini:hover{color:#fdf0cf;border-color:rgba(226,184,104,.9);box-shadow:0 0 22px -6px rgba(226,184,104,.8)}
+.pg-mini.on{color:#2a1d0a;background:linear-gradient(180deg,#e8c580,#a8781f);border-color:rgba(255,238,190,.7)}
+.pg-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+
+@media (max-width:1080px){
+  .pg-body{grid-template-columns:150px minmax(0,1fr) 0;padding:104px 16px 84px}
+  .pg.panel-open .pg-body{grid-template-columns:150px minmax(0,1fr) clamp(260px,30vw,320px)}
+}
+
 </style>
 </head>
 <body>
@@ -1262,6 +1736,7 @@ details.deep .b{padding-top:14px;font-size:14.5px;line-height:1.75;color:var(--i
     <div class="screen" id="sc-ledger"></div>
     <div class="screen" id="sc-friends"></div>
     <div class="screen" id="sc-profile"></div>
+    <div class="screen" id="sc-settings"></div>
   </div>
 
 </div>
@@ -1648,6 +2123,8 @@ const P={
   name:"",seed:101,level:1,xp:0,xpMax:600,points:0,shards:0,
   owned:{},packs:0,rank:"Unranked",rating:0,wins:0,losses:0,
   champ:null,skin:{},deckName:"First Binding",deck:[],
+  fav:{},claimed:{},quality:"high",lang:"en",
+  wheelspin:true,dragspin:true,keyspin:true,confirm:false,keepnames:true,
   reduced:false,new:true
 };
 function owned(){return CARDS.filter(c=>P.owned[c.id]>0)}
@@ -1872,7 +2349,10 @@ function saveGame(){
   try{localStorage.setItem(SAVE_KEY,JSON.stringify({
     name:P.name,seed:P.seed,level:P.level,xp:P.xp,xpMax:P.xpMax,points:P.points,shards:P.shards,
     owned:P.owned,packs:P.packs,rank:P.rank,rating:P.rating,wins:P.wins,losses:P.losses,
-    champ:P.champ,skin:P.skin,deckName:P.deckName,deck:P.deck
+    champ:P.champ,skin:P.skin,deckName:P.deckName,deck:P.deck,
+    tutorialDone:P.tutorialDone,fav:P.fav,claimed:P.claimed,
+    hicon:P.hicon,big:P.big,reduced:P.reduced,quality:P.quality,lang:P.lang,
+    wheelspin:P.wheelspin,dragspin:P.dragspin,keyspin:P.keyspin,confirm:P.confirm,keepnames:P.keepnames
   }))}catch(e){}
 }
 function loadGame(){
@@ -3125,8 +3605,8 @@ function closeSpoils(){
 }
 
 
-/* ---------- settings ---------- */
-function openSettings(){
+/* ---------- settings (legacy overlay, superseded by SCREEN.settings) ---------- */
+function openSettingsOverlay(){
   const s=$("#settings");
   s.innerHTML=`<div class="setin">
     <div class="fn2">The iron key</div><h2 style="font-size:22px;letter-spacing:.24em;margin-top:9px">SETTINGS</h2>
@@ -3175,6 +3655,765 @@ function forgetMe(){
   toast("The page is torn out.");
   setTimeout(()=>location.reload(),1200);
 }
+/* ============================================================
+   SANCTUM PAGES
+   Collection · Forge · Ladder · Contracts · Codex · Settings
+   One shared chrome. Stone, blackened metal, aged gold.
+   ============================================================ */
+
+/* ---- engraved runes for the pillar filters ---- */
+const RUNE={
+  all:'<path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M12 7v10M7.5 9.5v5M16.5 9.5v5"/>',
+  blade:'<path d="M12 2 14 14l-2 8-2-8z"/><path d="M8 14h8"/>',
+  staff:'<path d="M12 3v18"/><circle cx="12" cy="5.5" r="2.6"/><path d="M8.6 12.4 12 9l3.4 3.4"/>',
+  dagger:'<path d="m12 2 1.6 9L12 15l-1.6-4z"/><path d="M8.4 15h7.2M12 15v7"/>',
+  chalice:'<path d="M7 4h10l-1.4 6a3.8 3.8 0 0 1-7.2 0z"/><path d="M12 14v6M8.6 20h6.8"/>',
+  ward:'<path d="M12 2c3 2 5.5 2.6 8 2.6 0 8.4-3 13.6-8 17.4C7 18.2 4 13 4 4.6 6.5 4.6 9 4 12 2z"/>',
+  pack:'<path d="M4 6h16v14H4z"/><path d="M4 6 12 2l8 4M12 2v18M4 12h16"/>',
+  anvil:'<path d="M4 8h9l3 3h4v3h-3l-2 4H8l-2-4H4z"/><path d="M9 18h8l1 3H8z"/>',
+  gem:'<path d="m12 2 6 6-6 14L6 8z"/><path d="M6 8h12M12 2 9 8l3 14 3-14z"/>',
+  coin:'<circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.4 10h5.2M9.4 14h5.2"/>',
+  crown:'<path d="M4 17 6 6l4 5 2-6 2 6 4-5 2 11z"/><path d="M4 19h16"/>',
+  scroll:'<path d="M6 4h11a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7"/><path d="M6 4a2 2 0 0 0-2 2v2h3"/><path d="M9 9h7M9 13h7M9 17h4"/>',
+  moon:'<path d="M15.4 3.4a8.6 8.6 0 1 0 5.2 12A7 7 0 0 1 15.4 3.4z"/>',
+  book:'<path d="M4 4h6a3 3 0 0 1 2 1 3 3 0 0 1 2-1h6v14h-6a3 3 0 0 0-2 1 3 3 0 0 0-2-1H4z"/><path d="M12 5v14"/>',
+  trophy:'<path d="M7 3h10v5a5 5 0 0 1-10 0z"/><path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3"/><path d="M12 13v4M9 21h6l-1-4h-4z"/>',
+  hourglass:'<path d="M6 3h12M6 21h12"/><path d="M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/>',
+  eye:'<path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.6"/>',
+  gear:'<circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>',
+  speaker:'<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/>',
+  hand:'<path d="M8 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1V4.5a1.5 1.5 0 0 1 3 0V11m0-.5V6a1.5 1.5 0 0 1 3 0v7a8 8 0 0 1-8 8 6 6 0 0 1-6-6v-2a1.6 1.6 0 0 1 3-.8"/>',
+  key:'<circle cx="8" cy="8" r="4.2"/><path d="m11 11 9 9M17 17l2-2M14.5 14.5l2-2"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.4 3 14.6 0 18M12 3c-3 3.4-3 14.6 0 18"/>'
+};
+function rune(k,s){return `<svg width="${s||20}" height="${s||20}" viewBox="0 0 24 24" fill="none"
+  stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">${RUNE[k]||RUNE.all}</svg>`}
+
+/* ---- shared page chrome ---- */
+function pgShell(el,o){
+  el.className="screen pg-screen";
+  el.innerHTML=`
+  <div class="pg" id="pg-${o.id}">
+    <div class="pg-room"></div>
+    <div class="pg-ray a"></div><div class="pg-ray b"></div><div class="pg-ray c"></div>
+    <div class="pg-floor"></div>
+    <div class="pg-head">
+      <div class="pg-titlewrap">
+        <h2 class="pg-title">${o.title}</h2>
+        <div class="pg-rule"></div>
+        <div class="pg-sub">${o.sub||""}</div>
+      </div>
+      <button class="pg-back" onclick="closeScreens()">Return to the sanctum</button>
+    </div>
+    <div class="pg-body">
+      <div class="pg-pillar">
+        <div class="pg-cap"></div>
+        <div class="pg-shaft" id="pgf-${o.id}"></div>
+        <div class="pg-base"></div>
+      </div>
+      <div class="pg-stage">
+        ${o.platform===false?"":'<div class="pg-plat"></div>'}
+        <div class="pg-scroll" id="pgs-${o.id}"></div>
+      </div>
+      <div class="pg-panel"><div class="pg-slab">
+        <button class="pg-close" onclick="pgClosePanel('${o.id}')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5 5 19"/></svg></button>
+        <div class="pg-slab-in" id="pgp-${o.id}"></div>
+      </div></div>
+    </div>
+    <div class="pg-foot" id="pgb-${o.id}"></div>
+  </div>`;
+  const root=$("#pg-"+o.id,el);
+  for(let i=0;i<20;i++){
+    const d=document.createElement("div");d.className="pg-dust";
+    d.style.left=(4+Math.random()*92)+"%";d.style.top=(24+Math.random()*68)+"%";
+    d.style.animationDuration=(15+Math.random()*20)+"s";
+    d.style.animationDelay=(-Math.random()*32)+"s";
+    d.style.opacity=String(.2+Math.random()*.55);
+    root.appendChild(d);
+  }
+  return {root,rail:$("#pgf-"+o.id,el),stage:$("#pgs-"+o.id,el),
+          panel:$("#pgp-"+o.id,el),foot:$("#pgb-"+o.id,el)};
+}
+function pgOpenPanel(id){const p=$("#pg-"+id);if(p)p.classList.add("panel-open")}
+function pgClosePanel(id){
+  const p=$("#pg-"+id);if(!p)return;
+  p.classList.remove("panel-open");
+  $$(".vc.sel,.pg-q.sel,.pg-ware.sel",p).forEach(x=>x.classList.remove("sel"));
+}
+function pgFilters(rail,items,onPick,active){
+  rail.innerHTML="";
+  items.forEach((it,i)=>{
+    const b=document.createElement("button");
+    b.className="pgf"+((active===undefined?i===0:active===it.k)?" on":"");
+    b.dataset.k=it.k;
+    b.innerHTML=`<span class="rune">${rune(it.r)}</span><span class="lb">${it.n}</span>`+
+      (it.c!==undefined?`<span class="ct">${it.c}</span>`:"");
+    b.onclick=()=>{
+      $$(".pgf",rail).forEach(x=>x.classList.remove("on"));
+      b.classList.add("on");onPick(it.k,it);
+    };
+    rail.appendChild(b);
+  });
+}
+function pgBtn(w,s,fn,cls){
+  const b=document.createElement("button");
+  b.className="pg-btn "+(cls||"");
+  b.innerHTML=`<div class="w">${w}</div>${s?`<div class="s">${s}</div>`:""}`+
+    Array.from({length:8},(_,i)=>{const a=i/8*6.283;
+      return `<span class="pg-spark" style="left:${50+Math.cos(a)*44}%;top:${50+Math.sin(a)*40}%;
+        --sx:${(Math.cos(a)*48).toFixed(0)}px;--sy:${(Math.sin(a)*36).toFixed(0)}px;
+        animation-delay:${(i*.12).toFixed(2)}s"></span>`}).join("");
+  b.onclick=fn;
+  return b;
+}
+
+/* ---- the vintage card element, reusable ---- */
+const ROLE_CLASS={
+  Ranger:"Assassins",Scout:"Assassins",Hunter:"Assassins",Thief:"Assassins",
+  Trickster:"Assassins",Skitterer:"Assassins",Runner:"Assassins",Sapper:"Assassins",
+  Singer:"Support",Tender:"Support",Recorder:"Support",Attendant:"Support",
+  Herald:"Support",Matron:"Support",Smith:"Support",
+  Elder:"Mages",Lord:"Mages",King:"Mages",Countess:"Mages",Prime:"Mages",
+  Aberration:"Mages",Spawn:"Mages",Imp:"Mages",Lesser:"Mages",
+  Warchief:"Warriors",Brute:"Warriors",Breaker:"Warriors",Knight:"Warriors",
+  Captain:"Warriors",Guard:"Warriors",Champion:"Warriors",Footman:"Warriors",
+  Warden:"Warriors",Drake:"Warriors",Spearhand:"Warriors",Thrall:"Warriors",
+  Tidecaller:"Mages"
+};
+function classOf(c){ return c.t!=="Unit" ? (c.t==="Spell"?"Mages":"Support") : (ROLE_CLASS[c.role]||"Warriors") }
+const FTINT={
+  Civilization:"sepia(.28) saturate(.8) hue-rotate(160deg) contrast(1.05) brightness(.94)",
+  Warfare:"sepia(.42) saturate(1.15) hue-rotate(-18deg) contrast(1.08) brightness(.95)",
+  Nature:"sepia(.34) saturate(.95) hue-rotate(55deg) contrast(1.04) brightness(.93)",
+  Dark:"sepia(.3) saturate(.9) hue-rotate(255deg) contrast(1.1) brightness(.86)"
+};
+function vcard(c,o={}){
+  const F=FACTION[c.a]||FACTION.Civilization;
+  const d=document.createElement("div");
+  d.className="vc"+(o.cls?" "+o.cls:"");
+  const own=P.owned[c.id]||0;
+  if(o.coll&&!own)d.classList.add("locked");
+  d.style.setProperty("--cc",F.glow.replace(/,\.5\)$/,",.72)"));
+  d.style.setProperty("--cg",F.glow);
+  const art=P.skin[c.id]?SKINFX[P.skin[c.id]]:"";
+  d.innerHTML=`
+    <div class="vc-frame">
+      <div class="vc-art">
+        <img src="cards/liora-sm.jpg" alt="" style="filter:${art||FTINT[c.a]}">
+        <div class="vc-cost">${c.cost}</div>
+        ${o.coll?`<div class="vc-own">${own?"×"+own:"—"}</div>`:""}
+        ${P.fav&&P.fav[c.id]?`<div class="vc-fav"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="m12 3 2.7 6 6.3.6-4.8 4.2 1.5 6.2L12 16.8 6.3 20l1.5-6.2L3 9.6 9.3 9z"/></svg></div>`:""}
+      </div>
+      <div class="vc-plate">
+        <div class="n">${c.n.split(",")[0]}</div>
+        <div class="t">${c.race} · ${RARN[c.r]}</div>
+      </div>
+    </div>
+    <div class="vc-pool"></div>`;
+  if(!o.noclick)d.onclick=()=>o.onclick?o.onclick(c,d):null;
+  return d;
+}
+
+/* ============================================================
+   1 · COLLECTION
+   ============================================================ */
+SCREEN.collection=el=>{
+  const S=pgShell(el,{id:"coll",title:"COLLECTION",sub:"every record the covenant has kept"});
+  let filt="All", sel=null;
+  const CATS=[{k:"All",n:"All",r:"all"},{k:"Warriors",n:"Warriors",r:"blade"},
+    {k:"Mages",n:"Mages",r:"staff"},{k:"Assassins",n:"Assassins",r:"dagger"},
+    {k:"Support",n:"Support",r:"chalice"},{k:"Held",n:"Held only",r:"ward"}];
+  CATS.forEach(c=>{c.c=c.k==="All"?CARDS.length:c.k==="Held"?owned().length:CARDS.filter(x=>classOf(x)===c.k).length});
+  pgFilters(S.rail,CATS,k=>{filt=k;draw()});
+
+  function list(){
+    if(filt==="All")return CARDS;
+    if(filt==="Held")return owned();
+    return CARDS.filter(c=>classOf(c)===filt);
+  }
+  function draw(){
+    const arr=list();
+    S.stage.innerHTML=`<div class="pg-groupline"><span class="k">${filt==="Held"?"Held":filt}</span>
+      <span class="ln"></span><span class="n">${arr.length} records · ${owned().length} of ${CARDS.length} discovered</span></div>
+      <div class="pg-grid" id="collGrid"></div>`;
+    const g=$("#collGrid",S.stage);
+    if(!arr.length){S.stage.innerHTML+=`<div class="pg-empty">Nothing of this kind was ever recorded.</div>`;return}
+    arr.forEach(c=>g.appendChild(vcard(c,{coll:true,onclick:pick})));
+  }
+  function pick(c,node){
+    sel=c;
+    $$(".vc.sel",S.root).forEach(x=>x.classList.remove("sel"));
+    if(node)node.classList.add("sel");
+    const own=P.owned[c.id]||0;
+    S.panel.innerHTML=`
+      <div class="pg-pk">${classOf(c)} · ${RARN[c.r]} · held ×${own}</div>
+      <div class="pg-pt">${c.n}</div>
+      <div class="pg-pd">${c.sub||c.race} — a ${c.race} of ${FACTION_FULL[c.a]}.</div>
+      <div class="pg-line"></div>
+      <div class="pg-stats">
+        <div class="pg-stat"><div class="k">Aether</div><div class="v">${c.cost}</div></div>
+        <div class="pg-stat"><div class="k">Kind</div><div class="v" style="font-size:14px">${c.t}</div></div>
+        ${c.pow!=null?`<div class="pg-stat"><div class="k">Power</div><div class="v">${c.pow}</div></div>`:""}
+        ${c.hp!=null?`<div class="pg-stat"><div class="k">Health</div><div class="v">${c.hp}</div></div>`:""}
+      </div>
+      <div class="pg-line"></div>
+      <div class="pg-pk">Abilities</div>
+      ${c.sk.map(s=>`<div class="pg-ab"><b>${s[0]}</b><span>${s[1]}</span></div>`).join("")}
+      <div class="pg-line"></div>
+      <div class="pg-pk">Lore</div>
+      <div class="pg-lore">${c.fl}</div>
+      <div class="pg-row">
+        <button class="pg-mini" onclick="P.champ='${c.id}';buildLobby();toast('${c.n.split(",")[0]} stands as your champion.')">Set champion</button>
+      </div>`;
+    pgOpenPanel("coll");
+    foot();
+  }
+  function foot(){
+    S.foot.innerHTML="";
+    const fav=sel&&P.fav&&P.fav[sel.id];
+    S.foot.appendChild(pgBtn("EDIT DECK","bind and unbind records",()=>openScreen("decks"),""));
+    S.foot.appendChild(pgBtn(fav?"UNFAVOUR":"FAVOURITE",sel?sel.n.split(",")[0]:"select a record",()=>{
+      if(!sel)return toast("Choose a record first.");
+      P.fav=P.fav||{};
+      if(P.fav[sel.id]){delete P.fav[sel.id];toast("Removed from the favoured.")}
+      else{P.fav[sel.id]=1;toast(sel.n.split(",")[0]+" is favoured.")}
+      saveGame&&saveGame();draw();pick(sel);
+    },"ghost"));
+  }
+  draw();foot();
+  REDRAW.collection=()=>{draw();if(sel)pick(sel)};
+};
+
+/* ============================================================
+   2 · SHOP / FORGE
+   ============================================================ */
+SCREEN.shop=el=>{
+  const S=pgShell(el,{id:"forge",title:"THE FORGE",sub:"what may be bought with ember and sigil",platform:false});
+  let cat="packs", sel=null;
+  pgFilters(S.rail,[
+    {k:"packs",n:"Card Packs",r:"pack"},
+    {k:"arms",n:"Weapons",r:"blade"},
+    {k:"cosm",n:"Cosmetics",r:"gem"},
+    {k:"res",n:"Resources",r:"coin"}
+  ],k=>{cat=k;draw()});
+
+  const WARES={
+    packs:PACKS.map(p=>({id:p.id,n:p.n,d:p.desc,pr:p.n.length*80+200,cur:"Embers",a:p.a,kind:"pack",
+      meta:p.tag,buy:()=>buyPack(p.n.length*80+200)})),
+    arms:[
+      {id:"w1",n:"Emberbrand Haft",d:"A weapon-relic sheathed in slow heat. Adds an ember to the opening draw.",pr:340,cur:"Embers",a:"Warfare",kind:"blade",meta:"Relic · Warfare"},
+      {id:"w2",n:"Silverleaf Recurve",d:"Strung with the last of the pale wood. Its arrows do not wander.",pr:300,cur:"Embers",a:"Civilization",kind:"blade",meta:"Relic · Civilization"},
+      {id:"w3",n:"Rootbound Maul",d:"Heavier every season. The forest keeps adding to it.",pr:280,cur:"Embers",a:"Nature",kind:"blade",meta:"Relic · Nature"},
+      {id:"w4",n:"Hollow Court Sickle",d:"Cuts the thread, not the throat. What it takes, it keeps.",pr:380,cur:"Embers",a:"Dark",kind:"blade",meta:"Relic · Dark"}
+    ],
+    cosm:[
+      {id:"c1",n:"Ember-Touched",d:"The art is lit from beneath, as though the parchment sits on coals.",pr:120,cur:"Sigils",a:"Warfare",kind:"gem",meta:"Altered record",buy:()=>buySkin("liora","Ember-Touched",120)},
+      {id:"c2",n:"Moonlit",d:"Cold light through the vault window. Everything turns silver.",pr:120,cur:"Sigils",a:"Civilization",kind:"gem",meta:"Altered record",buy:()=>buySkin("merfolktide","Moonlit",120)},
+      {id:"c3",n:"Ancient",d:"Foxed, sun-bleached, and worth more for it.",pr:90,cur:"Sigils",a:"Nature",kind:"gem",meta:"Altered record",buy:()=>buySkin("treeelder","Ancient",90)},
+      {id:"c4",n:"Corrupted",d:"Something got into the ink. It has not stopped moving.",pr:150,cur:"Sigils",a:"Dark",kind:"gem",meta:"Altered record",buy:()=>buySkin("undeadking","Corrupted",150)}
+    ],
+    res:[
+      {id:"r1",n:"Coffer of Embers",d:"Five hundred embers, counted twice by the keeper.",pr:60,cur:"Sigils",a:"Warfare",kind:"coin",meta:"500 Embers",
+       buy:()=>{if(P.shards<60)return toast("Not enough Sigils.");P.shards-=60;P.points+=500;toast("Five hundred embers added.");buildLobby();REDRAW.shop()}},
+      {id:"r2",n:"Sigil Reliquary",d:"Twenty sigils, cold to the touch.",pr:900,cur:"Embers",a:"Civilization",kind:"gem",meta:"20 Sigils",
+       buy:()=>{if(P.points<900)return toast("Not enough Embers.");P.points-=900;P.shards+=20;toast("Twenty sigils recovered.");buildLobby();REDRAW.shop()}},
+      {id:"r3",n:"Whetstone of Hours",d:"Doubles the experience taken from your next three trials.",pr:220,cur:"Embers",a:"Nature",kind:"hourglass",meta:"Consumable"},
+      {id:"r4",n:"Keeper's Ledger Page",d:"One blank page. Names a new deck and remembers it.",pr:140,cur:"Embers",a:"Dark",kind:"scroll",meta:"Consumable"}
+    ]
+  };
+
+  function draw(){
+    const arr=WARES[cat];
+    S.stage.innerHTML=`<div class="pg-forge">
+      <div class="pg-orbit" id="forgeOrbit"></div>
+      <div class="pg-anvil">
+        <div class="pg-heat"></div>
+        ${anvilSVG()}
+      </div></div>`;
+    const orb=$("#forgeOrbit",S.stage);
+    for(let i=0;i<16;i++){
+      const e=document.createElement("div");e.className="pg-ember";
+      e.style.left=(42+Math.random()*16)+"%";e.style.bottom=(6+Math.random()*16)+"%";
+      e.style.setProperty("--ex",((Math.random()-.5)*70).toFixed(0)+"px");
+      e.style.animationDuration=(3.4+Math.random()*3.4)+"s";
+      e.style.animationDelay=(-Math.random()*6)+"s";
+      orb.appendChild(e);
+    }
+    // arc the wares over the forge
+    const n=arr.length;
+    arr.forEach((w,i)=>{
+      const t=n===1?.5:i/(n-1);
+      const a=Math.PI*(1-t);                 // left to right over the top
+      const x=50+Math.cos(a)*40;
+      const y=44-Math.sin(a)*24;
+      const d=document.createElement("div");
+      d.className="pg-ware";
+      d.style.left=x+"%";d.style.top=y+"%";
+      d.style.animationDelay=(-i*1.3)+"s";
+      const F=FACTION[w.a]||FACTION.Warfare;
+      d.style.setProperty("--cc",F.glow.replace(/,\.5\)$/,",.72)"));
+      d.innerHTML=`<div class="pg-chest">
+        <div class="ic">${rune(w.kind,40)}</div>
+        <div class="nm">${w.n}</div>
+        <div class="pr"><i></i>${w.pr.toLocaleString()}</div>
+      </div>`;
+      d.onclick=()=>pick(w,d);
+      orb.appendChild(d);
+    });
+  }
+  function pick(w,node){
+    sel=w;
+    $$(".pg-ware.sel",S.root).forEach(x=>x.classList.remove("sel"));
+    if(node)node.classList.add("sel");
+    S.panel.innerHTML=`
+      <div class="pg-pk">${w.meta}</div>
+      <div class="pg-pt">${w.n}</div>
+      <div class="pg-pd">${w.d}</div>
+      <div class="pg-line"></div>
+      <div class="pg-stats">
+        <div class="pg-stat"><div class="k">Price</div><div class="v">${w.pr.toLocaleString()}</div></div>
+        <div class="pg-stat"><div class="k">Paid in</div><div class="v" style="font-size:14px">${w.cur}</div></div>
+        <div class="pg-stat"><div class="k">Your embers</div><div class="v">${P.points.toLocaleString()}</div></div>
+        <div class="pg-stat"><div class="k">Your sigils</div><div class="v">${P.shards}</div></div>
+      </div>
+      <div class="pg-line"></div>
+      <div class="pg-lore">The keeper does not haggle. He has been here longer than the prices.</div>`;
+    pgOpenPanel("forge");foot();
+  }
+  function foot(){
+    S.foot.innerHTML="";
+    S.foot.appendChild(pgBtn("PURCHASE",sel?sel.n:"choose a ware",()=>{
+      if(!sel)return toast("Choose something from the forge.");
+      if(sel.buy)return sel.buy();
+      const have=sel.cur==="Embers"?P.points:P.shards;
+      if(have<sel.pr)return toast("Not enough "+sel.cur+".");
+      if(sel.cur==="Embers")P.points-=sel.pr; else P.shards-=sel.pr;
+      toast(sel.n+" is struck and yours.");
+      buildLobby();REDRAW.shop();
+    },"lg"));
+  }
+  draw();foot();
+  REDRAW.shop=()=>{draw();if(sel)pick(sel)};
+};
+function anvilSVG(){
+  return `<svg viewBox="0 0 300 190" style="overflow:visible">
+    <defs>
+      <linearGradient id="anvM" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3b332c"/><stop offset=".5" stop-color="#1d1815"/><stop offset="1" stop-color="#0c0a08"/></linearGradient>
+      <linearGradient id="anvS" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2a231c"/><stop offset="1" stop-color="#0a0806"/></linearGradient>
+      <radialGradient id="anvH" cx="50%" cy="18%">
+        <stop offset="0" stop-color="#ffb457" stop-opacity=".9"/><stop offset="1" stop-color="#8a3c0c" stop-opacity="0"/></radialGradient>
+    </defs>
+    <ellipse cx="150" cy="176" rx="132" ry="15" fill="#000" opacity=".7"/>
+    <ellipse cx="150" cy="172" rx="120" ry="13" fill="url(#anvH)" opacity=".55"/>
+    <path d="M40 150h220l-14 26H54z" fill="url(#anvS)" stroke="rgba(196,150,70,.35)" stroke-width="1"/>
+    <path d="M96 96h108v54H96z" fill="url(#anvS)" stroke="rgba(150,116,58,.35)"/>
+    <path d="M56 62h188l-10 30H66z" fill="url(#anvM)" stroke="rgba(214,170,90,.45)" stroke-width="1.2"/>
+    <path d="M56 62 20 74l36 10z" fill="url(#anvM)" stroke="rgba(214,170,90,.4)"/>
+    <path d="M244 62l30 8-30 12z" fill="url(#anvM)" stroke="rgba(214,170,90,.4)"/>
+    <path d="M60 64h180" stroke="rgba(255,224,160,.35)" stroke-width="1.4"/>
+    <path d="M110 60c8-14 26-14 34 0" stroke="#ffb454" stroke-width="2" fill="none" opacity=".8"/>
+    <path d="M160 58c6-16 28-12 30 2" stroke="#ff9a3c" stroke-width="1.6" fill="none" opacity=".6"/>
+    <ellipse cx="150" cy="62" rx="70" ry="8" fill="url(#anvH)"/>
+  </svg>`;
+}
+
+/* ============================================================
+   3 · RANKED / LADDER
+   ============================================================ */
+SCREEN.rank=el=>{
+  const S=pgShell(el,{id:"lad",title:"THE ASCENT",sub:"season of the low tallow",platform:false});
+  let view="season";
+  pgFilters(S.rail,[
+    {k:"season",n:"Season",r:"crown"},
+    {k:"region",n:"Region",r:"globe"},
+    {k:"friends",n:"Friends",r:"ward"}
+  ],k=>{view=k;draw()});
+
+  const TIERS=["Ash","Iron","Bronze","Silver","Gold","Grey Vigil","Covenant"];
+  const NAMES={
+    season:["Vaskir the Unlit","Hesper of the Ninth Vigil","Oren Cartwright","Aelric of the Low Fen",
+      "Sister Mourn","Ossian Wend","The Tallow Keeper"],
+    region:["Halda of Brackmoor","Ivo Lantern","Nine-Fingers","Petra Stonewake",
+      "The Fen Widow","Curran Ash","Marovel"],
+    friends:["Aelric of the Low Fen","Hesper","The Cartwright","Ninth Vigil","Ossian Wend","M.","Wren"]
+  };
+  function rows(){
+    const nm=NAMES[view];
+    const base=view==="friends"?820:2400;
+    const list=nm.map((n,i)=>({n,rating:base-i*Math.round(base/12),tier:TIERS[Math.max(0,TIERS.length-1-i)]}));
+    list.push({n:P.name||"Warden",rating:P.rating,tier:P.rank==="Unranked"?"Ash":P.rank.split(" ")[0],me:true});
+    list.sort((a,b)=>b.rating-a.rating);
+    return list;
+  }
+  function draw(){
+    const list=rows();
+    S.stage.innerHTML=`<div class="pg-tower" id="towerCol"></div>`;
+    const t=$("#towerCol",S.stage);
+    // column-reverse: append best last so it sits highest
+    list.slice().reverse().forEach((r,i)=>{
+      const place=list.length-i;
+      const d=document.createElement("div");
+      d.className="pg-tab"+(r.me?" me":"");
+      d.innerHTML=`<span class="rk">${place}</span>
+        <span class="gl">${rune(place===1?"crown":"ward",20)}</span>
+        <span class="nm">${r.n}</span>
+        <span class="sc">${r.rating.toLocaleString()} · ${r.tier}</span>`;
+      d.onclick=()=>pick(r,place,d);
+      t.appendChild(d);
+    });
+  }
+  function pick(r,place,node){
+    S.panel.innerHTML=`
+      <div class="pg-pk">${view==="friends"?"Companion":"Contender"} · place ${place}</div>
+      <div class="pg-pt">${r.n}</div>
+      <div class="pg-pd">${r.me?"Your own tablet, struck this season and re-struck after every trial."
+        :"A name cut into the ladder above the sanctum floor. It has been there a while."}</div>
+      <div class="pg-line"></div>
+      <div class="pg-stats">
+        <div class="pg-stat"><div class="k">Rating</div><div class="v">${r.rating.toLocaleString()}</div></div>
+        <div class="pg-stat"><div class="k">Tier</div><div class="v" style="font-size:14px">${r.tier}</div></div>
+        ${r.me?`<div class="pg-stat"><div class="k">Won</div><div class="v">${P.wins}</div></div>
+        <div class="pg-stat"><div class="k">Lost</div><div class="v">${P.losses}</div></div>`:""}
+      </div>
+      <div class="pg-line"></div>
+      <div class="pg-pk">Tiers</div>
+      <div class="pg-lore">Ash, Iron, Bronze, Silver, Gold, Grey Vigil, Covenant. Each is three hundred rating above the last.</div>`;
+    pgOpenPanel("lad");
+  }
+  S.foot.appendChild(pgBtn("ENTER DUEL","climb the ascent",()=>enterBattle(),"lg"));
+  draw();
+  REDRAW.rank=draw;
+};
+
+/* ============================================================
+   4 · QUESTS / CONTRACTS
+   ============================================================ */
+SCREEN.ledger=el=>{
+  const S=pgShell(el,{id:"con",title:"CONTRACTS",sub:"what is owed to the covenant"});
+  let cat="daily", sel=null;
+  pgFilters(S.rail,[
+    {k:"daily",n:"Daily",r:"hourglass"},
+    {k:"weekly",n:"Weekly",r:"moon"},
+    {k:"story",n:"Story",r:"book"},
+    {k:"special",n:"Special",r:"eye"}
+  ],k=>{cat=k;draw()});
+
+  P.claimed=P.claimed||{};
+  function tasks(){
+    const held=owned().length;
+    const set={
+      daily:[
+        ["d1","Light the first coal","Win a single trial before the lamp is trimmed.",Math.min(P.wins,1),1,"40 Embers"],
+        ["d2","Turn the wheel","Inspect five records in the archive.",Math.min(held,5),5,"20 Embers"],
+        ["d3","Bind a record","Add any card to your deck.",P.deck.length?1:0,1,"15 Embers"]
+      ],
+      weekly:[
+        ["w1","Three trials taken","Win three covenant trials this week.",Math.min(P.wins,3),3,"1 sealed parcel"],
+        ["w2","Twenty records kept","Catalogue twenty distinct records.",Math.min(held,20),20,"40 Sigils"],
+        ["w3","A whole covenant","Bind a legal deck of forty.",P.deck.length>=40?1:0,1,"1 sealed parcel"]
+      ],
+      story:[
+        ["s1","The first trial","Pass through the gate and take your first duel.",P.tutorialDone?1:0,1,"3 records"],
+        ["s2","Name a champion","Set any held record as your champion.",P.champ?1:0,1,"60 Embers"],
+        ["s3","The four affinities","Field a unit from each of the four factions.",
+          new Set(owned().filter(c=>c.t==="Unit").map(c=>c.a)).size,4,"an altered record"],
+        ["s4","Ash and iron","Reach the Iron tier on the ascent.",P.rating>=300?1:0,1,"1 sealed parcel"]
+      ],
+      special:[
+        ["x1","Season of low tallow","Play once on each of seven nights.",Math.min(P.level,7),7,"Covenant title"],
+        ["x2","The keeper's favour","Spend two thousand embers at the forge.",Math.min(P.points,0),2000,"Reliquary key"],
+        ["x3","Unbroken wax","Open ten sealed parcels.",Math.min(P.packs,0),10,"120 Sigils"]
+      ]
+    };
+    return set[cat];
+  }
+  function draw(){
+    const arr=tasks();
+    S.stage.innerHTML=`<div class="pg-groupline"><span class="k">${cat}</span><span class="ln"></span>
+      <span class="n">${arr.filter(t=>t[3]>=t[4]).length} of ${arr.length} sealed</span></div>
+      <div class="pg-tablets" id="conGrid"></div>`;
+    const g=$("#conGrid",S.stage);
+    arr.forEach(t=>{
+      const [id,n,d,now,goal,rew]=t;
+      const done=now>=goal, claimed=P.claimed[id];
+      const q=document.createElement("div");
+      q.className="pg-q"+(claimed?" done":done?" claimable":"");
+      q.innerHTML=`
+        <div class="seal">${claimed?"✕":done?"✦":"◈"}</div>
+        <div class="qk">${cat} contract</div>
+        <div class="qn">${n}</div>
+        <div class="qd">${d}</div>
+        <div class="pg-bar"><i style="width:${Math.min(100,now/goal*100)}%"></i></div>
+        <div class="qf"><span>${now} of ${goal}</span><b>${claimed?"claimed":rew}</b></div>`;
+      q.onclick=()=>pick(t,q);
+      g.appendChild(q);
+    });
+  }
+  function pick(t,node){
+    sel=t;
+    $$(".pg-q.sel",S.root).forEach(x=>x.classList.remove("sel"));
+    if(node)node.classList.add("sel");
+    const [id,n,d,now,goal,rew]=t;
+    const done=now>=goal, claimed=P.claimed[id];
+    S.panel.innerHTML=`
+      <div class="pg-pk">${cat} contract · ${claimed?"discharged":done?"ready":"open"}</div>
+      <div class="pg-pt">${n}</div>
+      <div class="pg-pd">${d}</div>
+      <div class="pg-line"></div>
+      <div class="pg-stats">
+        <div class="pg-stat"><div class="k">Progress</div><div class="v">${now}/${goal}</div></div>
+        <div class="pg-stat"><div class="k">Reward</div><div class="v" style="font-size:13px">${rew}</div></div>
+      </div>
+      <div class="pg-bar" style="margin-top:14px"><i style="width:${Math.min(100,now/goal*100)}%"></i></div>
+      <div class="pg-line"></div>
+      <div class="pg-lore">${claimed?"The wax is broken and the page is initialled. Nothing more is owed."
+        :done?"The seal is warm. Break it at the table below."
+        :"The scroll stays sealed until the work is done."}</div>`;
+    pgOpenPanel("con");foot();
+  }
+  function foot(){
+    S.foot.innerHTML="";
+    const ok=sel&&sel[3]>=sel[4]&&!P.claimed[sel[0]];
+    const b=pgBtn("CLAIM REWARD",sel?sel[1]:"choose a contract",()=>{
+      if(!sel)return toast("Choose a contract.");
+      if(P.claimed[sel[0]])return toast("Already discharged.");
+      if(sel[3]<sel[4])return toast("The work is not done.");
+      P.claimed[sel[0]]=1;
+      const r=sel[5];
+      if(/Embers/.test(r))P.points+=parseInt(r,10)||0;
+      else if(/Sigils/.test(r))P.shards+=parseInt(r,10)||0;
+      else if(/parcel/.test(r))P.packs+=1;
+      toast("Claimed: "+r+".");
+      saveGame&&saveGame();buildLobby();draw();pick(sel);
+    },"lg");
+    if(!ok)b.setAttribute("disabled","");
+    S.foot.appendChild(b);
+  }
+  draw();foot();
+  REDRAW.ledger=()=>{draw();if(sel)pick(sel)};
+};
+
+/* ============================================================
+   5 · PROFILE / CODEX
+   ============================================================ */
+SCREEN.profile=el=>{
+  const S=pgShell(el,{id:"cdx",title:"CODEX",sub:"struck in the stone beside the hearth",platform:false});
+  let sec="overview";
+  pgFilters(S.rail,[
+    {k:"overview",n:"Overview",r:"eye"},
+    {k:"achieve",n:"Achievements",r:"trophy"},
+    {k:"history",n:"History",r:"hourglass"},
+    {k:"titles",n:"Titles",r:"crown"},
+    {k:"stats",n:"Statistics",r:"book"}
+  ],k=>{sec=k;drawPanel()});
+
+  const total=P.wins+P.losses;
+  const wr=total?Math.round(P.wins/total*100):0;
+  function draw(){
+    const ch=BY[P.champ]||CARDS[0];
+    const nodes=[
+      ["Level",P.level],["Win rate",wr+"%"],["Trials won",P.wins],
+      ["Records",owned().length],["Rating",P.rating],["Embers",P.points.toLocaleString()]
+    ];
+    S.stage.innerHTML=`<div class="pg-codex"><div class="pg-rings" id="cdxRings">
+      <div class="pg-ring"></div><div class="pg-ring r2 spin"></div><div class="pg-ring r3 spin2"></div>
+      <div class="pg-glowfloor"></div>
+      <div class="pg-statue" id="cdxStatue"></div>
+    </div></div>`;
+    const R=$("#cdxRings",S.stage);
+    $("#cdxStatue",S.stage).appendChild(vcard(ch,{noclick:true}));
+    nodes.forEach((nd,i)=>{
+      const a=-Math.PI/2+i/nodes.length*Math.PI*2;
+      const d=document.createElement("div");
+      d.className="pg-node";
+      d.style.left=(50+Math.cos(a)*44)+"%";
+      d.style.top=(50+Math.sin(a)*44)+"%";
+      d.innerHTML=`<div class="k">${nd[0]}</div><div class="v">${nd[1]}</div>`;
+      R.appendChild(d);
+    });
+  }
+  function drawPanel(){
+    const ACH=[
+      ["First Light","Take your first trial.",P.tutorialDone],
+      ["Archivist","Hold twenty distinct records.",owned().length>=20],
+      ["Bound","Assemble a legal deck of forty.",P.deck.length>=40],
+      ["Ironbearer","Reach three hundred rating.",P.rating>=300],
+      ["Ember-Rich","Hold a thousand embers at once.",P.points>=1000],
+      ["The Long Vigil","Reach level five.",P.level>=5]
+    ];
+    const TITLES=[
+      ["Initiate Warden","Granted at the gate.",true],
+      ["Recorder","Catalogue ten records.",owned().length>=10],
+      ["Ashbound","Win five trials.",P.wins>=5],
+      ["Keeper of the Low Tallow","Finish a season.",false],
+      ["Of the Covenant","Reach the Covenant tier.",false]
+    ];
+    const body={
+      overview:()=>`
+        <div class="pg-pk">Warden</div>
+        <div class="pg-pt">${P.name||"Warden"}</div>
+        <div class="pg-pd">Level ${P.level} · ${P.rank} · sealed this night.</div>
+        <div class="pg-stats">
+          <div class="pg-stat"><div class="k">Trials won</div><div class="v">${P.wins}</div></div>
+          <div class="pg-stat"><div class="k">Trials lost</div><div class="v">${P.losses}</div></div>
+          <div class="pg-stat"><div class="k">Win rate</div><div class="v">${wr}%</div></div>
+          <div class="pg-stat"><div class="k">Rating</div><div class="v">${P.rating}</div></div>
+        </div>
+        <div class="pg-line"></div>
+        <div class="pg-pk">Toward level ${P.level+1}</div>
+        <div class="pg-bar" style="margin-top:10px"><i style="width:${Math.min(100,P.xp/P.xpMax*100)}%"></i></div>
+        <div class="pg-lore">${P.xpMax-P.xp} experience remaining.</div>`,
+      achieve:()=>`<div class="pg-pk">Achievements</div><div class="pg-pt">${ACH.filter(a=>a[2]).length} of ${ACH.length}</div>`+
+        ACH.map(a=>`<div class="pg-ab" style="${a[2]?"":"opacity:.45"}"><b>${a[2]?"✦ ":"◈ "}${a[0]}</b><span>${a[1]}</span></div>`).join(""),
+      history:()=>`<div class="pg-pk">History</div><div class="pg-pt">The last nights</div>`+
+        (total?Array.from({length:Math.min(8,total)},(_,i)=>{
+          const won=i<P.wins;
+          return `<div class="pg-ab" style="border-left-color:${won?"rgba(214,170,90,.7)":"rgba(120,60,40,.7)"}">
+            <b>${won?"Trial won":"Trial lost"}</b><span>${won?"+18 rating · embers recovered from the ground.":"−12 rating · the record closed."}</span></div>`
+        }).join(""):`<div class="pg-lore">No trial has been written down yet.</div>`),
+      titles:()=>`<div class="pg-pk">Titles</div><div class="pg-pt">${TITLES.filter(t=>t[2]).length} earned</div>`+
+        TITLES.map(t=>`<div class="pg-ab" style="${t[2]?"":"opacity:.4"}"><b>${t[0]}</b><span>${t[1]}</span></div>`).join(""),
+      stats:()=>{
+        const byF=["Civilization","Warfare","Nature","Dark"].map(f=>[f,owned().filter(c=>c.a===f).length]);
+        return `<div class="pg-pk">Statistics</div><div class="pg-pt">The whole tally</div>
+        <div class="pg-stats">
+          <div class="pg-stat"><div class="k">Records held</div><div class="v">${owned().length}</div></div>
+          <div class="pg-stat"><div class="k">Of possible</div><div class="v">${CARDS.length}</div></div>
+          <div class="pg-stat"><div class="k">Parcels</div><div class="v">${P.packs}</div></div>
+          <div class="pg-stat"><div class="k">Sigils</div><div class="v">${P.shards}</div></div>
+        </div>
+        <div class="pg-line"></div>
+        <div class="pg-pk">By faction</div>`+
+        byF.map(([f,n])=>`<div style="margin-top:11px">
+          <div class="qf" style="display:flex;justify-content:space-between;font-family:var(--ui);font-size:9px;
+            letter-spacing:.18em;text-transform:uppercase;color:rgba(206,178,124,.4)">
+            <span>${f}</span><span>${n}</span></div>
+          <div class="pg-bar" style="margin-top:6px"><i style="width:${Math.min(100,n/Math.max(1,CARDS.filter(c=>c.a===f).length)*100)}%"></i></div>
+        </div>`).join("");
+      }
+    };
+    S.panel.innerHTML=body[sec]();
+    pgOpenPanel("cdx");
+  }
+  S.foot.appendChild(pgBtn("EDIT DECK","carry it to the gate",()=>openScreen("decks"),"ghost"));
+  S.foot.appendChild(pgBtn("ENTER DUEL","write the next line",()=>enterBattle(),"lg"));
+  draw();drawPanel();
+  REDRAW.profile=()=>{draw();drawPanel()};
+};
+
+/* ============================================================
+   6 · SETTINGS  (a full page, not an overlay)
+   ============================================================ */
+SCREEN.settings=el=>{
+  const S=pgShell(el,{id:"set",title:"SETTINGS",sub:"the iron key",platform:false});
+  let cat="graphics";
+  P.lang=P.lang||"en"; P.quality=P.quality||"high";
+  const SNAP=()=>JSON.stringify({reduced:P.reduced,hicon:P.hicon,big:P.big,quality:P.quality,
+    lang:P.lang,music:Snd.on,vol:Snd.vol});
+  let start=SNAP();
+  pgFilters(S.rail,[
+    {k:"graphics",n:"Graphics",r:"eye"},
+    {k:"audio",n:"Audio",r:"speaker"},
+    {k:"controls",n:"Controls",r:"hand"},
+    {k:"account",n:"Account",r:"key"},
+    {k:"language",n:"Language",r:"globe"}
+  ],k=>{cat=k;draw()});
+
+  const sw=(k,on,fn)=>`<div class="pg-sw ${on?"on":""}" data-sw="${k}"><i></i></div>`;
+  const seg=(k,opts,cur)=>`<div class="pg-seg" data-seg="${k}">${opts.map(o=>
+    `<button data-v="${o[0]}" class="${cur===o[0]?"on":""}">${o[1]}</button>`).join("")}</div>`;
+  const sl=(k,v)=>`<div class="pg-sl" data-sl="${k}"><div class="tr"></div>
+    <div class="fl" style="width:${v*100}%"></div><div class="kb" style="left:${v*100}%"></div></div>`;
+
+  function rows(){
+    if(cat==="graphics")return [
+      ["Still the world","Reduce motion: rays, embers and dust are shortened.",sw("reduced",P.reduced)],
+      ["Raise the lamp","Higher contrast for engraved text and hairlines.",sw("hicon",P.hicon)],
+      ["Larger hand","Increase text size throughout the sanctum.",sw("big",P.big)],
+      ["Quality","How much the room is allowed to breathe.",seg("quality",[["low","Low"],["med","Medium"],["high","High"]],P.quality)]
+    ];
+    if(cat==="audio")return [
+      ["The score","Four cues — the vault, the hall, the archive, the trial. They crossfade as you move.",sw("music",Snd.on)],
+      ["Volume","The score sits low by design. Raise it if your room is loud.",sl("vol",Snd.vol)]
+    ];
+    if(cat==="controls")return [
+      ["Wheel turns the orbit","Scroll rotates the card wheel on the platform.",sw("wheelspin",P.wheelspin!==false)],
+      ["Drag to turn","Click and pull the wheel with the pointer.",sw("dragspin",P.dragspin!==false)],
+      ["Arrow keys","Left and right step the wheel one card.",sw("keyspin",P.keyspin!==false)],
+      ["Confirm before duel","Ask once before the arena doors open.",sw("confirm",!!P.confirm)]
+    ];
+    if(cat==="account")return [
+      ["Signed in as","This is the name other wardens see.",
+        `<div class="pg-mini" style="pointer-events:none">${P.name||"Warden"}</div>`],
+      ["Leave the hall","Your covenant is kept. You will be recognised at the door.",
+        `<button class="pg-mini" data-act="signout">Sign out</button>`],
+      ["Forget me","Erase this covenant entirely. The ledger page is torn out.",
+        `<button class="pg-mini" data-act="forget" style="border-color:rgba(140,54,38,.7);color:rgba(214,140,110,.85)">Erase</button>`]
+    ];
+    return [
+      ["Language","The tongue the sanctum speaks.",
+        seg("lang",[["en","English"],["nl","Nederlands"],["zh","中文"],["de","Deutsch"]],P.lang)],
+      ["Card names","Keep original record names untranslated.",sw("keepnames",P.keepnames!==false)]
+    ];
+  }
+  function draw(){
+    S.stage.innerHTML=`<div class="pg-tabs" id="setTabs"></div>`;
+    const w=$("#setTabs",S.stage);
+    rows().forEach(([t,d,ctl])=>{
+      const r=document.createElement("div");
+      r.className="pg-set";
+      r.innerHTML=`<div class="t"><b>${t}</b><small>${d}</small></div><div class="ctl">${ctl}</div>`;
+      w.appendChild(r);
+    });
+    wire();
+  }
+  function wire(){
+    $$("[data-sw]",S.stage).forEach(t=>t.onclick=()=>{
+      const k=t.dataset.sw;t.classList.toggle("on");
+      const on=t.classList.contains("on");
+      if(k==="music")return musicOn(on);
+      P[k]=on;
+      if(k==="reduced")document.body.classList.toggle("reduced",on);
+    });
+    $$("[data-seg]",S.stage).forEach(g=>$$("button",g).forEach(b=>b.onclick=()=>{
+      $$("button",g).forEach(x=>x.classList.remove("on"));b.classList.add("on");
+      const k=g.dataset.seg;
+      if(k==="quality")P.quality=b.dataset.v;
+      if(k==="lang"){P.lang=b.dataset.v;if(b.dataset.v!=="en")toast("Only English is carved so far.")}
+    }));
+    $$("[data-sl]",S.stage).forEach(s=>{
+      const set=e=>{
+        const r=s.getBoundingClientRect();
+        const v=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
+        $(".fl",s).style.width=(v*100)+"%";$(".kb",s).style.left=(v*100)+"%";
+        setVol(v);
+      };
+      s.onpointerdown=e=>{set(e);const mv=ev=>set(ev);
+        const up=()=>{document.removeEventListener("pointermove",mv);document.removeEventListener("pointerup",up)};
+        document.addEventListener("pointermove",mv);document.addEventListener("pointerup",up)};
+    });
+    $$("[data-act]",S.stage).forEach(b=>b.onclick=()=>{
+      if(b.dataset.act==="signout")signOut();
+      if(b.dataset.act==="forget")forgetMe();
+    });
+  }
+  S.foot.appendChild(pgBtn("APPLY","keep these choices",()=>{
+    saveGame&&saveGame();start=SNAP();toast("The settings are struck into the stone.");
+  },"lg"));
+  S.foot.appendChild(pgBtn("RESET","return to the defaults",()=>{
+    P.reduced=false;P.hicon=false;P.big=false;P.quality="high";P.lang="en";
+    P.wheelspin=true;P.dragspin=true;P.keyspin=true;P.confirm=false;P.keepnames=true;
+    document.body.classList.remove("reduced");
+    setVol(.5);draw();toast("Defaults restored.");
+  },"ghost"));
+  draw();
+  REDRAW.settings=draw;
+};
+function openSettings(){ openScreen("settings") }
+
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape"){
     if($("#settings").classList.contains("on"))return $("#settings").classList.remove("on");
